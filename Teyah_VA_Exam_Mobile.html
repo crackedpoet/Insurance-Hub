@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Virginia L&H Practice Exam</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f2f2f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a1a; }
+.wrap { max-width: 680px; margin: 0 auto; padding: 16px; }
+.header { margin-bottom: 16px; }
+.header h1 { font-size: 19px; font-weight: 700; color: #1a1a1a; }
+.header p { font-size: 13px; color: #666; margin-top: 3px; }
+.top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+.stat { background: #fff; border-radius: 10px; padding: 10px 6px; text-align: center; }
+.stat-num { font-size: 20px; font-weight: 700; color: #1a1a1a; }
+.stat-lbl { font-size: 10px; color: #888; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+.section-label { font-size: 10px; font-weight: 700; color: #888; margin-bottom: 7px; letter-spacing: 0.08em; text-transform: uppercase; }
+.mode-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; margin-bottom: 16px; }
+.mode-btn { padding: 10px 8px; font-size: 13px; border: 1.5px solid #ddd; border-radius: 9px; background: #fff; color: #444; cursor: pointer; text-align: center; font-weight: 500; }
+.mode-btn.active { background: #e8f0fe; border-color: #2A5FA5; color: #2A5FA5; font-weight: 700; }
+.topic-section { margin-bottom: 16px; }
+.topic-group { margin-bottom: 12px; }
+.topic-group-label { font-size: 10px; font-weight: 700; color: #888; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.topic-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.topic-btn { background: #fff; border: 1.5px solid #ddd; border-radius: 8px; padding: 8px 10px; font-size: 12px; color: #333; cursor: pointer; text-align: left; line-height: 1.4; }
+.topic-btn.active { border-color: #2A5FA5; color: #2A5FA5; background: #e8f0fe; font-weight: 700; }
+.ch-badge { font-size: 10px; color: #999; display: block; margin-bottom: 1px; }
+.gen-btn { width: 100%; padding: 14px; background: #2A5FA5; color: #fff; border: none; border-radius: 11px; font-size: 16px; font-weight: 700; cursor: pointer; margin-bottom: 20px; }
+.gen-btn:disabled { opacity: 0.5; }
+.reset-btn { font-size: 12px; color: #888; background: #fff; border: 1.5px solid #ddd; border-radius: 8px; padding: 8px 11px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.qcard { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+.qnum { font-size: 10px; color: #999; margin-bottom: 8px; letter-spacing: 0.04em; text-transform: uppercase; }
+.qtext { font-size: 15px; color: #1a1a1a; line-height: 1.65; margin-bottom: 14px; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 7px; }
+.opt { display: flex; align-items: flex-start; gap: 10px; padding: 11px 13px; border: 1.5px solid #e0e0e0; border-radius: 9px; cursor: pointer; font-size: 14px; color: #1a1a1a; line-height: 1.5; background: #fff; text-align: left; width: 100%; }
+.opt.correct { background: #e8f5e0; border-color: #3B6D11; color: #1d4209; }
+.opt.wrong { background: #fce8e8; border-color: #A32D2D; color: #501313; }
+.opt.reveal-correct { background: #e8f5e0; border-color: #3B6D11; color: #1d4209; }
+.opt-letter { font-weight: 700; min-width: 18px; flex-shrink: 0; }
+.explanation { margin-top: 12px; padding: 12px 14px; background: #e8f0fe; border-left: 3px solid #2A5FA5; border-radius: 0 8px 8px 0; font-size: 13px; color: #1B3F7A; line-height: 1.65; }
+.expl-label { font-weight: 700; margin-bottom: 4px; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; }
+.weak-info { margin-bottom: 12px; padding: 10px 12px; background: #fff3e0; border-radius: 9px; font-size: 13px; color: #854F0B; }
+.weak-tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; background: #FAC775; color: #633806; margin: 2px 3px 2px 0; }
+.set-label { font-size: 10px; font-weight: 700; color: #999; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.no-q { text-align: center; padding: 24px; color: #888; font-size: 14px; background: #fff; border-radius: 12px; margin-bottom: 12px; }
+.progress-bar-wrap { background: #e0e0e0; border-radius: 99px; height: 5px; margin-bottom: 16px; }
+.progress-bar { background: #2A5FA5; height: 5px; border-radius: 99px; transition: width 0.3s; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-row">
+    <div class="header">
+      <h1>Virginia L&amp;H Practice Exam</h1>
+      <p>19 chapters + VA laws &middot; 120 questions &middot; full explanations</p>
+    </div>
+    <button class="reset-btn" onclick="resetStats()">&#8635; Reset</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Done</div></div>
+    <div class="stat"><div class="stat-num" id="stat-correct">0</div><div class="stat-lbl">Correct</div></div>
+    <div class="stat"><div class="stat-num" id="stat-pct">—</div><div class="stat-lbl">Score</div></div>
+    <div class="stat"><div class="stat-num" id="stat-streak">0</div><div class="stat-lbl">Streak</div></div>
+  </div>
+
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+
+  <div class="section-label">Mode</div>
+  <div class="mode-row">
+    <button class="mode-btn active" id="mode-random" onclick="setMode('random')">&#127922; Random mix</button>
+    <button class="mode-btn" id="mode-topic" onclick="setMode('topic')">&#128218; By chapter</button>
+    <button class="mode-btn" id="mode-weak" onclick="setMode('weak')">&#127919; Weak areas</button>
+    <button class="mode-btn" id="mode-va" onclick="setMode('va')">&#9878;&#65039; VA laws only</button>
+  </div>
+
+  <div id="topic-section" class="topic-section" style="display:none"></div>
+  <div id="weak-info" class="weak-info" style="display:none">
+    Focusing on weak spots (&lt;70%): <span id="weak-tags"><em>keep going to find them</em></span>
+  </div>
+
+  <button class="gen-btn" id="gen-btn" onclick="generateQuestions()">&#9654; Generate 5 questions</button>
+  <div id="questions-container"></div>
+</div>
+
+<script>
+const BANK = [
+  // ── Ch. 1–2: Insurance fundamentals, risk & contract law ──
+  {topic:"Insurance fundamentals, risk & contract law",question:"Which of the following BEST describes the law of large numbers as it applies to insurance?",options:{A:"The larger the group, the more accurately losses can be predicted",B:"Insurance companies must write a minimum number of policies to operate legally",C:"Insurers must maintain large cash reserves to pay all claims immediately",D:"The more policies sold, the higher the premium for each insured"},correct:"A",explanation:"The law of large numbers states that as the number of similar exposure units increases, the more closely actual losses will match expected losses. This allows insurers to predict future losses with greater accuracy and set premiums appropriately. It does not relate to legal minimums, reserves, or premium levels directly."},
+  {topic:"Insurance fundamentals, risk & contract law",question:"A contract of adhesion means:",options:{A:"Both parties negotiate the terms equally",B:"The insured must adhere to all premium payment schedules",C:"The contract is written by one party and accepted or rejected as a whole by the other",D:"The insurer adheres to state-mandated policy language only"},correct:"C",explanation:"A contract of adhesion is drafted entirely by one party (the insurer) and offered to the other (the insured) on a take-it-or-leave-it basis. The insured cannot negotiate the terms. Because of this imbalance, any ambiguities in the contract are interpreted in favor of the insured — this is called the doctrine of reasonable expectations."},
+  {topic:"Insurance fundamentals, risk & contract law",question:"Which element is NOT required for a valid insurance contract?",options:{A:"Offer and acceptance",B:"Consideration",C:"Legal purpose",D:"Written form"},correct:"D",explanation:"A valid contract requires offer and acceptance, consideration, competent parties, and legal purpose. Insurance contracts do NOT have to be in writing to be legally valid — oral binders are legally enforceable. However, most insurance policies are issued in writing for practical reasons and to satisfy state requirements."},
+  {topic:"Insurance fundamentals, risk & contract law",question:"The concept of indemnity in insurance means:",options:{A:"The insured profits from a loss",B:"The insured is restored to the same financial position as before the loss",C:"The insurer pays the maximum policy limit for every claim",D:"The insured is compensated double for losses caused by negligence"},correct:"B",explanation:"Indemnity means the insured is made financially whole — restored to the same position they were in before the loss, no more and no less. The principle prevents moral hazard by ensuring insureds cannot profit from a loss. Life insurance is NOT a contract of indemnity because it pays a fixed face amount regardless of actual economic loss."},
+  {topic:"Insurance fundamentals, risk & contract law",question:"Pure risk differs from speculative risk in that pure risk:",options:{A:"Involves a chance of gain, loss, or no change",B:"Only involves the possibility of loss or no loss — no chance of gain",C:"Can be insured or hedged through financial markets",D:"Applies only to property and casualty insurance"},correct:"B",explanation:"Pure risk involves only two outcomes: loss or no loss. There is never a chance of gain. Only pure risks are insurable. Speculative risk (like gambling or investing) involves three outcomes — gain, loss, or no change — and is generally not insurable because of the moral hazard involved."},
+
+  // ── Ch. 3: Legal concepts ──
+  {topic:"Legal concepts (subrogation, waiver, estoppel)",question:"Subrogation allows an insurer to:",options:{A:"Cancel a policy after a large claim",B:"Step into the shoes of the insured to recover from a responsible third party",C:"Refuse payment when the insured was partially at fault",D:"Subrogate the insured's rights to future premium discounts"},correct:"B",explanation:"Subrogation gives the insurer the legal right to pursue a third party responsible for an insurance loss that the insurer has already paid. For example, if another driver causes an accident and your auto insurer pays your claim, the insurer can then sue the at-fault driver. Importantly, subrogation does NOT apply to life insurance or individual health insurance policies in Virginia."},
+  {topic:"Legal concepts (subrogation, waiver, estoppel)",question:"Estoppel in insurance law prevents an insurer from:",options:{A:"Raising premiums at renewal",B:"Denying a claim based on a condition it previously chose not to enforce",C:"Canceling a policy for non-payment of premium",D:"Excluding pre-existing conditions from coverage"},correct:"B",explanation:"Estoppel is a legal doctrine that prevents a party from asserting a right or defense that is inconsistent with its prior conduct. If an insurer knowingly allows a policy violation (such as late premium payments) and the insured relies on that behavior, the insurer may be estopped (legally barred) from later denying a claim on that basis."},
+  {topic:"Legal concepts (subrogation, waiver, estoppel)",question:"A waiver in insurance is best defined as:",options:{A:"The voluntary relinquishment of a known right",B:"A court order requiring an insurer to pay a claim",C:"The insured's right to cancel a policy",D:"An agreement between two insurers to share a risk"},correct:"A",explanation:"A waiver is the intentional and voluntary giving up of a known legal right. In insurance, if an insurer knows of a policy violation but chooses not to enforce it, the insurer has waived that right. Once waived, the right cannot be reclaimed. This is closely related to estoppel, which prevents a party from contradicting its own prior conduct."},
+  {topic:"Legal concepts (subrogation, waiver, estoppel)",question:"Which of the following is an example of utmost good faith (uberrimae fidei) in insurance?",options:{A:"An insurer paying claims promptly",B:"An applicant fully disclosing all material facts on the application",C:"An insurer offering the lowest available premium",D:"Both parties signing the policy at the same time"},correct:"B",explanation:"Utmost good faith requires both parties to an insurance contract to act in complete honesty and disclose all material information. The applicant must reveal all facts that could affect the insurer's decision to issue coverage or set the premium rate. Concealment of material facts can void the policy, and misrepresentation can make the policy voidable."},
+  {topic:"Legal concepts (subrogation, waiver, estoppel)",question:"Which doctrine holds that an insured cannot collect more than the actual cash value of a loss?",options:{A:"Subrogation",B:"Indemnity",C:"Insurable interest",D:"Adhesion"},correct:"B",explanation:"The principle of indemnity prevents an insured from profiting from an insurance claim. The insured can only be restored to their pre-loss financial position, not enriched. This is why property insurance pays actual cash value (replacement cost minus depreciation) rather than an arbitrary higher amount. Life insurance is an exception — it pays a stated face amount, not based on actual loss."},
+
+  // ── Ch. 4: Types of life insurance ──
+  {topic:"Types of life insurance policies",question:"Which type of life insurance provides coverage for a specific period and pays a death benefit only if the insured dies during that period?",options:{A:"Whole life",B:"Universal life",C:"Term life",D:"Variable life"},correct:"C",explanation:"Term life insurance provides pure death protection for a specific period (e.g., 10, 20, or 30 years). If the insured dies during the term, the beneficiary receives the death benefit. If the insured survives the term, the coverage expires with no cash value paid out. Term is the most affordable type of life insurance because it builds no cash value."},
+  {topic:"Types of life insurance policies",question:"Whole life insurance is characterized by all of the following EXCEPT:",options:{A:"Guaranteed level premiums",B:"Permanent protection to age 100 or death",C:"Accumulation of cash value",D:"Premiums that increase with age"},correct:"D",explanation:"Whole life insurance features guaranteed level premiums that never increase. It provides permanent coverage (to age 100 or death), builds guaranteed cash value over time, and has a guaranteed death benefit. The level premium structure is one of whole life's defining advantages over term, which may have increasing premiums at renewal."},
+  {topic:"Types of life insurance policies",question:"Universal life insurance differs from whole life insurance primarily because it offers:",options:{A:"A guaranteed death benefit with no cash value",B:"Flexible premiums and adjustable death benefits",C:"Coverage for a set term only",D:"Premiums that are always tax-deductible"},correct:"B",explanation:"Universal life (UL) insurance is characterized by its flexibility. The policyowner can adjust premium payments (within limits) and change the death benefit amount as needs change. The cash value earns interest at a declared rate. Unlike whole life, there are no rigid premium schedules — but insufficient premiums can cause the policy to lapse if the cash value is depleted."},
+  {topic:"Types of life insurance policies",question:"A Modified Endowment Contract (MEC) is created when:",options:{A:"A policy's death benefit exceeds $1,000,000",B:"A policy fails the 7-pay test by being funded too rapidly",C:"The insured reaches age 70½ and must take distributions",D:"A policy is converted from term to permanent"},correct:"B",explanation:"A MEC occurs when a life insurance policy is funded with more premium than allowed under the 7-pay test (IRS test). MECs lose favorable tax treatment: withdrawals and loans are taxed as ordinary income on a LIFO basis, and a 10% penalty applies to distributions before age 59½. The death benefit remains income-tax-free. Transfers should be carefully planned to avoid MEC status."},
+  {topic:"Types of life insurance policies",question:"Variable life insurance differs from whole life in that the cash value:",options:{A:"Is guaranteed never to decrease",B:"Is invested in separate account sub-funds chosen by the policyowner",C:"Earns a fixed interest rate set by the insurer",D:"Cannot be borrowed against under any circumstances"},correct:"B",explanation:"With variable life, the policyowner directs the cash value into separate account investment sub-funds (similar to mutual funds). The cash value and potentially the death benefit fluctuate based on investment performance. Because of this investment risk and the securities component, agents selling variable life must hold both a life insurance license AND a FINRA securities registration (Series 6 or 7)."},
+
+  // ── Ch. 5: Provisions, riders & nonforfeiture ──
+  {topic:"Provisions, riders & nonforfeiture options",question:"What is the default nonforfeiture option in Virginia if the policyowner does not make a selection?",options:{A:"Cash surrender value",B:"Reduced paid-up insurance",C:"Extended term insurance",D:"Automatic premium loan"},correct:"C",explanation:"In Virginia, if a policyowner does not select a nonforfeiture option, the default is extended term insurance. This uses the policy's cash value to purchase term insurance for the full original face amount for as long a period as the cash value will support. Nonforfeiture options ensure that the policyowner receives value if premiums are stopped."},
+  {topic:"Provisions, riders & nonforfeiture options",question:"The waiver of premium rider provides that:",options:{A:"The insurer waives the first year's premium as an incentive",B:"The policyowner can skip premiums without notice during financial hardship",C:"Premiums are waived if the insured becomes totally disabled",D:"The beneficiary is not required to pay any taxes on the death benefit"},correct:"C",explanation:"The waiver of premium rider keeps a policy in force without premium payments if the insured becomes totally disabled (typically defined as unable to perform any gainful occupation). There is usually an elimination (waiting) period of 3–6 months before the waiver kicks in. The policy continues as if premiums were being paid — cash value still grows and the death benefit remains intact."},
+  {topic:"Provisions, riders & nonforfeiture options",question:"A policy loan provision allows the policyowner to:",options:{A:"Borrow up to the full death benefit from the insurer",B:"Borrow against the policy's cash value without approval",C:"Take a tax-free loan from the government using the policy as collateral",D:"Receive an advance on the death benefit only in terminal illness cases"},correct:"B",explanation:"Policyowners can borrow against accumulated cash value without a credit check or approval. The loan bears interest and remains outstanding until repaid. If the insured dies with an unpaid loan, the death benefit is reduced by the outstanding loan balance plus interest. Unlike a withdrawal, a policy loan does not reduce cash value immediately — but it does reduce the net death benefit."},
+  {topic:"Provisions, riders & nonforfeiture options",question:"The accidental death benefit (ADB) rider doubles the death benefit if the insured dies:",options:{A:"Within one year of policy issue",B:"As a result of an accident, as defined in the policy",C:"Before age 65 for any reason",D:"Without a named beneficiary on file"},correct:"B",explanation:"The ADB rider (sometimes called double indemnity) pays an additional amount — typically equal to the face amount — if the insured's death results from a covered accident. The accident must be the direct cause of death, usually within a specified time period (such as 90 days) of the accident. Deaths from illness, suicide, or excluded activities do not qualify for the ADB."},
+  {topic:"Provisions, riders & nonforfeiture options",question:"Virginia's incontestability clause requires that after how many years an insurer cannot contest a life policy for material misrepresentation?",options:{A:"1 year",B:"2 years",C:"3 years",D:"5 years"},correct:"B",explanation:"Virginia law requires that life insurance policies include an incontestability clause, making the policy incontestable after 2 years from the date of issue (while the insured is alive). After 2 years, the insurer cannot deny a claim based on misrepresentation or concealment in the application — EXCEPT in cases of fraud, which has no time limit. This protects insureds and beneficiaries from having claims denied years later."},
+
+  // ── Ch. 6: Premiums, proceeds & beneficiaries ──
+  {topic:"Premiums, proceeds & beneficiaries",question:"Which beneficiary designation gives the policyowner maximum flexibility to change the beneficiary at any time?",options:{A:"Irrevocable beneficiary",B:"Revocable beneficiary",C:"Primary beneficiary",D:"Contingent beneficiary"},correct:"B",explanation:"A revocable beneficiary designation can be changed by the policyowner at any time without the beneficiary's consent. This provides maximum flexibility. An irrevocable beneficiary designation, by contrast, cannot be changed without the beneficiary's written consent — the beneficiary has a vested interest in the policy. Irrevocable designations are often used in divorce settlements or business arrangements."},
+  {topic:"Premiums, proceeds & beneficiaries",question:"Under the spendthrift clause in a life insurance policy:",options:{A:"The beneficiary cannot spend more than $500 per month from proceeds",B:"Proceeds are paid out over time and protected from the beneficiary's creditors",C:"The insured's creditors can access the death benefit before the beneficiary",D:"The policyowner forfeits cash value if premiums are not paid on time"},correct:"B",explanation:"A spendthrift clause protects life insurance proceeds from being seized by the beneficiary's creditors when the proceeds are held by the insurer under a settlement option (installments). The clause keeps proceeds from being assigned or used to pay the beneficiary's debts before they are received. It is designed to protect financially irresponsible beneficiaries from losing all their inheritance immediately."},
+  {topic:"Premiums, proceeds & beneficiaries",question:"If an insured and primary beneficiary die in the same accident and it cannot be determined who died first, which rule applies?",options:{A:"The Uniform Simultaneous Death Act — the insured is presumed to have survived",B:"The death benefit is paid to the insurer",C:"The contingent beneficiary automatically receives double the benefit",D:"The estate of the primary beneficiary always receives the proceeds"},correct:"A",explanation:"The Uniform Simultaneous Death Act presumes the insured survived the beneficiary when there is no evidence of the order of death. This means proceeds pass as if the beneficiary predeceased the insured — going to the contingent beneficiary (or the insured's estate if no contingent is named). This avoids proceeds going through the primary beneficiary's estate and potentially being taxed twice."},
+  {topic:"Premiums, proceeds & beneficiaries",question:"Life insurance death benefits paid to a named beneficiary are:",options:{A:"Subject to federal income tax as ordinary income",B:"Generally received income-tax-free",C:"Taxed at capital gains rates",D:"Subject to Virginia state income tax only"},correct:"B",explanation:"Life insurance death benefits are generally received income-tax-free by the named beneficiary under IRC Section 101(a). This is one of the primary tax advantages of life insurance. However, if proceeds are left with the insurer and earn interest, the interest portion IS taxable. Also, the death benefit may be included in the insured's taxable estate for estate tax purposes if the insured owned the policy at death."},
+
+  // ── Ch. 7: Underwriting & policy issue ──
+  {topic:"Life insurance underwriting & policy issue",question:"Which of the following is a non-medical source of underwriting information?",options:{A:"Attending physician's statement",B:"Medical Information Bureau (MIB) report",C:"Blood and urine test results",D:"EKG results"},correct:"B",explanation:"The Medical Information Bureau (MIB) is a non-medical underwriting source — it is a cooperative database of coded medical information shared among member insurers. It helps detect fraud and omissions on applications. The attending physician's statement, blood/urine tests, and EKG are all medical sources of underwriting information. MIB does not make underwriting decisions; it only provides information to insurers."},
+  {topic:"Life insurance underwriting & policy issue",question:"A substandard risk applicant is most likely to be offered:",options:{A:"Coverage at standard rates with no conditions",B:"Declined coverage with a full premium refund",C:"Coverage at higher premiums or with an exclusion rider",D:"Group coverage only — individual coverage is unavailable"},correct:"C",explanation:"Substandard risks (higher-than-average mortality risk due to health, occupation, or lifestyle factors) are typically offered coverage with a rated-up premium, a flat extra premium, or an exclusion rider that excludes coverage for the specific hazardous condition. Complete denial is reserved for uninsurable risks. Substandard underwriting allows more people to obtain coverage while pricing for the additional risk."},
+  {topic:"Life insurance underwriting & policy issue",question:"The free-look period in Virginia for a standard life insurance policy is:",options:{A:"5 days",B:"10 days",C:"20 days",D:"30 days"},correct:"B",explanation:"Virginia requires a minimum 10-day free-look period for standard life insurance policies. During this time, the policyowner can review the policy and return it for a full premium refund for any reason. The free-look period is extended to 30 days for policies sold to senior citizens (age 65+) and for long-term care insurance policies. This consumer protection gives buyers time to make an informed decision."},
+  {topic:"Life insurance underwriting & policy issue",question:"When does life insurance coverage typically become effective?",options:{A:"When the application is submitted to the insurer",B:"When the insurer approves the application at headquarters",C:"When the first premium is paid and the policy is delivered while the insured is in good health",D:"On the date printed on the policy declarations page only"},correct:"C",explanation:"Life insurance coverage typically becomes effective when the first premium is paid AND the policy is delivered while the insured is in good health. If a conditional receipt was issued at application and premium was collected, coverage may begin earlier — at the application date or exam date — if the applicant is found insurable. The specific terms depend on the type of receipt issued."},
+
+  // ── Ch. 8: Group life insurance ──
+  {topic:"Group life insurance",question:"Under Section 79 of the IRS Code, how much employer-provided group term life insurance can be received income-tax-free?",options:{A:"$25,000",B:"$50,000",C:"$75,000",D:"$100,000"},correct:"B",explanation:"Under IRC Section 79, the first $50,000 of employer-paid group term life insurance is received income-tax-free by the employee. Coverage above $50,000 creates imputed income — the employee must include the cost of the excess coverage (calculated using IRS Table I rates) in their gross income for the year. This applies only to group term life, not permanent or individual policies."},
+  {topic:"Group life insurance",question:"Which of the following is a characteristic of group life insurance?",options:{A:"Each insured receives an individual policy",B:"Evidence of insurability is always required",C:"Coverage is provided under a master policy issued to the employer",D:"Premiums are always paid entirely by the employee"},correct:"C",explanation:"Group life insurance is issued under a single master policy to the group sponsor (employer, association, etc.). Individual members receive certificates of coverage, not separate policies. One of the key advantages is that members can often enroll without evidence of insurability during open enrollment periods. Premium contributions can be employer-paid, employee-paid, or shared."},
+  {topic:"Group life insurance",question:"Conversion privilege in a group life insurance plan allows a terminated employee to:",options:{A:"Continue group coverage at the group rate indefinitely",B:"Convert group coverage to individual permanent insurance without evidence of insurability",C:"Transfer the master policy to a new employer",D:"Convert unused sick leave into premium payments"},correct:"B",explanation:"The conversion privilege gives a terminated employee (or someone losing group coverage) the right to convert their group coverage to an individual permanent life insurance policy within 31 days of leaving the group — without providing evidence of insurability. However, the new individual policy will be priced at standard individual rates, not the lower group rate, which can be significantly more expensive."},
+  {topic:"Group life insurance",question:"The minimum participation requirement for a non-contributory group life plan is:",options:{A:"51%",B:"75%",C:"85%",D:"100%"},correct:"D",explanation:"A non-contributory plan is one where the employer pays 100% of the premium. Because the employer bears the entire cost, 100% participation of eligible employees is required — there is no reason for employees not to participate if it costs them nothing. Contributory plans (where employees share the premium cost) typically require 75% participation to prevent adverse selection."},
+
+  // ── Ch. 9: Annuities ──
+  {topic:"Annuities",question:"The primary purpose of an annuity is to:",options:{A:"Provide a large lump sum at death",B:"Protect against the risk of outliving one's income (longevity risk)",C:"Generate tax-free retirement income",D:"Replace term life insurance at retirement"},correct:"B",explanation:"Annuities are designed to address longevity risk — the risk of outliving your money. During the accumulation phase, funds grow tax-deferred. During the annuitization (distribution) phase, the insurer makes periodic payments to the annuitant for a set period or for life. Unlike life insurance (which protects against dying too soon), annuities protect against living too long."},
+  {topic:"Annuities",question:"Which annuity settlement option guarantees income for the annuitant's lifetime but provides NO payments to survivors?",options:{A:"Life with period certain",B:"Joint and survivor",C:"Straight life (life only)",D:"Fixed period certain"},correct:"C",explanation:"The straight life (life only) option pays the highest periodic payment because there is no survivor benefit. Payments continue for the annuitant's lifetime and cease at death — even if only one payment was made. This option maximizes income but carries the risk that little or nothing is paid if the annuitant dies soon after annuitization. It is suitable for those with no dependents who want maximum income."},
+  {topic:"Annuities",question:"A 1035 exchange allows:",options:{A:"An annuity to be exchanged for a life insurance policy tax-free",B:"A life insurance policy to be exchanged for an annuity tax-free",C:"An IRA to be converted to a Roth IRA without taxes",D:"Group life coverage to be converted to individual coverage"},correct:"B",explanation:"IRC Section 1035 allows certain tax-free exchanges of insurance products. Life insurance can be exchanged for another life policy, an endowment, or an annuity — tax-free. Annuities can be exchanged for another annuity tax-free. However, an annuity CANNOT be exchanged for a life insurance policy tax-free under Section 1035 — that exchange is taxable. The key rule: you can only go 'broader,' not 'narrower.'"},
+  {topic:"Annuities",question:"A variable annuity differs from a fixed annuity in that the variable annuity:",options:{A:"Guarantees a minimum monthly payment",B:"Has no accumulation phase",C:"Invests in separate account sub-funds with payments tied to investment performance",D:"Is always funded with after-tax dollars"},correct:"C",explanation:"Variable annuities invest the premium in separate account sub-funds (similar to mutual funds) chosen by the owner. The accumulation value and future payments vary based on sub-fund performance — there is investment risk to the owner, but also potential for higher returns. Fixed annuities credit a guaranteed interest rate. Because of the securities component, variable annuity sellers must hold both an insurance license and a FINRA securities registration."},
+
+  // ── Ch. 10: Uses of life insurance ──
+  {topic:"Uses of life insurance (key person, buy-sell, estate)",question:"In a key person life insurance policy, who is the owner and beneficiary?",options:{A:"The key employee owns and is the beneficiary",B:"The business owns the policy and is the beneficiary",C:"The insured's family owns the policy",D:"A trustee owns the policy on behalf of shareholders"},correct:"B",explanation:"Key person insurance is purchased by a business on the life of an employee whose death would cause significant financial loss to the company. The business is both the owner and the beneficiary. The business pays the premiums, which are NOT tax-deductible. The death benefit is received income-tax-free by the business, helping it cover lost profits, recruit a replacement, and repay any business debts tied to the key person."},
+  {topic:"Uses of life insurance (key person, buy-sell, estate)",question:"In a cross-purchase buy-sell agreement:",options:{A:"The business buys life insurance on each owner",B:"Each owner buys life insurance on each other owner",C:"A trustee holds all policies on behalf of all owners",D:"The surviving owners purchase the deceased's shares using company funds"},correct:"B",explanation:"In a cross-purchase agreement, each business owner buys a life insurance policy on each of the other owners. When one owner dies, the surviving owners receive the death benefit and use it to buy the deceased's business interest from the estate. This can be administratively complex with many owners (each needing policies on all others), but it gives each surviving owner a stepped-up basis in the shares purchased."},
+  {topic:"Uses of life insurance (key person, buy-sell, estate)",question:"Life insurance is used in estate planning primarily to:",options:{A:"Avoid paying any federal estate taxes",B:"Provide immediate liquidity to pay estate taxes and settlement costs",C:"Transfer assets to heirs during the insured's lifetime",D:"Replace income lost due to estate attorney fees"},correct:"B",explanation:"One of the major uses of life insurance in estate planning is providing immediate, liquid cash at death to pay estate taxes, funeral costs, debts, and settlement expenses — without forcing heirs to liquidate assets (like real estate or a family business) quickly at potentially unfavorable prices. When held in an Irrevocable Life Insurance Trust (ILIT), the death benefit can also be kept outside the taxable estate."},
+
+  // ── Ch. 11: Retirement plans & IRAs ──
+  {topic:"Retirement plans & IRAs",question:"The 2026 IRA contribution limit for an individual UNDER age 50 is:",options:{A:"$6,000",B:"$6,500",C:"$7,000",D:"$7,500"},correct:"D",explanation:"For 2026, the IRA contribution limit is $7,500 for individuals under age 50 and $8,600 for individuals age 50 and older (the catch-up contribution amount). These limits apply to both traditional and Roth IRAs combined. Contributions must be from earned income (wages, salaries, etc.) and cannot exceed the individual's earned income for the year."},
+  {topic:"Retirement plans & IRAs",question:"Under SECURE 2.0, Required Minimum Distributions (RMDs) from traditional IRAs must begin at age:",options:{A:"70½",B:"72",C:"73",D:"75"},correct:"C",explanation:"The SECURE 2.0 Act (effective 2023) pushed the Required Minimum Distribution age to 73. Individuals who turn 73 must begin taking RMDs from traditional IRAs and most employer retirement plans by April 1 of the following year. Roth IRAs do NOT have RMDs during the owner's lifetime, which is a key tax advantage. Failing to take RMDs triggers a steep excise tax penalty."},
+  {topic:"Retirement plans & IRAs",question:"A Roth IRA differs from a traditional IRA in that Roth contributions are:",options:{A:"Tax-deductible and grow tax-deferred",B:"Made with after-tax dollars and qualified distributions are tax-free",C:"Only available to self-employed individuals",D:"Exempt from all contribution limits"},correct:"B",explanation:"Roth IRA contributions are made with after-tax dollars — no upfront tax deduction. However, qualified distributions (after age 59½ and a 5-year holding period) are completely tax-free, including all earnings. Traditional IRA contributions may be tax-deductible (depending on income and workplace plan participation), but distributions are taxed as ordinary income. Roth IRAs also have no RMDs during the owner's lifetime."},
+  {topic:"Retirement plans & IRAs",question:"Which type of retirement plan requires the employer to make contributions solely based on a formula tied to profits?",options:{A:"Defined benefit pension plan",B:"401(k) plan",C:"Profit-sharing plan",D:"SIMPLE IRA"},correct:"C",explanation:"A profit-sharing plan requires employer contributions only when the company has profits — and contributions are discretionary (the employer decides the amount each year within IRS limits). Defined benefit plans promise a specific monthly benefit at retirement regardless of profits. 401(k) plans allow employee salary deferrals (with optional employer matching). SIMPLE IRAs are for small businesses (100 or fewer employees)."},
+
+  // ── Ch. 12: Social Security & disability ──
+  {topic:"Social Security & disability benefits",question:"The Full Retirement Age (FRA) for Social Security benefits for someone born in 1960 or later is:",options:{A:"62",B:"65",C:"66 and 6 months",D:"67"},correct:"D",explanation:"The Full Retirement Age for anyone born in 1960 or later is 67. Workers can begin claiming reduced Social Security retirement benefits as early as age 62 (permanently reduced by up to 30%), or delay past FRA to earn delayed retirement credits (up to age 70, adding approximately 8% per year). Claiming at exactly FRA results in 100% of the earned benefit."},
+  {topic:"Social Security & disability benefits",question:"The Social Security disability waiting period before benefits begin is:",options:{A:"1 month",B:"3 months",C:"5 months",D:"6 months"},correct:"C",explanation:"There is a 5-month elimination (waiting) period for Social Security Disability Insurance (SSDI). Benefits begin with the 6th full month of disability. Additionally, the disability standard for SSDI is strict — the applicant must be unable to engage in any substantial gainful activity due to a medically determinable impairment expected to last at least 12 months or result in death. This is an 'any occupation' standard, much stricter than most private disability policies."},
+  {topic:"Social Security & disability benefits",question:"Medicare Part A primarily covers:",options:{A:"Physician and outpatient services",B:"Prescription drugs",C:"Inpatient hospital, skilled nursing facility, and hospice care",D:"Dental and vision care"},correct:"C",explanation:"Medicare Part A (Hospital Insurance) primarily covers inpatient hospital stays, skilled nursing facility (SNF) care after a qualifying hospital stay of 3+ days, hospice care, and some home health care. Most people receive Part A premium-free if they or their spouse worked and paid Medicare taxes for at least 40 quarters (10 years). Part B covers physician services, Part D covers prescription drugs."},
+
+  // ── Ch. 13: Health & accident basics ──
+  {topic:"Health & accident insurance basics",question:"Under the ACA, young adults can remain on a parent's health insurance plan until age:",options:{A:"21",B:"23",C:"25",D:"26"},correct:"D",explanation:"The Affordable Care Act (ACA) requires health insurance plans that provide dependent coverage to allow young adults to remain on their parent's plan until age 26, regardless of marital status, financial dependency, student status, or whether they have access to coverage through their own employer. This applies to both individual and group plans. Virginia uses Healthcare.gov (the federal marketplace) — it does not have a state-run exchange."},
+  {topic:"Health & accident insurance basics",question:"Which of the following is NOT considered an essential health benefit under the ACA?",options:{A:"Emergency services",B:"Maternity and newborn care",C:"Adult dental and vision care",D:"Mental health services"},correct:"C",explanation:"The ACA requires 10 categories of essential health benefits (EHBs) in individual and small group plans: ambulatory services, emergency services, hospitalization, maternity/newborn care, mental health, prescription drugs, rehab, lab services, preventive/wellness, and pediatric services (including dental and vision for children). Adult dental and vision care are NOT required EHBs — they may be offered as optional add-on coverage."},
+  {topic:"Health & accident insurance basics",question:"COBRA continuation coverage is available to employees who lose group health coverage due to:",options:{A:"Voluntary termination or reduction in hours",B:"Medicare eligibility",C:"Moving to a new state",D:"Reaching the plan's lifetime maximum"},correct:"A",explanation:"COBRA (Consolidated Omnibus Budget Reconciliation Act) allows employees (and dependents) who lose group health coverage due to a qualifying event — including voluntary/involuntary termination, reduction in hours, divorce, death of the covered employee, or dependent aging out — to continue coverage for up to 18 months (36 months for some dependents). The individual pays the full premium plus a 2% administrative fee, which can be expensive."},
+
+  // ── Ch. 14: Health plan types ──
+  {topic:"Health plan types (HMO, PPO, EPO, POS, HDHP)",question:"Which managed care plan requires members to select a primary care physician (PCP) who coordinates all care?",options:{A:"PPO",B:"EPO",C:"HMO",D:"Indemnity plan"},correct:"C",explanation:"Health Maintenance Organizations (HMOs) require members to choose a PCP who serves as a gatekeeper for all medical services. Referrals from the PCP are generally required to see specialists. HMOs only cover in-network providers (except in emergencies), resulting in lower out-of-pocket costs but less flexibility. Members must live or work in the HMO's service area."},
+  {topic:"Health plan types (HMO, PPO, EPO, POS, HDHP)",question:"A Preferred Provider Organization (PPO) differs from an HMO primarily because PPO members:",options:{A:"Must select a PCP and get referrals",B:"Can see out-of-network providers at a higher cost sharing",C:"Are only covered for preventive care",D:"Cannot use any out-of-network providers"},correct:"B",explanation:"PPOs offer more flexibility than HMOs. Members can see any provider — in-network or out-of-network — without a referral or PCP. In-network providers have negotiated lower rates, so members pay less out-of-pocket when using them. Out-of-network care is covered but at higher cost-sharing (higher deductible, coinsurance, and copays). PPOs typically have higher premiums than HMOs in exchange for this flexibility."},
+  {topic:"Health plan types (HMO, PPO, EPO, POS, HDHP)",question:"A High Deductible Health Plan (HDHP) is often paired with a:",options:{A:"Flexible Spending Account (FSA)",B:"Health Savings Account (HSA)",C:"Health Reimbursement Arrangement funded by the employee",D:"Medicare Supplement plan"},correct:"B",explanation:"HDHPs are eligible to be paired with a Health Savings Account (HSA). The HSA allows individuals to contribute pre-tax dollars to cover qualified medical expenses. For 2026, the HSA contribution limit is $4,400 (self-only) or $8,750 (family), and the HDHP minimum deductible is $1,700/$3,400. HSA funds roll over year to year, never expire, and can be invested — making them a powerful triple-tax-advantaged savings tool."},
+  {topic:"Health plan types (HMO, PPO, EPO, POS, HDHP)",question:"A Point-of-Service (POS) plan combines features of which two plan types?",options:{A:"HMO and traditional indemnity",B:"HMO and PPO",C:"PPO and EPO",D:"EPO and traditional indemnity"},correct:"B",explanation:"A POS plan is a hybrid of HMO and PPO. Like an HMO, members select a PCP who coordinates care and provides referrals within the network. Like a PPO, members can choose to go out-of-network — but they pay significantly more (higher deductibles and coinsurance) when they do. POS plans offer flexibility for those willing to pay more to see out-of-network providers but want the cost savings of managed care for routine in-network care."},
+
+  // ── Ch. 15: Medical expense & cost-sharing ──
+  {topic:"Medical expense & cost-sharing",question:"The amount a covered person must pay out-of-pocket before the insurance company begins paying benefits is called the:",options:{A:"Copayment",B:"Coinsurance",C:"Deductible",D:"Out-of-pocket maximum"},correct:"C",explanation:"The deductible is the amount the insured must pay out-of-pocket before the insurer begins covering costs. For example, a $1,000 deductible means the insured pays the first $1,000 of covered expenses each plan year. Copays are fixed dollar amounts per service visit. Coinsurance is the percentage split between insurer and insured after the deductible. The out-of-pocket maximum is the most the insured will pay in a year before the insurer covers 100%."},
+  {topic:"Medical expense & cost-sharing",question:"If a health plan has an 80/20 coinsurance provision, this means:",options:{A:"The insurer pays 20% and the insured pays 80%",B:"The insurer pays 80% and the insured pays 20% after the deductible",C:"The first 20% of premiums are returned if no claims are filed",D:"The insured must use in-network providers 80% of the time"},correct:"B",explanation:"An 80/20 coinsurance split means the insurance company pays 80% of covered expenses (above the deductible) and the insured pays the remaining 20%. This continues until the out-of-pocket maximum is reached, after which the insurer pays 100%. The insured's 20% share is called the coinsurance amount, and it is paid after the deductible is satisfied."},
+  {topic:"Medical expense & cost-sharing",question:"A coordination of benefits (COB) provision prevents an insured covered by two health plans from:",options:{A:"Seeing out-of-network providers",B:"Collecting more than 100% of actual medical expenses",C:"Changing primary insurers more than once per year",D:"Filing claims with the secondary insurer without prior approval"},correct:"B",explanation:"Coordination of Benefits (COB) ensures that when someone is covered under two health insurance plans, the total benefits paid do not exceed the actual cost of the medical services. The primary plan pays first; the secondary plan pays up to its limits for the remaining balance — but the combined payment cannot exceed 100% of the actual expenses. This prevents double-dipping and overpayment."},
+
+  // ── Ch. 16: Disability income insurance ──
+  {topic:"Disability income insurance",question:"Which disability definition is MOST favorable to the insured?",options:{A:"Any occupation",B:"Own occupation",C:"Gainful occupation",D:"Modified own occupation"},correct:"B",explanation:"Own-occupation disability is the most liberal (favorable) definition for the insured. It pays benefits if the insured cannot perform the duties of THEIR specific occupation — even if they could work in another field. For example, a surgeon who loses hand function could collect benefits while working as a teacher. Any-occupation is the strictest — benefits only pay if the insured cannot work in ANY occupation for which they are reasonably suited."},
+  {topic:"Disability income insurance",question:"The elimination period in a disability income policy is most similar to a:",options:{A:"Grace period",B:"Deductible",C:"Coinsurance period",D:"Free-look period"},correct:"B",explanation:"The elimination period is a time-based deductible — a waiting period at the beginning of a disability during which no benefits are paid. Common elimination periods are 30, 60, 90, or 180 days. Longer elimination periods result in lower premiums because the insurer covers fewer days of disability. The benefit period is how long benefits are paid (e.g., 2 years, 5 years, or to age 65) once the elimination period is satisfied."},
+  {topic:"Disability income insurance",question:"Residual disability benefits in a disability income policy pay when the insured:",options:{A:"Is totally disabled and hospitalized",B:"Has a partial loss of income due to disability but can still work",C:"Reaches age 65 regardless of disability status",D:"Has a disability that is expected to be permanent"},correct:"B",explanation:"Residual (partial) disability benefits compensate the insured when they can still work but suffer a partial income loss due to a disability — for example, a salesperson who can only work half-days. Benefits are proportional to the income loss. Without the residual benefit rider, a disability policy would pay only for total disability, leaving partially disabled workers with no coverage during recovery."},
+  {topic:"Disability income insurance",question:"Business overhead expense (BOE) disability insurance is designed to:",options:{A:"Replace the owner's personal income during disability",B:"Fund a buy-sell agreement triggered by disability",C:"Pay the ongoing fixed business expenses while the owner is disabled",D:"Provide lump-sum payments to business partners if an owner becomes disabled"},correct:"C",explanation:"BOE insurance covers a business owner's fixed overhead expenses (rent, utilities, staff salaries, loan payments, insurance premiums) while the owner is disabled and unable to work. It does NOT replace the owner's personal income — a separate individual disability income policy handles that. Benefits are paid to the business, not the owner personally, and are taxable to the business since premiums are tax-deductible."},
+
+  // ── Ch. 17: Medicare, Medigap & senior health plans ──
+  {topic:"Medicare, Medigap & senior health plans",question:"The 2026 Medicare Part B monthly premium is:",options:{A:"$148.50",B:"$170.10",C:"$202.90",D:"$226.00"},correct:"C",explanation:"The 2026 Medicare Part B premium is $202.90 per month for most beneficiaries, with a $283 annual deductible. Part B covers physician services, outpatient hospital care, preventive services, durable medical equipment, and some home health care. Higher-income beneficiaries pay Income-Related Monthly Adjustment Amounts (IRMAA) — additional amounts above the standard premium."},
+  {topic:"Medicare, Medigap & senior health plans",question:"Medicare Part A hospital inpatient coverage begins after a beneficiary satisfies:",options:{A:"A monthly premium",B:"An inpatient deductible per benefit period",C:"A 20% coinsurance for the first 20 days",D:"A 90-day waiting period"},correct:"B",explanation:"Medicare Part A does not have a monthly premium for most beneficiaries (those with 40+ quarters of Medicare-covered work), but it does have an inpatient deductible per benefit period. For 2026, this deductible covers the first 60 days of inpatient care. Days 61–90 require daily coinsurance. Most people receive Part A premium-free; they paid into it through payroll taxes during their working years."},
+  {topic:"Medicare, Medigap & senior health plans",question:"Medigap (Medicare Supplement) insurance is designed to:",options:{A:"Replace Medicare Parts A and B entirely",B:"Cover prescription drugs not covered under Part B",C:"Fill in the gaps such as deductibles and coinsurance left by Original Medicare",D:"Provide coverage for dental and vision not included in Medicare"},correct:"C",explanation:"Medigap policies are sold by private insurers to cover the out-of-pocket costs (gaps) left by Original Medicare — such as deductibles, coinsurance, and copays. They are standardized into lettered plans (A through N). Medigap does NOT cover prescription drugs (that's Part D), dental, vision, or long-term care. You must have both Medicare Part A and Part B to purchase a Medigap policy."},
+  {topic:"Medicare, Medigap & senior health plans",question:"Virginia's Medicaid program was expanded under the ACA to cover:",options:{A:"Only children and pregnant women",B:"Adults up to 138% of the federal poverty level",C:"All residents regardless of income",D:"Only seniors over age 65 who lack Medicare"},correct:"B",explanation:"Virginia expanded Medicaid under the ACA, effective January 2019, covering adults (ages 19–64) with incomes up to 138% of the federal poverty level. Before expansion, many low-income adults without children did not qualify. Virginia's CHIP program is called FAMIS (Family Access to Medical Insurance Security) and covers children in families with incomes too high for Medicaid but too low to afford private insurance."},
+
+  // ── Ch. 18: Health insurance policy provisions ──
+  {topic:"Health insurance policy provisions",question:"Under the mandatory notice of claim provision, an insured must notify the insurer of a claim within how many days of a loss?",options:{A:"10 days",B:"20 days",C:"30 days",D:"90 days"},correct:"B",explanation:"Virginia's mandatory health insurance provisions require the insured to notify the insurer of a claim within 20 days of the loss (or as soon as reasonably possible). After receiving notice, the insurer must provide claim forms within 15 days. The insured then has 90 days to submit proof of loss. These timeframes are designed to protect both the insured and insurer during the claims process."},
+  {topic:"Health insurance policy provisions",question:"The time limit on certain defenses provision in health insurance (similar to incontestability) states that after how many years the insurer cannot deny a claim due to misrepresentation?",options:{A:"1 year",B:"2 years",C:"3 years",D:"5 years"},correct:"B",explanation:"After 2 years from the issue date of a health insurance policy, the insurer cannot void the policy or deny a claim based on misrepresentation in the application (except for fraudulent misstatements). This 2-year limit applies to both the contestability of the policy itself and the exclusion of pre-existing conditions not disclosed. This provision mirrors life insurance incontestability rules and protects long-term policyholders."},
+  {topic:"Health insurance policy provisions",question:"The physical examination and autopsy provision allows the insurer to:",options:{A:"Require the insured to undergo annual physicals at insurer expense",B:"Examine the insured or perform an autopsy to evaluate a claim",C:"Deny all claims without a physical exam on file",D:"Require a second opinion before approving any surgery"},correct:"B",explanation:"This mandatory health insurance provision gives the insurer the right to examine the insured (at the insurer's expense) during a pending claim as often as reasonably required. In the event of a death claim, the insurer may also require an autopsy where not prohibited by law. This helps prevent fraudulent claims by allowing the insurer to verify the nature and extent of the claimed disability or illness."},
+
+  // ── Ch. 19: Health underwriting & renewability ──
+  {topic:"Health insurance underwriting & renewability",question:"Which renewability provision provides the most protection for the insured?",options:{A:"Cancellable",B:"Conditionally renewable",C:"Guaranteed renewable",D:"Non-cancellable"},correct:"D",explanation:"Non-cancellable policies provide the greatest protection — the insurer cannot cancel the policy, raise the premiums, or change any policy terms as long as premiums are paid. This is the most favorable (and most expensive) option for the insured. Guaranteed renewable allows the insurer to raise rates for an entire class (not individually). Conditionally renewable allows non-renewal for specific reasons. Cancellable gives the insurer the most control."},
+  {topic:"Health insurance underwriting & renewability",question:"HIPAA's portability provisions are designed to:",options:{A:"Allow employers to offer health insurance across state lines",B:"Limit pre-existing condition exclusion periods when switching group coverage",C:"Require all employers to offer health insurance to employees",D:"Eliminate deductibles for employees who switch jobs"},correct:"B",explanation:"HIPAA (Health Insurance Portability and Accountability Act) protects workers by limiting the pre-existing condition exclusion period when moving from one group health plan to another. If an individual had creditable coverage for 12 months without a significant gap (63+ days), the new plan cannot apply a pre-existing condition exclusion. HIPAA also established the privacy and security rules for protected health information (PHI)."},
+  {topic:"Health insurance underwriting & renewability",question:"Pre-existing condition exclusions are:",options:{A:"Permitted in all health insurance policies regardless of ACA",B:"Completely prohibited in ACA-compliant individual and small group plans",C:"Only prohibited for children under age 18",D:"Allowed for up to 5 years in ACA marketplace plans"},correct:"B",explanation:"The Affordable Care Act (ACA) prohibits pre-existing condition exclusions in all ACA-compliant individual and small group health insurance plans. Insurers cannot deny coverage, charge higher premiums, or exclude benefits based on an applicant's health status or pre-existing conditions. This is one of the most significant consumer protections in the ACA. Grandfathered plans and certain other plan types may have different rules."},
+
+  // ── VA: Title 38.2 & required numbers ──
+  {topic:"Virginia Title 38.2 & required numbers",question:"In Virginia, the grace period for life insurance premium payments is:",options:{A:"7 days",B:"10 days",C:"21 days",D:"31 days"},correct:"D",explanation:"Virginia requires a minimum 31-day grace period for life insurance policies. During the grace period, the policy remains in force even if the premium has not been paid. If the insured dies during the grace period, the insurer pays the death benefit minus the overdue premium. After 31 days without payment, the policy lapses and the nonforfeiture options take effect."},
+  {topic:"Virginia Title 38.2 & required numbers",question:"A Virginia producer must retain client records for a minimum of:",options:{A:"2 years",B:"3 years",C:"5 years",D:"7 years"},correct:"C",explanation:"Virginia law (Title 38.2) requires insurance producers to retain records of insurance transactions, including applications, policies, and correspondence, for a minimum of 5 years. This includes replacement-related documentation. Records must be made available to the Virginia Bureau of Insurance (BOI) upon request. Failure to maintain records can result in disciplinary action including license suspension or revocation."},
+  {topic:"Virginia Title 38.2 & required numbers",question:"A Virginia life insurance policy's suicide clause typically excludes death benefits for suicide within the first:",options:{A:"6 months",B:"1 year",C:"2 years",D:"3 years"},correct:"C",explanation:"Virginia's standard suicide clause excludes coverage for suicide within the first 2 years of the policy. If the insured dies by suicide during this period, the insurer returns only the premiums paid — there is no death benefit. After the 2-year period, suicide is covered like any other cause of death. The incontestability clause also takes effect at 2 years (for non-fraud misrepresentation), making year 2 a critical milestone in Virginia life insurance policies."},
+  {topic:"Virginia Title 38.2 & required numbers",question:"Virginia's free-look period for senior citizens (age 65+) purchasing a life insurance policy is:",options:{A:"10 days",B:"15 days",C:"20 days",D:"30 days"},correct:"D",explanation:"While the standard free-look period in Virginia is 10 days, senior citizens (age 65 and older) receive a 30-day free-look period. Long-term care (LTC) policies also require a 30-day free-look period for all buyers. During the free-look period, the consumer can review the policy and return it for a full premium refund if not satisfied, for any reason."},
+  {topic:"Virginia Title 38.2 & required numbers",question:"Virginia's reinstatement provision gives a policyowner how long to reinstate a lapsed life insurance policy?",options:{A:"1 year",B:"2 years",C:"3 years",D:"5 years"},correct:"C",explanation:"Virginia's reinstatement provision gives policyowners 3 years to reinstate a lapsed policy. To reinstate, the policyowner must: (1) pay all overdue premiums with interest, (2) provide evidence of insurability (the insured must still be insurable), and (3) repay any outstanding policy loans. Reinstating is often preferable to buying a new policy because the original issue date (and thus the incontestability/suicide clause start date) is restored."},
+
+  // ── VA: Producer licensing & reporting ──
+  {topic:"Producer licensing & reporting rules",question:"A Virginia insurance producer must report a felony conviction to the Bureau of Insurance within:",options:{A:"10 days",B:"15 days",C:"30 days",D:"60 days"},correct:"C",explanation:"Virginia law requires producers to report felony convictions, administrative actions taken by another state's insurance regulator, and changes of address to the Bureau of Insurance (BOI) within 30 days of the event. Failure to report can result in license suspension or revocation. The BOI uses this information to monitor the fitness of licensees and protect consumers from dishonest producers."},
+  {topic:"Producer licensing & reporting rules",question:"The continuing education requirement for a Virginia life and health insurance producer license is:",options:{A:"12 hours every year",B:"24 hours every 2 years including 3 hours of ethics",C:"20 hours every year including 5 hours of ethics",D:"18 hours every 3 years"},correct:"B",explanation:"Virginia requires licensed producers to complete 24 hours of continuing education (CE) every 2-year license cycle, including at least 3 hours of ethics. CE must be completed at least 15 days before the license expiration date. Failure to complete CE requirements results in an inactive license. CE courses must be approved by the BOI. New licensees have reduced requirements in their first licensing period."},
+  {topic:"Producer licensing & reporting rules",question:"The resident producer license fee in Virginia is:",options:{A:"$25",B:"$50",C:"$75",D:"$100"},correct:"B",explanation:"The Virginia Bureau of Insurance charges a $50 fee for a resident producer license. Virginia does not mandate pre-licensing education hours (unlike some states), though completing an approved pre-licensing course is strongly recommended before sitting for the Prometric exam. The licensing exam is administered by Prometric on behalf of the Virginia BOI, governed by Title 38.2 of the Virginia Code."},
+  {topic:"Producer licensing & reporting rules",question:"Which of the following actions by a producer would be considered acting in the capacity of an insurance agent WITHOUT a license?",options:{A:"Explaining policy terms to an existing client",B:"Quoting premium ranges from memory to a prospective client",C:"Actively soliciting and binding insurance coverage for compensation",D:"Referring a friend to a licensed agent in exchange for a gift card"},correct:"C",explanation:"Soliciting, negotiating, or binding insurance coverage for compensation requires a valid insurance producer license in Virginia. Acting as a producer without a license is a criminal offense under Title 38.2. Explaining policy terms to existing clients or referring people to licensed agents (without receiving compensation tied to the sale) are generally not considered unlicensed activity, though even referrals for compensation can trigger licensing requirements."},
+
+  // ── VA: Unfair trade practices ──
+  {topic:"Unfair trade practices & consumer protection",question:"'Twisting' in insurance is defined as:",options:{A:"Charging different premiums for the same risk based on protected characteristics",B:"Inducing a policyowner to replace a policy through misrepresentation",C:"Failing to pay a valid claim within a reasonable time period",D:"Selling insurance without disclosing commissions to the buyer"},correct:"B",explanation:"Twisting is an unfair trade practice where a producer uses misrepresentation or misleading comparisons to induce a policyowner to lapse, surrender, or replace an existing policy — for the producer's benefit (commission) rather than the client's. It is illegal under Virginia Title 38.2. The related practice of churning involves replacing a client's own existing policy through misrepresentation to generate new commissions."},
+  {topic:"Unfair trade practices & consumer protection",question:"Rebating in insurance occurs when a producer:",options:{A:"Returns a portion of the premium to the insured as an inducement to purchase",B:"Charges the insured above the filed premium rate",C:"Fails to disclose the policy's exclusions at time of sale",D:"Allows a policy to lapse intentionally to sell a new one"},correct:"A",explanation:"Rebating is the illegal practice of giving or offering to give an insured anything of value (money, gifts, special favors) as an inducement to purchase insurance — where such return is not provided for in the policy. Rebating is an unfair trade practice under Virginia law, though some states (Florida and California) allow rebating. It is considered unfair discrimination against buyers who don't receive the rebate."},
+  {topic:"Unfair trade practices & consumer protection",question:"Using the name of the Virginia Life, Accident, and Sickness Insurance Guaranty Association in advertising as a sales inducement is:",options:{A:"Permitted if the advertisement is accurate",B:"Illegal under Virginia law",C:"Required in all life insurance advertisements",D:"Permitted only for policies under $300,000"},correct:"B",explanation:"Virginia law explicitly prohibits using the existence or coverage of the Virginia Life, Accident, and Sickness Insurance Guaranty Association as an inducement to purchase insurance. The Guaranty Association protects policyholders if a licensed insurer becomes insolvent — but using it as a selling point would misrepresent the nature of the protection and encourage consumers to select insurers based on the guaranty rather than financial strength."},
+  {topic:"Unfair trade practices & consumer protection",question:"Which of the following is an example of unfair discrimination in insurance?",options:{A:"Charging higher premiums to a 60-year-old than a 30-year-old for life insurance",B:"Offering different rates to two applicants with identical risk profiles based on race",C:"Refusing to insure a skydiving instructor for an aviation-related death",D:"Declining to write a policy in a high-crime geographic area"},correct:"B",explanation:"Unfair discrimination means treating equally-situated risks differently based on protected characteristics (race, religion, national origin, sex in some contexts). Charging different rates based on age, health status, or occupation is NOT unfair discrimination — these are legitimate risk factors. However, charging different rates to applicants with identical risk profiles based on race, religion, or other protected classes is illegal unfair discrimination."},
+
+  // ── VA: Replacement regulations ──
+  {topic:"Replacement regulations & Guaranty Association",question:"Under Virginia replacement regulations, a producer who recommends replacing an existing life insurance policy must:",options:{A:"Obtain written approval from the Bureau of Insurance before proceeding",B:"Provide the applicant with a notice of replacement and comparison documents",C:"Waive the first year's commission on the new policy",D:"Allow the insured 6 months to reconsider the replacement"},correct:"B",explanation:"Virginia's replacement regulations require producers to provide the applicant with a Notice Regarding Replacement and a comparison of the existing and proposed policies so the consumer can make an informed decision. Both the applicant and producer must sign the notice. The replacing insurer must notify the existing insurer of the replacement. Records of replacement transactions must be retained for 5 years."},
+  {topic:"Replacement regulations & Guaranty Association",question:"The Virginia Life, Accident, and Sickness Insurance Guaranty Association protects policyholders if a member insurer becomes insolvent. The maximum coverage for life insurance death benefits is:",options:{A:"$100,000",B:"$250,000",C:"$300,000",D:"$500,000"},correct:"C",explanation:"The Virginia Life, Accident, and Sickness Insurance Guaranty Association provides protection up to $300,000 for life insurance death benefits per insured life if a member insurer becomes insolvent. The association covers net cash surrender values up to $100,000 and health insurance claims up to $500,000 per individual. Not all insurers or policies are covered — the association does not cover HMOs or fraternal benefit societies."},
+
+  // ── VA: Health & Medicare regulations ──
+  {topic:"Virginia-specific health & Medicare regulations",question:"Virginia uses which type of health insurance marketplace?",options:{A:"A state-run exchange operated by the Commonwealth",B:"A partnership exchange jointly operated with the federal government",C:"The federal exchange at Healthcare.gov",D:"No exchange — all coverage must be purchased directly from insurers"},correct:"C",explanation:"Virginia uses the federally facilitated marketplace — Healthcare.gov — for ACA-compliant individual and family health insurance plans. Virginia does NOT operate its own state-based exchange. Consumers in Virginia shop for plans through healthcare.gov during the annual open enrollment period (November 1 – January 15) or through a special enrollment period triggered by a qualifying life event."},
+  {topic:"Virginia-specific health & Medicare regulations",question:"Virginia's FAMIS program provides health coverage for:",options:{A:"Low-income seniors who don't qualify for Medicare",B:"Children and pregnant women in families with moderate incomes",C:"Disabled adults between ages 18 and 64",D:"State employees and their dependents"},correct:"B",explanation:"FAMIS (Family Access to Medical Insurance Security) is Virginia's CHIP (Children's Health Insurance Program). It provides low-cost health coverage to uninsured children and pregnant women in families with incomes too high to qualify for Medicaid but who cannot afford private insurance. FAMIS is administered by the Virginia Department of Medical Assistance Services (DMAS) and is jointly funded by state and federal governments."},
+  {topic:"Virginia-specific health & Medicare regulations",question:"The Virginia Long-Term Care Partnership Program allows Medicaid to:",options:{A:"Pay for LTC without any income or asset requirements",B:"Protect a portion of the beneficiary's assets equal to LTC benefits paid",C:"Require LTC insurance for all Virginians over age 60",D:"Provide free LTC insurance to low-income seniors"},correct:"B",explanation:"The Virginia Long-Term Care Partnership Program is a joint state-federal program designed to encourage people to purchase private LTC insurance. When a qualifying LTC policy pays out benefits, the policyholder can protect (shelter) an amount of assets equal to the benefits paid by the policy — and still qualify for Medicaid to cover additional LTC costs. This dollar-for-dollar asset protection incentivizes people to plan ahead for LTC needs."}
+];
+
+// Map topic labels to BANK entries
+const TOPIC_GROUPS = [
+  { group:"LIFE INSURANCE — CH. 1–12", topics:[
+    {ch:"Ch. 1–2", label:"Insurance fundamentals, risk & contract law"},
+    {ch:"Ch. 3",   label:"Legal concepts (subrogation, waiver, estoppel)"},
+    {ch:"Ch. 4",   label:"Types of life insurance policies"},
+    {ch:"Ch. 5",   label:"Provisions, riders & nonforfeiture options"},
+    {ch:"Ch. 6",   label:"Premiums, proceeds & beneficiaries"},
+    {ch:"Ch. 7",   label:"Life insurance underwriting & policy issue"},
+    {ch:"Ch. 8",   label:"Group life insurance"},
+    {ch:"Ch. 9",   label:"Annuities"},
+    {ch:"Ch. 10",  label:"Uses of life insurance (key person, buy-sell, estate)"},
+    {ch:"Ch. 11",  label:"Retirement plans & IRAs"},
+    {ch:"Ch. 12",  label:"Social Security & disability benefits"},
+  ]},
+  { group:"HEALTH INSURANCE — CH. 13–19", topics:[
+    {ch:"Ch. 13", label:"Health & accident insurance basics"},
+    {ch:"Ch. 14", label:"Health plan types (HMO, PPO, EPO, POS, HDHP)"},
+    {ch:"Ch. 15", label:"Medical expense & cost-sharing"},
+    {ch:"Ch. 16", label:"Disability income insurance"},
+    {ch:"Ch. 17", label:"Medicare, Medigap & senior health plans"},
+    {ch:"Ch. 18", label:"Health insurance policy provisions"},
+    {ch:"Ch. 19", label:"Health insurance underwriting & renewability"},
+  ]},
+  { group:"VIRGINIA STATE LAWS", topics:[
+    {ch:"VA", label:"Virginia Title 38.2 & required numbers"},
+    {ch:"VA", label:"Producer licensing & reporting rules"},
+    {ch:"VA", label:"Unfair trade practices & consumer protection"},
+    {ch:"VA", label:"Replacement regulations & Guaranty Association"},
+    {ch:"VA", label:"Virginia-specific health & Medicare regulations"},
+  ]}
+];
+
+const ALL_TOPICS = TOPIC_GROUPS.flatMap(g => g.topics.map(t => t.label));
+const VA_TOPICS = TOPIC_GROUPS[2].topics.map(t => t.label);
+
+// Build per-topic question pools, shuffle
+const POOLS = {};
+ALL_TOPICS.forEach(t => {
+  POOLS[t] = shuffle(BANK.filter(q => q.topic === t));
+});
+const POOL_IDX = {};
+ALL_TOPICS.forEach(t => { POOL_IDX[t] = 0; });
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pickFrom(topic) {
+  if (!POOLS[topic] || POOLS[topic].length === 0) return null;
+  const idx = POOL_IDX[topic] % POOLS[topic].length;
+  POOL_IDX[topic]++;
+  if (POOL_IDX[topic] >= POOLS[topic].length) {
+    POOLS[topic] = shuffle(POOLS[topic]);
+    POOL_IDX[topic] = 0;
+  }
+  return POOLS[topic][idx];
+}
+
+let state = {
+  mode:'random', selectedTopic:null,
+  total:0, correct:0, streak:0, topicScores:{}
+};
+
+function saveState() { try { localStorage.setItem('va_exam_v3', JSON.stringify({total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores})); } catch(e) {} }
+function loadState() { try { const s = localStorage.getItem('va_exam_v3'); if(s) { const p = JSON.parse(s); state.total=p.total||0; state.correct=p.correct||0; state.streak=p.streak||0; state.topicScores=p.topicScores||{}; } } catch(e) {} }
+
+function resetStats() {
+  state = {mode:state.mode,selectedTopic:state.selectedTopic,total:0,correct:0,streak:0,topicScores:{}};
+  ALL_TOPICS.forEach(t => { POOLS[t] = shuffle(BANK.filter(q => q.topic === t)); POOL_IDX[t] = 0; });
+  saveState(); updateStats();
+  document.getElementById('questions-container').innerHTML = '';
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = state.total;
+  document.getElementById('stat-correct').textContent = state.correct;
+  document.getElementById('stat-pct').textContent = state.total > 0 ? Math.round(state.correct/state.total*100)+'%' : '—';
+  document.getElementById('stat-streak').textContent = state.streak;
+  const pb = document.getElementById('progress-bar');
+  if (pb) pb.style.width = (state.total > 0 ? Math.min(Math.round(state.correct/state.total*100), 100) : 0) + '%';
+  const weak = getWeakTopics();
+  const el = document.getElementById('weak-tags');
+  if (el) el.innerHTML = weak.length ? weak.map(t=>`<span class="weak-tag">${t}</span>`).join('') : '<em>No weak spots yet!</em>';
+}
+
+function getWeakTopics() {
+  return ALL_TOPICS.filter(t => { const s = state.topicScores[t]; return s && s.total >= 2 && s.correct/s.total < 0.7; });
+}
+
+function setMode(m) {
+  state.mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mode-' + m).classList.add('active');
+  document.getElementById('topic-section').style.display = m === 'topic' ? 'block' : 'none';
+  document.getElementById('weak-info').style.display = m === 'weak' ? 'block' : 'none';
+  updateStats();
+}
+
+function buildTopicSection() {
+  const sec = document.getElementById('topic-section');
+  sec.innerHTML = '<div class="section-label" style="margin-bottom:10px">Select a chapter</div>' +
+    TOPIC_GROUPS.map(g => `<div class="topic-group">
+      <div class="topic-group-label">${g.group}</div>
+      <div class="topic-grid">${g.topics.map(t => `
+        <button class="topic-btn${state.selectedTopic===t.label?' active':''}" onclick="selectTopic(${JSON.stringify(t.label)},this)">
+          <span class="ch-badge">${t.ch}</span>${t.label}
+        </button>`).join('')}
+      </div></div>`).join('');
+}
+
+function selectTopic(label, btn) {
+  state.selectedTopic = label;
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function getTopicsForMode() {
+  if (state.mode === 'topic') return [state.selectedTopic || ALL_TOPICS[Math.floor(Math.random()*ALL_TOPICS.length)]];
+  if (state.mode === 'va') return VA_TOPICS;
+  if (state.mode === 'weak') { const w = getWeakTopics(); return w.length ? w : ALL_TOPICS; }
+  return ALL_TOPICS;
+}
+
+function generateQuestions() {
+  const topicPool = getTopicsForMode();
+  const questions = [];
+  const usedTopics = [];
+
+  for (let i = 0; i < 5; i++) {
+    const topic = topicPool[Math.floor(Math.random() * topicPool.length)];
+    const q = pickFrom(topic);
+    if (q) { questions.push(q); usedTopics.push(topic); }
+  }
+
+  if (questions.length === 0) {
+    document.getElementById('questions-container').insertAdjacentHTML('afterbegin',
+      '<div class="no-q">No questions available for this selection. Try a different mode.</div>');
+    return;
+  }
+
+  renderQuestions(questions, state.mode === 'topic' ? state.selectedTopic : null);
+}
+
+function renderQuestions(questions, topicLabel) {
+  const container = document.getElementById('questions-container');
+  const wrapper = document.createElement('div');
+  wrapper.style.marginBottom = '1.5rem';
+
+  if (topicLabel) {
+    const lbl = document.createElement('div');
+    lbl.className = 'set-label';
+    lbl.textContent = topicLabel;
+    wrapper.appendChild(lbl);
+  }
+
+  const uid = Date.now();
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    const qKey = `${uid}-${qi}`;
+    const topicSafe = q.topic.replace(/'/g,"\\'");
+    const explSafe = q.explanation.replace(/`/g,'\\`').replace(/\n/g,' ');
+
+    card.innerHTML = `
+      <div class="qnum">Q${state.total + qi + 1} &middot; ${q.topic}</div>
+      <div class="qtext">${q.question}</div>
+      <div class="options" id="opts-${qKey}">
+        ${['A','B','C','D'].map(l => `
+          <button class="opt" data-letter="${l}"
+            onclick="answer(this,'${l}','${q.correct}','${qKey}','${topicSafe}',\`${explSafe}\`)">
+            <span class="opt-letter">${l}</span><span>${q.options[l]}</span>
+          </button>`).join('')}
+      </div>
+      <div class="explanation" id="expl-${qKey}" style="display:none">
+        <div class="expl-label">Why this is the answer</div>
+        <div id="expl-text-${qKey}"></div>
+      </div>`;
+    wrapper.appendChild(card);
+  });
+
+  container.insertBefore(wrapper, container.firstChild);
+  window.scrollTo({top: 0, behavior:'smooth'});
+}
+
+function answer(btn, chosen, correct, key, topic, explanation) {
+  const opts = document.getElementById('opts-' + key);
+  if (!opts || opts.dataset.answered) return;
+  opts.dataset.answered = '1';
+  const isCorrect = chosen === correct;
+
+  state.total++;
+  if (isCorrect) { state.correct++; state.streak++; } else { state.streak = 0; }
+  if (!state.topicScores[topic]) state.topicScores[topic] = {total:0,correct:0};
+  state.topicScores[topic].total++;
+  if (isCorrect) state.topicScores[topic].correct++;
+
+  opts.querySelectorAll('.opt').forEach(o => {
+    const l = o.dataset.letter;
+    if (l === correct) o.classList.add(isCorrect && l === chosen ? 'correct' : 'reveal-correct');
+    else if (l === chosen && !isCorrect) o.classList.add('wrong');
+    o.style.cursor = 'default';
+    o.disabled = true;
+  });
+
+  const expl = document.getElementById('expl-' + key);
+  const explText = document.getElementById('expl-text-' + key);
+  if (expl && explText) { explText.textContent = explanation; expl.style.display = 'block'; }
+
+  updateStats(); saveState();
+}
+
+loadState();
+buildTopicSection();
+updateStats();
+setMode('random');
+</script>
+</body>
+</html>
