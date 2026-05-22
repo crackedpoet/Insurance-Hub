@@ -95,7 +95,7 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <button class="mode-btn active" id="mode-random" onclick="setMode('random')">&#127922; Random mix</button>
       <button class="mode-btn" id="mode-topic" onclick="setMode('topic')">&#128218; By chapter</button>
       <button class="mode-btn" id="mode-weak" onclick="setMode('weak')">&#127919; Weak areas</button>
-      <button class="mode-btn" id="mode-va" onclick="setMode('va')">&#9878;&#65039; VA laws only</button>
+      <button class="mode-btn" id="mode-md" onclick="setMode('md')">&#9878;&#65039; MD laws only</button>
     </div>
     <div id="topic-section" class="topic-section" style="display:none"></div>
     <div id="weak-info" class="weak-info" style="display:none">
@@ -219,9 +219,9 @@ function updateStats(){
 }
 function getWeak(){return ALL_TOPICS.filter(t=>{const s=state.topicScores[t];return s&&s.total>=2&&s.correct/s.total<0.7;});}
 function setMode(m){state.mode=m;document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));document.getElementById('mode-'+m).classList.add('active');document.getElementById('topic-section').style.display=m==='topic'?'block':'none';document.getElementById('weak-info').style.display=m==='weak'?'block':'none';updateStats();}
-function buildTopics(){document.getElementById('topic-section').innerHTML='<div class="section-label" style="margin-bottom:10px">Select a chapter</div>'+TOPIC_GROUPS.map(g=>`<div class="topic-group"><div class="topic-group-label">${g.group}</div><div class="topic-grid">${g.topics.map(t=>`<button class="topic-btn${state.selectedTopic===t.label?' active':''}" onclick="selTopic(${JSON.stringify(t.label)},this)"><span class="ch-badge">${t.ch}</span>${t.label}</button>`).join('')}</div></div>`).join('');}
+function buildTopics(){document.getElementById('topic-section').innerHTML='<div class="section-label" style="margin-bottom:10px">Select a chapter</div>'+TOPIC_GROUPS.map(g=>`<div class="topic-group"><div class="topic-group-label">${g.group}</div><div class="topic-grid">${g.topics.map(t=>`<button class="topic-btn${state.selectedTopic===t.label?' active':''}" data-label="${t.label.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" onclick="selTopic(this.dataset.label,this)"><span class="ch-badge">${t.ch}</span>${t.label}</button>`).join('')}</div></div>`).join('');}
 function selTopic(l,b){state.selectedTopic=l;document.querySelectorAll('.topic-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}
-function getTopics(){if(state.mode==='topic')return[state.selectedTopic||ALL_TOPICS[0]];if(state.mode==='va')return MD_TOPICS;if(state.mode==='weak'){const w=getWeak();return w.length?w:ALL_TOPICS;}return ALL_TOPICS;}
+function getTopics(){if(state.mode==='topic')return[state.selectedTopic||ALL_TOPICS[0]];if(state.mode==='md')return MD_TOPICS;if(state.mode==='weak'){const w=getWeak();return w.length?w:ALL_TOPICS;}return ALL_TOPICS;}
 
 function generateQuestions(){
   const pool=getTopics(),count=parseInt(document.getElementById('q-count').value)||5,qs=[];
