@@ -189,7 +189,7 @@ let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScor
 function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
 function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
 
-const POOLS={},PIDX={};
+const POOLS={},PIDX={},QDB={};
 function initPools(){ALL_TOPICS.forEach(t=>{POOLS[t]=shuffle(BANK.filter(q=>q.topic===t));PIDX[t]=0;});}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function qid(q){return q.question.substring(0,48);}
@@ -234,13 +234,13 @@ function renderQs(qs,label){
   if(label){const l=document.createElement('div');l.className='set-label';l.textContent=label;wrap.appendChild(l);}
   const uid=Date.now();
   qs.forEach((q,i)=>{
-    const card=document.createElement('div');card.className='qcard';const k=`${uid}-${i}`;
-    card.innerHTML=`<div class="qnum">Q${state.total+i+1} &middot; ${q.topic}</div><div class="qtext">${q.question}</div><div class="options" id="o-${k}">${['A','B','C','D'].map(l=>`<button class="opt" data-l="${l}" onclick="ans(this,'${l}','${q.correct}','${k}',${JSON.stringify(q)})"><span class="opt-letter">${l}</span><span>${q.options[l]}</span></button>`).join('')}</div><div class="explanation" id="ex-${k}" style="display:none"><div class="expl-label">Why this is the answer</div><div id="ext-${k}"></div></div>`;
+    const card=document.createElement('div');card.className='qcard';const k=`${uid}-${i}`;QDB[k]=q;
+    card.innerHTML=`<div class="qnum">Q${state.total+i+1} &middot; ${q.topic}</div><div class="qtext">${q.question}</div><div class="options" id="o-${k}">${['A','B','C','D'].map(l=>`<button class="opt" data-l="${l}" onclick="ans(this,'${l}','${q.correct}','${k}')"><span class="opt-letter">${l}</span><span>${q.options[l]}</span></button>`).join('')}</div><div class="explanation" id="ex-${k}" style="display:none"><div class="expl-label">Why this is the answer</div><div id="ext-${k}"></div></div>`;
     wrap.appendChild(card);
   });
   con.insertBefore(wrap,con.firstChild);window.scrollTo({top:0,behavior:'smooth'});
 }
-function ans(btn,chosen,correct,k,q){
+function ans(btn,chosen,correct,k){const q=QDB[k];if(!q)return;
   const opts=document.getElementById('o-'+k);if(!opts||opts.dataset.done)return;opts.dataset.done='1';
   const ok=chosen===correct;state.total++;if(ok){state.correct++;state.streak++;}else{state.streak=0;}
   if(!state.topicScores[q.topic])state.topicScores[q.topic]={total:0,correct:0};
