@@ -71,6 +71,49 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .review-opt.ro-w{background:#fce8e8;border-color:#A32D2D;color:#501313}
 .review-expl{font-size:12px;color:#444;line-height:1.65;padding:10px 12px;background:#f4f6fb;border-radius:8px}
 .review-empty{text-align:center;padding:40px 20px;color:#888;font-size:14px;background:#fff;border-radius:12px}
+
+/* ---------- AI Study Coach ---------- */
+.nav-tab{font-size:11px;padding:9px 4px 13px}
+.c-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.c-status{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px}
+.c-on{background:#D8F0D5;color:#1B6F50}
+.c-off{background:#eceff3;color:#66707c}
+.c-gear{border:1.5px solid #ddd;background:#fff;border-radius:9px;width:34px;height:34px;font-size:16px;cursor:pointer;color:#555;flex-shrink:0;line-height:1}
+.c-settings{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;border:1.5px solid #e3e6ec}
+.c-set-t{font-weight:700;font-size:13px;margin-bottom:6px}
+.c-set-p{font-size:12px;color:#555;line-height:1.55;margin-bottom:8px}
+.c-input{width:100%;padding:9px 11px;border:1.5px solid #ddd;border-radius:9px;font-size:13px;margin-bottom:8px;background:#fff;color:#1a1a1a;font-family:inherit}
+.c-set-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px}
+.c-btn{padding:8px 12px;border:1.5px solid #ddd;background:#fff;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:#444;font-family:inherit}
+.c-btn-p{background:#1B6F50;border-color:#1B6F50;color:#fff}
+.c-set-note{font-size:11px;color:#8a909a;line-height:1.5}
+.c-log{min-height:170px;max-height:50vh;overflow-y:auto;margin-bottom:10px}
+.c-empty{background:#fff;border-radius:12px;padding:16px;font-size:13px;color:#555;line-height:1.65}
+.c-row{display:flex;margin-bottom:10px}
+.c-row-u{justify-content:flex-end}
+.c-bub{max-width:88%;padding:11px 13px;border-radius:13px;font-size:13.5px;line-height:1.62}
+.c-bub-u{background:#1B6F50;color:#fff;border-bottom-right-radius:4px}
+.c-bub-a{background:#fff;color:#1a1a1a;border-bottom-left-radius:4px}
+.c-bub-a p{margin:0 0 8px}
+.c-bub-a p:last-child{margin:0}
+.c-tag{font-size:10px;color:#a0a6b0;margin-top:9px;text-transform:uppercase;letter-spacing:.04em}
+.c-think{color:#888;font-style:italic}
+.c-def{background:#eef4ff;border-left:3px solid #1B6F50;border-radius:0 8px 8px 0;padding:10px 12px;margin-bottom:8px}
+.c-def-t{font-weight:700;margin-bottom:4px}
+.c-src-h{font-size:10px;font-weight:700;color:#a0a6b0;text-transform:uppercase;letter-spacing:.07em;margin:12px 0 6px}
+.c-src{border:1px solid #e6e9ee;border-radius:9px;padding:10px 12px;margin-bottom:7px;background:#fafbfc}
+.c-src-top{font-size:10px;color:#a0a6b0;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.c-src-q{font-weight:600;font-size:13px;margin-bottom:5px;line-height:1.5}
+.c-src-a{font-size:12.5px;color:#1d4209;margin-bottom:5px}
+.c-src-e{font-size:12.5px;color:#555;line-height:1.6}
+.c-none{background:#fff8e8;border-radius:9px;padding:12px;font-size:13px;color:#7A4F00;line-height:1.6}
+.c-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.c-chip{border:1.5px solid #dde1e7;background:#fff;border-radius:99px;padding:7px 12px;font-size:12px;cursor:pointer;color:#445;font-family:inherit;text-align:left}
+.c-chip:active{background:#eef1f5}
+.c-inputrow{display:flex;gap:8px;align-items:flex-end}
+.c-ta{flex:1;padding:11px 13px;border:1.5px solid #ddd;border-radius:11px;font-size:14px;font-family:inherit;resize:none;line-height:1.5;background:#fff;color:#1a1a1a;max-height:110px;overflow-y:auto}
+.c-send{padding:12px 18px;background:#1B6F50;color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;flex-shrink:0}
+.c-ask{margin-top:10px;border:1.5px solid #1B6F50;background:#fff;color:#1B6F50;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
@@ -161,6 +204,39 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     </div>
     <div id="final-results" style="display:none"></div>
   </div>
+
+  <div id="tab-coach" style="display:none">
+    <div class="c-head">
+      <div>
+        <div class="section-label" style="margin-bottom:4px">Study Coach</div>
+        <span id="coach-status" class="c-status c-off">Offline mode</span>
+      </div>
+      <button id="coach-settings-btn" type="button" class="c-gear" title="Coach settings" aria-label="Coach settings">&#9881;</button>
+    </div>
+    <div id="coach-settings" class="c-settings" style="display:none">
+      <div class="c-set-t">Connect Claude &mdash; optional</div>
+      <div class="c-set-p">The coach already answers from your question bank and glossary for free, offline, with no setup. Connecting Claude adds conversational answers for anything outside the bank.</div>
+      <div class="c-set-p"><b>Your key stays in this browser only.</b> It is never uploaded, never stored in the repository, and never shared. On a shared computer, press Remove key when you finish studying.</div>
+      <input id="coach-key" class="c-input" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-&hellip;">
+      <select id="coach-model" class="c-input">
+        <option value="claude-sonnet-5">Claude Sonnet 5 &mdash; balanced (recommended)</option>
+        <option value="claude-opus-5">Claude Opus 5 &mdash; deepest reasoning</option>
+        <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 &mdash; fastest and cheapest</option>
+      </select>
+      <div class="c-set-row">
+        <button id="coach-save-key" type="button" class="c-btn c-btn-p">Save &amp; connect</button>
+        <button id="coach-clear-key" type="button" class="c-btn">Remove key</button>
+        <button id="coach-clear-chat" type="button" class="c-btn">Clear chat</button>
+      </div>
+      <div class="c-set-note">Create a key at console.anthropic.com under API Keys. Usage is billed to that account and is separate from a Claude subscription.</div>
+    </div>
+    <div id="coach-log" class="c-log"></div>
+    <div id="coach-chips" class="c-chips"></div>
+    <div class="c-inputrow">
+      <textarea id="coach-input" class="c-ta" rows="1" placeholder="Ask anything&hellip; e.g. What is a MEC?"></textarea>
+      <button id="coach-send" type="button" class="c-send">Ask</button>
+    </div>
+  </div>
 </div>
 
 <div class="bottom-nav">
@@ -175,6 +251,10 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <button class="nav-tab" id="nav-final" onclick="switchTab('final')">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block;margin:0 auto 2px"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
     Final Exam
+  </button>
+  <button class="nav-tab" id="nav-coach" onclick="switchTab('coach')">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block;margin:0 auto 2px"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    Coach
   </button>
 </div>
 
@@ -252,6 +332,8 @@ function switchTab(tab){
   document.getElementById('nav-practice').classList.toggle('active',tab==='practice');
   document.getElementById('nav-review').classList.toggle('active',tab==='review');
   var nf=document.getElementById('nav-final');if(nf)nf.classList.toggle('active',tab==='final');
+  var tc=document.getElementById('tab-coach');if(tc)tc.style.display=tab==='coach'?'block':'none';
+  var nc=document.getElementById('nav-coach');if(nc)nc.classList.toggle('active',tab==='coach');
   if(tab==='review')renderReview();
 }
 
@@ -473,7 +555,7 @@ function ans(btn,chosen,correct,k){const q=QDB[k];if(!q)return;
   state.topicScores[q.topic].total++;if(ok)state.topicScores[q.topic].correct++;
   state.reviewHistory.push({id:Date.now()+Math.random(),topic:q.topic,question:q.question,options:q.options,correct:q.correct,explanation:q.explanation,userAnswer:chosen,isCorrect:ok,ts:Date.now()});
   opts.querySelectorAll('.opt').forEach(o=>{const l=o.dataset.l;if(l===correct)o.classList.add(ok&&l===chosen?'correct':'reveal-correct');else if(l===chosen&&!ok)o.classList.add('wrong');o.style.cursor='default';o.disabled=true;});
-  const ex=document.getElementById('ex-'+k),ext=document.getElementById('ext-'+k);if(ex&&ext){ext.textContent=q.explanation;ex.style.display='block';}
+  const ex=document.getElementById('ex-'+k),ext=document.getElementById('ext-'+k);if(ex&&ext){ext.textContent=q.explanation;ex.style.display='block';if(typeof coachAddAskButton==='function')try{coachAddAskButton(ex,q);}catch(_){}}
   updateStats();save();
 }
 
@@ -537,13 +619,531 @@ function exportPDF(){
 }
 
 function boot(){try{initPools();load();buildTopics();updateStats();setMode('random');}catch(e){console.error('Bootstrap error:',e);try{localStorage.removeItem(SK);}catch(_){}initPools();state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{}};buildTopics();updateStats();setMode('random');}}
+
+/* ===== Study Coach (offline retrieval + optional Claude) ===== */
+/* Study Coach glossary: [term, "alias|alias", definition] */
+var COACH_G=[
+/* ---- GENERAL & REGULATION ---- */
+["Insurable interest","insurable interest","Must exist at the time of APPLICATION for life insurance — NOT at the time of death. You automatically have it in your own life, and in a spouse, dependent, business partner, or key employee. (Property insurance is the opposite: interest must exist at time of loss.)"],
+["Indemnity","principle of indemnity|indemnify","Restores the insured to the same financial position as before the loss — no profit from insurance. Health/medical expense insurance is indemnity-based; life insurance is a valued (stated-amount) contract instead."],
+["Adverse selection","adverse selection|antiselection","The tendency of higher-than-average risks to seek insurance more aggressively than standard risks. Underwriting, participation requirements, and waiting periods exist to control it."],
+["Law of large numbers","law of large numbers","The more similar exposure units an insurer covers, the more closely actual losses match predicted losses. This is what makes rate-making possible."],
+["Utmost good faith","utmost good faith|uberrimae fidei","Both parties rely on each other's honesty and full disclosure. It's the basis for the rules on representations, concealment, and warranties."],
+["Aleatory contract","aleatory","Values exchanged are UNEQUAL and depend on an uncertain future event — you might pay $500 in premium and collect $500,000, or pay for years and collect nothing."],
+["Contract of adhesion","adhesion","Written entirely by the insurer on a take-it-or-leave-it basis. Because the insured had no say in the wording, any ambiguity is construed AGAINST the insurer."],
+["Unilateral contract","unilateral","Only ONE party (the insurer) makes a legally enforceable promise. The insured can stop paying premium at any time without being in breach."],
+["Conditional contract","conditional","Both parties must satisfy certain conditions — pay premium, furnish proof of loss — before the contract is enforceable."],
+["Representation","representation|representations","A statement believed true to the best of the applicant's knowledge. It only supports rescission if it is both MATERIAL and false. Most application statements are representations."],
+["Warranty","warranty|warranties","A statement guaranteed to be absolutely true — a stricter standard than a representation. Rare in modern life and health applications."],
+["Concealment","concealment|conceal","Deliberately withholding a material fact the insurer needs to underwrite. Material concealment can void the contract."],
+["Material misrepresentation","material misrepresentation|misrepresentation","A false statement that would have changed the insurer's underwriting decision had the truth been known. This is the standard for rescinding a policy within the contestable period."],
+["Waiver","waiver","The voluntary giving up of a known right — for example, an insurer accepting a late premium without objection."],
+["Estoppel","estoppel","A party is legally prevented from denying something it previously allowed or asserted. Estoppel usually follows a waiver: once you waive a right, you're estopped from later enforcing it."],
+["Subrogation","subrogation|subrogate","After paying a claim, the insurer steps into the insured's shoes to recover from the responsible third party. It prevents double recovery. Applies to health, not life."],
+["Reinsurance","reinsurance|reinsurer|ceding","One insurer transfers part of its risk to another. The originating company is the ceding insurer; the assuming company is the reinsurer."],
+["Domestic, foreign, alien insurer","domestic insurer|foreign insurer|alien insurer|domestic foreign alien","DOMESTIC = incorporated in THIS state. FOREIGN = incorporated in another U.S. state. ALIEN = incorporated in another country."],
+["Admitted (authorized) insurer","admitted insurer|authorized insurer|certificate of authority|nonadmitted","An insurer holding a Certificate of Authority to transact business in the state. Non-admitted (unauthorized) insurers lack one and are generally not backed by the guaranty association."],
+["Stock vs mutual insurer","stock insurer|mutual insurer|participating|nonparticipating","STOCK companies are owned by shareholders and issue NON-participating policies (no dividends). MUTUAL companies are owned by policyowners and issue PARTICIPATING policies that pay dividends."],
+["Producer","producer|agent|broker","A licensed individual who solicits, negotiates, or sells insurance. A producer legally represents the INSURER, not the client."],
+["Appointment","appointment|appointed","The authorization an insurer grants a producer to act on its behalf. A producer generally must be both licensed and appointed to write business for that insurer."],
+["Fiduciary responsibility","fiduciary|fiduciary duty","A producer holds premium funds in trust for the insurer and must handle them with the highest standard of care."],
+["Commingling","commingling|commingle","Illegally mixing premium or trust funds with the producer's personal or business operating funds. A common license-revocation offense."],
+["Rebating","rebate|rebating","Giving any part of the commission or anything of value not specified in the policy to induce a purchase. Illegal in nearly every state — and illegal for the CLIENT to accept as well."],
+["Twisting","twisting|twist","Using misrepresentation or an incomplete/misleading comparison to induce a policyowner to drop existing coverage and buy a new policy. An unfair trade practice."],
+["Churning","churning|churn","Replacing policies with the SAME insurer, using the existing policy's values, purely to generate new commissions."],
+["Defamation","defamation|defame","Making a false written or oral statement that damages the reputation of an insurer or a person in the insurance business."],
+["Coercion, boycott, intimidation","coercion|boycott|intimidation","Unfair trade practices that restrain free competition — for example, forcing a borrower to buy insurance from a particular agency as a loan condition."],
+["Unfair claims settlement practices","unfair claims|claims settlement practices","Includes failing to acknowledge claims promptly, not conducting a reasonable investigation, refusing to pay without a reasonable basis, and lowballing to force litigation."],
+["Guaranty association","guaranty association|guaranty fund|insolvency","Protects policyholders when a member insurer becomes insolvent, up to per-life statutory caps. Producers are PROHIBITED from using guaranty association coverage as a sales inducement."],
+["MIB","mib|medical information bureau","The Medical Information Bureau — a nonprofit clearinghouse of coded medical information shared among member insurers. An insurer may NOT decline an applicant solely on the basis of an MIB report."],
+["FCRA","fcra|fair credit reporting act|consumer report|investigative report","The Fair Credit Reporting Act governs consumer and investigative reports. The applicant must be notified, may request the nature and scope of the investigation, and may correct inaccurate information."],
+["USA PATRIOT Act / AML","patriot act|anti-money laundering|money laundering|aml","Requires anti-money-laundering programs, producer training, and suspicious activity reporting. Applies to producers selling cash-value life and annuity products."],
+["Errors and omissions","errors and omissions|e&o|eando","Professional liability coverage protecting a producer against claims of negligent advice, mistakes, or failure to act."],
+
+/* ---- LIFE INSURANCE ---- */
+["Term life insurance","term life|term insurance|term policy","Pure death protection for a specified period, with no cash value. Lowest initial premium per dollar of coverage. Pays only if death occurs during the term."],
+["Level, ART, and decreasing term","level term|annually renewable term|art|decreasing term|increasing term","LEVEL term keeps face and premium constant. ANNUALLY RENEWABLE TERM renews each year at an increasing premium with no new evidence of insurability. DECREASING term has a declining face amount (often mortgage protection) with a level premium."],
+["Convertible term","convertible|convertibility|conversion privilege","Lets the owner exchange term coverage for a permanent policy WITHOUT proving insurability. The new premium is based on attained age (or original age, at extra cost)."],
+["Whole life insurance","whole life|ordinary life|straight life|permanent insurance","Permanent coverage with a level premium, a guaranteed death benefit, and guaranteed cash value that endows at maturity (age 100 or 121)."],
+["Limited-pay whole life","limited pay|20-pay life|paid up at 65|limited payment","Full lifetime whole-life coverage, but premiums are paid over a shorter period. Higher premium because you pay for the same coverage in fewer years."],
+["Single premium whole life","single premium|single premium whole life","One lump-sum premium creates an immediately paid-up policy. Almost always classified as a MEC for tax purposes."],
+["Universal life","universal life|ul|flexible premium|option a|option b","Permanent insurance with FLEXIBLE premiums and an adjustable death benefit. It's 'unbundled' — mortality charges, expenses, and interest are shown separately. Option A = level death benefit; Option B = increasing (face + cash value)."],
+["Variable life","variable life|vli","Fixed premium permanent insurance where cash value and death benefit vary with SEPARATE ACCOUNT investment performance. It is a security: the producer needs both an insurance license and FINRA registration."],
+["Variable universal life","variable universal life|vul","Combines flexible premiums with separate-account investing — the most securities-like life product. Requires both insurance and securities licensing."],
+["Indexed universal life","indexed universal life|iul|equity indexed life","Universal life where interest credited is tied to an external index (like the S&P 500), subject to a CAP on the upside and a FLOOR (usually 0%) protecting against market loss."],
+["Endowment","endowment","Pays the face amount at a stated maturity date OR at death, whichever comes first. Under current tax law most endowments are MECs."],
+["Juvenile insurance","juvenile insurance|juvenile life|jumping juvenile","Life insurance written on a child. Often paired with a payor benefit rider so premiums are waived if the paying adult dies or becomes disabled."],
+["Joint life (first-to-die)","joint life|first to die|first-to-die","Covers two or more lives and pays on the FIRST death. Common for business partners and mortgage protection."],
+["Survivorship life (second-to-die)","survivorship life|second to die|second-to-die|survivorship","Covers two lives and pays only after BOTH die. Cheaper than two policies and used to create liquidity for estate taxes."],
+["Credit life insurance","credit life","Decreasing term assigned to a creditor to pay off a loan balance if the borrower dies. The creditor is the beneficiary and coverage cannot exceed the debt."],
+["Cash value","cash value|cash surrender value|living benefit","The savings/equity element in permanent insurance. Accessible through policy loans, withdrawals, or surrender. It's the reason permanent insurance costs more than term."],
+["Nonforfeiture options","nonforfeiture|non-forfeiture","What the owner receives if the policy lapses or is surrendered: (1) CASH surrender, (2) REDUCED PAID-UP insurance, (3) EXTENDED TERM insurance — which is the automatic default in most policies."],
+["Extended term option","extended term","Nonforfeiture option that uses the cash value as a single premium to buy term insurance for the SAME face amount, lasting as long as the money will carry it. The usual automatic default."],
+["Reduced paid-up option","reduced paid up|reduced paid-up","Nonforfeiture option that uses the cash value as a single premium to buy a SMALLER, fully paid-up permanent policy that lasts for life with no further premiums."],
+["Dividend options","dividend option|dividends|paid-up additions|accumulate at interest","Available on participating policies: cash, reduce premium, accumulate at interest (interest is taxable), paid-up additions (usually the best long-term value), or one-year term. Dividends themselves are a non-taxable return of premium."],
+["Policy loan","policy loan|borrow against|loan provision","Borrowing against cash value. Not taxable in a non-MEC policy. Any unpaid loan plus interest is subtracted from the death benefit."],
+["Automatic premium loan","automatic premium loan|apl","A provision that automatically borrows from cash value to pay a premium still unpaid at the end of the grace period, preventing an unintended lapse."],
+["Grace period","grace period","The 30 or 31 days after a missed premium during which the policy stays in force. If the insured dies during it, the claim is paid minus the overdue premium."],
+["Incontestability","incontestability|incontestable|contestable period","After the policy has been in force 2 years during the insured's lifetime, the insurer can no longer contest it for material misrepresentation. (Fraud handling varies by state.)"],
+["Suicide clause","suicide clause|suicide","Typically 2 years. Suicide within the period limits the insurer's liability to a refund of premiums paid rather than the full death benefit."],
+["Misstatement of age or sex","misstatement of age|misstatement of sex|misstated age","Benefits are ADJUSTED to what the premium actually paid would have purchased at the correct age or sex. The policy is NOT voided — a favorite exam distinction."],
+["Free look","free look|right to examine|10 day free look","A period (commonly 10–30 days) after policy delivery during which the owner may return the policy for a FULL refund of premium, no questions asked."],
+["Reinstatement","reinstatement|reinstate","Restoring a lapsed policy — usually within 3–5 years — by providing proof of insurability and paying back premiums with interest. A new contestable period begins."],
+["Entire contract","entire contract","The policy plus the attached copy of the application constitute the whole agreement. Nothing can be added later by reference, and only an officer of the company can change it."],
+["Primary vs contingent beneficiary","primary beneficiary|contingent beneficiary|secondary beneficiary|tertiary","The PRIMARY beneficiary is first in line. The CONTINGENT (secondary) beneficiary receives proceeds only if no primary survives the insured."],
+["Revocable vs irrevocable beneficiary","revocable beneficiary|irrevocable beneficiary","REVOCABLE can be changed by the owner at any time. IRREVOCABLE has a vested right — the owner needs that beneficiary's WRITTEN CONSENT to change the designation, take a loan, or surrender."],
+["Per stirpes vs per capita","per stirpes|per capita","PER STIRPES ('by branch'): a deceased beneficiary's share passes down to their own descendants. PER CAPITA ('by head'): the proceeds are divided equally among the surviving named beneficiaries only."],
+["Common disaster clause","common disaster|simultaneous death|uniform simultaneous death","If the insured and beneficiary die in the same event and the order of death can't be determined, the INSURED is presumed to have survived — so proceeds pass to the contingent beneficiary rather than through the beneficiary's estate."],
+["Spendthrift clause","spendthrift","Protects policy proceeds still held by the insurer from the beneficiary's creditors and prevents the beneficiary from assigning or squandering future installments."],
+["Settlement options","settlement option|life income option|fixed period|fixed amount|interest only","How death proceeds are paid out: lump sum, interest only, fixed period, fixed amount, or life income (straight life, life with period certain, life with refund, or joint and survivor)."],
+["Waiver of premium rider","waiver of premium","Pays the policy's premiums if the insured becomes TOTALLY disabled, typically after a 6-month waiting period, keeping the policy fully in force."],
+["Payor benefit rider","payor benefit|payor rider","Used on juvenile policies: waives premiums if the ADULT premium-payer dies or becomes disabled, usually until the child reaches a specified age."],
+["Accidental death benefit","accidental death benefit|double indemnity|adb|ad&d","Pays an additional amount (often double the face) if death results from an accident, usually required to occur within 90 days of the accident."],
+["Guaranteed insurability rider","guaranteed insurability|gir|gio option dates","Lets the insured purchase additional coverage at specified option dates or ages with NO evidence of insurability — valuable if health later declines."],
+["Accelerated death benefit","accelerated death benefit|accelerated benefit|living benefit rider|terminal illness rider","Pays a portion of the death benefit while the insured is still living upon terminal (and sometimes chronic or critical) illness. Generally income-tax-free when the insured is terminally ill."],
+["Viatical and life settlement","viatical|viatical settlement|life settlement|viator","Selling an existing life policy to a third party for more than cash value but less than face. The buyer becomes owner and beneficiary and pays the remaining premiums. Viatical involves a terminally ill insured; life settlement involves a healthy senior."],
+["Buy-sell agreement","buy sell|buy-sell|cross purchase|entity purchase|stock redemption","A funded agreement so surviving owners can buy a deceased owner's business interest at a predetermined price. CROSS-PURCHASE: owners buy policies on each other. ENTITY (stock redemption): the business owns the policies."],
+["Key person insurance","key person|key employee|keyman","The business is the applicant, owner, premium payer, and beneficiary on a critical employee. Premiums are NOT tax-deductible; the death proceeds are generally income-tax-free."],
+["Executive bonus (Section 162)","executive bonus|section 162 plan|162 bonus","The employer pays a bonus (deductible to the business) that the employee uses to pay premiums on a policy the EMPLOYEE owns. The employee is taxed on the bonus."],
+["Human life value vs needs approach","human life value|needs approach|hlv","HUMAN LIFE VALUE estimates the insured's lost future earnings. NEEDS APPROACH totals actual cash requirements: final expenses, income replacement, mortgage, education, and debts."],
+["MEC","mec|modified endowment contract","A Modified Endowment Contract — a policy that fails the 7-pay test. The death benefit stays income-tax-free, but loans and withdrawals become LIFO (gain-taxed-first) with a 10% penalty before age 59½. Once a MEC, always a MEC."],
+["7-pay test","7 pay test|seven pay|7-pay","If cumulative premiums paid during the first seven policy years exceed what would have been paid on a 7-year paid-up basis, the policy becomes a MEC."],
+["1035 exchange","1035|1035 exchange|section 1035|tax free exchange","A tax-free exchange under IRC §1035. ALLOWED: life→life, life→annuity, life→LTC, annuity→annuity, annuity→LTC. NOT allowed: annuity→life."],
+
+/* ---- ANNUITIES ---- */
+["Accumulation vs annuity period","accumulation period|annuity period|payout period|annuitization","ACCUMULATION is the pay-in and growth phase. The ANNUITY (payout/liquidation) period is when the contract converts to income payments. Annuitization is irrevocable."],
+["Immediate vs deferred annuity","immediate annuity|deferred annuity|spia","An IMMEDIATE annuity (SPIA) is bought with a single premium and begins payout within one payment period. A DEFERRED annuity accumulates value first and pays out later."],
+["Fixed vs variable annuity","fixed annuity|variable annuity|separate account|general account","FIXED annuities guarantee a minimum interest rate and a fixed payout — the INSURER bears investment risk, funds sit in the general account. VARIABLE annuities invest in separate accounts — the OWNER bears the risk, and the producer needs FINRA registration."],
+["Indexed annuity","indexed annuity|equity indexed annuity|fixed indexed|participation rate|cap rate","Credits interest linked to an external index, limited by a CAP and a PARTICIPATION RATE, with a FLOOR that prevents loss of principal from market declines."],
+["Market value adjustment","market value adjustment|mva|modified guaranteed","An adjustment to the surrender value if the contract is cashed in before the end of the guarantee period. If interest rates ROSE, the adjustment is negative; if they FELL, it's positive."],
+["Surrender charge","surrender charge|surrender period|back end load","A declining penalty applied to withdrawals above the free-withdrawal amount during the early contract years, typically 5–10 years."],
+["Exclusion ratio","exclusion ratio","Investment in the contract ÷ expected return. Multiply it by each annuity payment to find the tax-free portion (return of basis); the rest is ordinary income. Once basis is recovered, payments are fully taxable."],
+["Life only annuity option","life only|straight life annuity|pure life","Pays the LARGEST periodic income for the annuitant's lifetime, but all payments stop at death with nothing to heirs. Highest payout, highest risk of forfeiting principal."],
+["Period certain and refund options","period certain|life with period certain|installment refund|cash refund","Guarantee a minimum number of payments or a return of unpaid principal to a beneficiary. Safer than life-only, so the periodic payment is smaller."],
+["Joint and survivor annuity","joint and survivor|joint life annuity|j&s","Pays until BOTH annuitants have died. Often steps down to two-thirds or one-half after the first death. Common for married couples."],
+["Annuity suitability","annuity suitability|suitability|suitable recommendation","The producer must have reasonable grounds to believe the annuity fits the consumer's age, income, financial objectives, liquidity needs, tax status, and risk tolerance — and must document the basis. Requires a one-time 4-hour annuity training course."],
+["Charitable gift annuity","charitable gift annuity|cga","The donor transfers assets to a charity in exchange for a lifetime income stream plus a partial charitable deduction. The charity keeps whatever remains at death."],
+
+/* ---- RETIREMENT / QUALIFIED PLANS ---- */
+["Traditional IRA","traditional ira|ira","Contributions may be tax-deductible (limited by income if covered by an employer plan). Growth is tax-deferred and distributions are taxable. 10% penalty before 59½ with exceptions."],
+["Roth IRA","roth|roth ira","Funded with AFTER-tax dollars. Qualified distributions are completely TAX-FREE after age 59½ and a 5-year holding period. No required minimum distributions for the original owner."],
+["401(k)","401k|401(k)","An employer-sponsored salary-deferral plan, frequently with an employer match and often a Roth option."],
+["403(b) / TSA","403b|403(b)|tsa|tax sheltered annuity","A Tax-Sheltered Annuity for employees of public schools and 501(c)(3) nonprofit organizations."],
+["SEP","sep|simplified employee pension","A Simplified Employee Pension — an employer-funded IRA arrangement popular with small businesses and the self-employed."],
+["SIMPLE plan","simple ira|simple plan","For employers with 100 or fewer employees. The employer must either match employee deferrals or make a nonelective contribution."],
+["Keogh (HR-10)","keogh|hr-10|hr10","A qualified retirement plan for self-employed individuals and unincorporated businesses."],
+["Rollover vs transfer","rollover|direct rollover|indirect rollover|trustee to trustee","A DIRECT (trustee-to-trustee) rollover avoids the 20% mandatory withholding because the participant never touches the money. An INDIRECT rollover triggers 20% withholding and must be completed within 60 days to avoid tax and penalty."],
+["Qualified vs non-qualified plan","qualified plan|non-qualified plan|nonqualified","QUALIFIED plans meet IRS requirements: contributions are deductible, growth is tax-deferred, and the plan cannot discriminate in favor of highly paid employees. NON-QUALIFIED plans can be selective and use after-tax dollars."],
+
+/* ---- HEALTH ---- */
+["Morbidity","morbidity","The likelihood of sickness or disability within a population — the health-insurance counterpart to mortality, and the basis for health premium rates."],
+["Elimination period","elimination period|waiting period","A time deductible at the start of a disability during which no benefits are paid. A LONGER elimination period means a LOWER premium. Common lengths: 30, 60, 90, 180 days."],
+["Benefit period","benefit period","How long benefits continue once they become payable — 2 years, 5 years, to age 65, or lifetime."],
+["Probationary period","probationary period","A period after issue during which SICKNESS claims are not covered. Accidents are typically covered immediately."],
+["Pre-existing condition","pre-existing|preexisting condition","A condition for which the insured received treatment or advice before the policy took effect. The ACA prohibits pre-existing exclusions in most plans today."],
+["Guaranteed renewable","guaranteed renewable","The insurer MUST renew to a stated age, but may raise premiums — for an entire CLASS of insureds only, never for one individual."],
+["Noncancellable","noncancellable|non-cancellable|noncan","The strongest renewal provision: the insurer can neither cancel the policy nor raise the premium above the amount stated in the contract."],
+["Conditionally / optionally renewable","conditionally renewable|optionally renewable","CONDITIONALLY renewable allows nonrenewal only for reasons stated in the contract. OPTIONALLY renewable lets the insurer decline renewal on a policy anniversary or premium due date."],
+["Coordination of benefits","coordination of benefits|cob|birthday rule","Prevents an insured with two plans from collecting more than 100% of actual expenses by designating one plan primary and the other secondary. For dependent children, the BIRTHDAY RULE makes primary the plan of the parent whose birthday falls earlier in the calendar year."],
+["Deductible, coinsurance, copay","deductible|coinsurance|copay|copayment|cost sharing","DEDUCTIBLE: the amount you pay before benefits start. COINSURANCE: the percentage split afterward (e.g. 80/20). COPAY: a flat dollar charge per visit or prescription."],
+["Out-of-pocket maximum","out of pocket maximum|stop loss|oop max","The annual ceiling on the insured's cost sharing. Once reached, the plan pays 100% of covered expenses for the rest of the year."],
+["UCR","ucr|usual customary and reasonable|reasonable and customary","Usual, Customary and Reasonable — the prevailing charge for a service in a geographic area. The plan pays up to the UCR amount; the insured may owe any excess."],
+["HMO","hmo|health maintenance organization|gatekeeper","Prepaid care delivered through a closed network. Requires a primary care physician GATEKEEPER for specialist referrals, covers out-of-network care only for emergencies, and stresses preventive care."],
+["PPO","ppo|preferred provider organization","A network of providers who have agreed to discounted fees. Members may go OUT of network at a higher cost, and no gatekeeper referral is required."],
+["EPO","epo|exclusive provider organization","Exclusive Provider Organization — network-only coverage like an HMO (no out-of-network benefits except emergencies), but typically without gatekeeper referrals."],
+["POS","pos|point of service","A hybrid plan: use the PCP gatekeeper and stay in network for the richest benefits, or self-refer out of network at reduced benefits."],
+["HDHP","hdhp|high deductible health plan","A High Deductible Health Plan with statutory minimum deductibles and maximum out-of-pocket limits. Required in order to fund an HSA."],
+["HSA","hsa|health savings account","Triple tax advantage: contributions are deductible (or pre-tax), growth is tax-free, and qualified medical withdrawals are tax-free. Requires an HDHP. Balances roll over indefinitely and belong to the employee. Non-medical withdrawals before 65 face income tax plus a 20% penalty."],
+["HRA","hra|health reimbursement arrangement","Funded and owned entirely by the EMPLOYER to reimburse employee medical expenses. Employees cannot contribute, and unused funds generally stay with the employer."],
+["FSA","fsa|flexible spending account|use it or lose it","An employee salary-reduction account for medical or dependent-care expenses. Generally USE-IT-OR-LOSE-IT with only a limited carryover or grace period. Does not require an HDHP."],
+["Capitation","capitation|capitated","A fixed per-member-per-month payment to a provider regardless of how many services the member actually uses — the classic HMO reimbursement model."],
+["Utilization review","utilization review|utilization management|precertification|prospective review|concurrent review","Cost-containment review of medical necessity — PROSPECTIVE (precertification before care), CONCURRENT (during a stay), and RETROSPECTIVE (after treatment)."],
+["Major medical","major medical|comprehensive major medical|basic medical","Broad coverage for hospital, surgical, and physician expenses with a deductible, coinsurance, and a high or unlimited maximum. Basic plans pay first-dollar but with low limits and no deductible."],
+["Corridor deductible","corridor deductible","In a supplemental major medical plan, an additional deductible the insured must satisfy in the gap AFTER basic benefits are exhausted and BEFORE major medical begins."],
+["Disability income insurance","disability income|di|income replacement","Replaces a percentage of lost earned income — usually 60–70% — when the insured cannot work. Benefits on an individually-owned policy paid with after-tax premiums are received INCOME-TAX-FREE."],
+["Own occupation vs any occupation","own occupation|own occ|any occupation|any occ","OWN OCC pays if you can't perform the duties of YOUR specific job — the more liberal, more expensive definition. ANY OCC pays only if you can't perform any job you're reasonably suited to by education, training, or experience."],
+["Presumptive disability","presumptive disability","Automatic payment of full benefits — usually with no elimination period — upon loss of sight, hearing, speech, or any two limbs, whether or not the insured can still work."],
+["Residual / partial disability","residual disability|partial disability","Pays a benefit proportional to the income actually lost when the insured returns to work at reduced capacity or hours."],
+["Social insurance supplement","social insurance supplement|sis|social security rider","Pays a benefit while the insured waits for Social Security disability to begin, then reduces or stops once Social Security payments start."],
+["COLA rider","cola|cost of living adjustment","Increases disability benefits after they begin, in step with inflation, so long-term claims keep pace with the cost of living."],
+["Future increase option","future increase option|fio|guaranteed insurability disability","Lets the insured buy additional disability coverage at later dates as income grows, with no new medical evidence required."],
+["Business overhead expense","business overhead expense|boe|overhead expense","Reimburses a disabled business owner's fixed operating costs — rent, utilities, staff salaries, leases — but NOT the owner's own salary. Premiums are tax-deductible and benefits are taxable."],
+["Disability buy-sell","disability buy sell|disability buyout","Funds the purchase of a totally disabled owner's business interest. Premiums are NOT deductible and benefits are received tax-free."],
+["Medicare Part A","medicare part a|part a|hospital insurance","Hospital insurance: inpatient hospital stays, limited skilled nursing facility care, home health, and hospice. Premium-free for those with 40 quarters of Medicare-covered employment."],
+["Medicare Part B","medicare part b|part b|medical insurance","Medical insurance: physician services, outpatient care, lab work, and durable medical equipment. Requires a monthly premium, has a 20% coinsurance, and carries a permanent late-enrollment penalty of 10% for each full 12 months of delay."],
+["Medicare Part C","medicare part c|part c|medicare advantage","Medicare Advantage — private plans approved by Medicare that must cover at least everything Parts A and B cover, and typically add dental, vision, hearing, and Part D drug coverage. Usually HMO or PPO networks."],
+["Medicare Part D","medicare part d|part d|prescription drug","Outpatient prescription drug coverage delivered through private plans. Late enrollment without other creditable drug coverage triggers a permanent penalty."],
+["Medigap","medigap|medicare supplement|medicare select","Standardized private policies (plans A through N) that fill Original Medicare's gaps. The 6-month OPEN ENROLLMENT period starts when the applicant is 65 AND enrolled in Part B — during it, coverage is guaranteed issue regardless of health."],
+["Medicaid","medicaid","A joint federal/state NEEDS-BASED program. Unlike Medicare, Medicaid pays for long-term CUSTODIAL care, which is why LTC planning so often revolves around Medicaid spend-down rules."],
+["Long-term care insurance","long term care|ltc|long-term care","Covers custodial, intermediate, skilled, home health, adult day, and respite care — services that regular health insurance and Medicare largely exclude."],
+["Activities of daily living","adl|adls|activities of daily living","Bathing, dressing, eating, toileting, transferring, and continence. A tax-qualified LTC policy pays when the insured cannot perform 2 of the 6 for at least 90 days, or has severe cognitive impairment."],
+["Levels of long-term care","skilled care|intermediate care|custodial care|home health care|respite care|adult day care","SKILLED: 24-hour nursing under physician orders. INTERMEDIATE: occasional nursing supervision. CUSTODIAL: help with ADLs, requiring no medical training — the most common need, and the one Medicare does NOT cover."],
+["Partnership LTC","partnership ltc|ltc partnership|asset disregard","A state program giving dollar-for-dollar Medicaid asset protection equal to the benefits the LTC policy paid, so policyholders keep more assets if care outlives the policy."],
+["COBRA","cobra|continuation of coverage","Federal continuation for employers with 20 or more employees. 18 months after termination or reduced hours; 29 months if disabled; 36 months for divorce, death of the employee, Medicare entitlement, or a dependent aging out. The former employee pays up to 102% of the premium."],
+["HIPAA","hipaa|portability|creditable coverage|special enrollment","Provides portability through creditable coverage, guaranteed issue and renewability protections, special enrollment rights for life events (marriage, birth, adoption, loss of other coverage), and privacy and genetic-information protections."],
+["ACA","aca|affordable care act|obamacare|metal levels|essential health benefits|shop|marketplace","Requires dependent coverage to age 26, bars pre-existing condition exclusions, mandates essential health benefits, sets metal levels (bronze, silver, gold, platinum), and creates individual and SHOP marketplaces with income-based subsidies."],
+["TRICARE","tricare|champus","The federal health program covering active-duty and retired military members and their families."],
+["Workers compensation","workers compensation|workers comp|occupational","State-mandated coverage for job-related injury and illness. Most individual disability policies are 'nonoccupational,' excluding work-related claims because workers comp already covers them."],
+["Dental insurance","dental|scheduled dental|indemnity dental","SCHEDULED plans pay a fixed dollar amount per procedure; NON-SCHEDULED plans pay a percentage of UCR. Typical tiers: preventive/diagnostic 100% with no deductible, basic services about 80%, major services about 50%."],
+["Vision insurance","vision|vision plan|eye exam","Covers ROUTINE eye care — exams, lenses, frames, contacts — usually through a network with copays. Medically necessary treatment such as cataract or glaucoma care falls under major medical, not the vision plan."],
+["Social Security disability","social security disability|ssdi|fully insured|currently insured|blackout period","Requires a 5-month waiting period and a strict definition: inability to engage in any substantial gainful activity expected to last at least 12 months or result in death. The BLACKOUT PERIOD is the gap when a surviving spouse's benefits stop until age 60."]
+];
+
+/* ==================== AI STUDY COACH ====================
+   Offline-first: answers from the question bank + glossary.
+   Optional: user-supplied Anthropic API key (stored only in this
+   browser's localStorage) for open-ended questions, grounded with
+   retrieved study material. No key is ever stored in this file.
+   ======================================================== */
+var COACH_STATE='MD', COACH_STATE_NAME='Maryland';
+var COACH_LS_KEY='ihub_coach_apikey', COACH_LS_MODEL='ihub_coach_model', COACH_LS_LOG='ihub_coach_log_'+COACH_STATE;
+var COACH_DEFAULT_MODEL='claude-sonnet-5';
+
+var COACH_STOP={};
+'a an and are as at be been but by can could did do does for from had has have how i if in into is it its may might must my no not of on or our shall should so than that the their them then there these they this those to under until up was we were what when where which while who whom why will with would you your about above after again all also am any because before being below between both during each few further here him his more most other over own same some such through too very once'.split(' ').forEach(function(w){COACH_STOP[w]=1;});
+
+/* acronym / synonym expansion so short queries still match */
+var COACH_SYN={
+ 'mec':'modified endowment contract seven pay','ltc':'long term care custodial nursing','adl':'activities daily living bathing dressing',
+ 'adls':'activities daily living bathing dressing','hmo':'health maintenance organization gatekeeper network',
+ 'ppo':'preferred provider organization network','epo':'exclusive provider organization network','pos':'point service gatekeeper',
+ 'hdhp':'high deductible health plan','hsa':'health savings account','hra':'health reimbursement arrangement',
+ 'fsa':'flexible spending account','cobra':'continuation coverage terminated employee','hipaa':'portability creditable coverage privacy',
+ 'aca':'affordable care act essential benefits marketplace','di':'disability income replacement',
+ 'boe':'business overhead expense','sis':'social insurance supplement social security','cola':'cost living adjustment',
+ 'fio':'future increase option','gio':'guaranteed insurability option','gir':'guaranteed insurability rider',
+ 'apl':'automatic premium loan','adb':'accidental death benefit double indemnity','ul':'universal life flexible premium',
+ 'vul':'variable universal life separate account','iul':'indexed universal life cap floor','art':'annually renewable term',
+ 'spia':'single premium immediate annuity','mva':'market value adjustment','cob':'coordination benefits primary secondary',
+ 'ucr':'usual customary reasonable','ira':'individual retirement account','sep':'simplified employee pension',
+ 'tsa':'tax sheltered annuity 403b','rmd':'required minimum distribution','mib':'medical information bureau',
+ 'fcra':'fair credit reporting act consumer report','aml':'anti money laundering patriot',
+ 'medigap':'medicare supplement standardized plan','ssdi':'social security disability','e&o':'errors omissions',
+ 'eo':'errors omissions','1035':'exchange tax free transfer','162':'executive bonus',
+ 'twisting':'replacement misrepresentation unfair','churning':'replacement same insurer commission',
+ 'rebating':'inducement value premium illegal','estoppel':'waiver prevented denying','subrogation':'recover third party',
+ 'annuitant':'annuity payout income','viatical':'settlement terminally ill sell policy','medicaid':'needs based custodial',
+ 'medicare':'part hospital medical advantage prescription','underwriting':'risk selection classification',
+ 'contestability':'incontestable two years misrepresentation','nonforfeiture':'cash surrender reduced paid up extended term',
+ 'beneficiary':'primary contingent revocable irrevocable proceeds','dividend':'participating mutual return premium',
+ 'deductible':'cost sharing coinsurance copay','elimination':'waiting period disability benefits begin',
+ 'presumptive':'disability sight hearing speech limbs','residual':'partial disability reduced income',
+ 'suitability':'annuity recommendation consumer objectives','guaranty':'association insolvent insurer protection'
+};
+
+var COACH_DOCS=[], COACH_DF={}, COACH_READY=false;
+
+function cEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function cNorm(s){return String(s||'').toLowerCase().replace(/[^a-z0-9\s-]/g,' ').replace(/\s+/g,' ').trim();}
+function cTok(s){return cNorm(s).split(' ').filter(function(w){return w&&w.length>1&&!COACH_STOP[w];});}
+function cExpand(toks){
+  var out=toks.slice();
+  toks.forEach(function(t){if(COACH_SYN[t])out=out.concat(COACH_SYN[t].split(' '));});
+  var seen={},res=[];
+  out.forEach(function(w){if(w&&!COACH_STOP[w]&&!seen[w]){seen[w]=1;res.push(w);}});
+  return res;
+}
+
+function coachBuildIndex(){
+  COACH_DOCS=[];COACH_DF={};
+  if(typeof BANK==='undefined')return;
+  BANK.forEach(function(q,i){
+    var o=q.options||{};
+    var full=q.question+' '+(o.A||'')+' '+(o.B||'')+' '+(o.C||'')+' '+(o.D||'')+' '+(q.explanation||'')+' '+(q.topic||'');
+    var d={i:i,q:q,toks:cTok(full),head:cTok(q.question+' '+(q.topic||'')),low:cNorm(full)};
+    var tf={};d.toks.forEach(function(t){tf[t]=(tf[t]||0)+1;});d.tf=tf;
+    COACH_DOCS.push(d);
+    Object.keys(tf).forEach(function(t){COACH_DF[t]=(COACH_DF[t]||0)+1;});
+  });
+  COACH_READY=true;
+}
+
+/* Scenario triggers: students ask "what happens if I stop paying" rather than
+   naming the concept. These map natural phrasings onto the right glossary terms. */
+/* NOTE: patterns run against cNorm() output, which turns apostrophes into spaces,
+   so contractions are written as can'?\s?t to match both "cant" and "can t". */
+var COACH_TRIG=[
+ [/stop(?:s|ped)? paying|quit(?:s)? paying|can'?\s?t afford|discontinue|stop(?:s|ped)? (?:the )?premium|lapse/,["Nonforfeiture options","Grace period"]],
+ [/miss(?:es|ed)? (?:a |the )?premium|late premium|overdue|past due/,["Grace period","Automatic premium loan"]],
+ [/lie[ds]? on|lied|false statement|didn'?\s?t disclose|did not disclose|failed to disclose|hid(?:e|den)? (?:a |the )?condition/,["Material misrepresentation","Incontestability"]],
+ [/kill(?:s|ed)? (?:him|her|them)self|suicide|takes? (?:his|her|their) own life/,["Suicide clause"]],
+ [/same (?:\w+ )?(?:accident|crash|time|event|disaster)|simultaneous|both die|die[ds]? together/,["Common disaster clause"]],
+ [/two (?:health )?plans|both parents|dual coverage|covered by two|double coverage|which (?:one |plan )?pays first/,["Coordination of benefits"]],
+ [/change (?:the |my |a )?beneficiar/,["Revocable vs irrevocable beneficiary"]],
+ [/chang(?:e|ed) (?:my|their) mind|return the policy|cancel(?:s|led)? (?:it|the policy) (?:right )?after|regret/,["Free look"]],
+ [/bring (?:it|the policy) back|restore|revive|put back in force/,["Reinstatement"]],
+ [/borrow|take money out|pull money|access (?:the )?cash/,["Policy loan","Cash value"]],
+ [/wrong (?:age|birth)|misstat|understated (?:his|her|their) age/,["Misstatement of age or sex"]],
+ [/terminally ill|dying|end of life|needs? (?:money|cash) (?:now|before)/,["Accelerated death benefit","Viatical and life settlement"]],
+ [/sell(?:s|ing)? (?:my |the |his |her )?policy/,["Viatical and life settlement"]],
+ [/can'?\s?t work|cannot work|unable to work|hurt and|injur(?:ed|y) and/,["Disability income insurance","Own occupation vs any occupation"]],
+ [/before (?:\w+ )?benefits (?:start|begin)|wait(?:ing)? before benefits|how long before benefits|how long (?:do i |must i )?wait/,["Elimination period"]],
+ [/lost (?:my |his |her |their )?job|left (?:my |his |her |their )?job|laid off|fired|quit (?:my |his |her |their )?job|keep my health insurance/,["COBRA"]],
+ [/turn(?:s|ing|ed)? 65|reach(?:es|ing)? 65|age 65/,["Medigap","Medicare Part B"]],
+ [/nursing home|assisted living|help (?:with )?bathing|can'?\s?t (?:bathe|dress|feed)|bathe or dress|home health/,["Activities of daily living","Long-term care insurance"]],
+ [/business partner (?:dies|died)|partner (?:dies|died)|buy out (?:a |the )?owner/,["Buy-sell agreement"]],
+ [/important employee|top employee|critical employee/,["Key person insurance"]],
+ [/too much (?:premium|money) (?:in|into)|overfund|dump money in/,["7-pay test","MEC"]],
+ [/swap|trade (?:in )?(?:my |the )?policy|exchange (?:my |the |an |a )?(?:old )?(?:policy|annuity)/,["1035 exchange"]],
+ [/kept the (?:money|premium)|didn'?\s?t turn in|(?:own|personal|his|her|their) (?:\w+ )?(?:bank )?account|commingl/,["Commingling","Fiduciary responsibility"]],
+ [/(?:gave|give|offer(?:s|ed|ing)?|paid|pay(?:ing)?) .{0,25}(?:client|customer|applicant|insured).{0,25}(?:gift|cash|discount|money|rebate)|rebat|split (?:my |the )?commission/,["Rebating"]],
+ [/convince[ds]? .*switch|talked .*into (?:replacing|switching)|pressure[ds]? .*replace/,["Twisting"]],
+ [/(?:insurer|company) (?:went|goes) (?:broke|under)|insolvent|bankrupt|goes broke/,["Guaranty association"]],
+ [/already (?:had|has) (?:a |the )?condition|before the policy started|prior condition/,["Pre-existing condition"]],
+ [/only sick people|healthy people don'?\s?t|worse risks/,["Adverse selection"]],
+ [/who (?:gets|receives) (?:the )?(?:money|proceeds|death benefit)/,["Primary vs contingent beneficiary","Settlement options"]],
+ [/pay(?:s|ing)? (?:the )?premiums? (?:if|when) .*disabled|premiums? waived/,["Waiver of premium rider"]]
+];
+function coachTrigHits(qn){
+  var names=[],out=[],seen={};
+  COACH_TRIG.forEach(function(t){if(t[0].test(qn))names=names.concat(t[1]);});
+  names.forEach(function(nm){
+    if(seen[nm])return; seen[nm]=1;
+    for(var i=0;i<COACH_G.length;i++){if(COACH_G[i][0]===nm){out.push({g:COACH_G[i],s:26,name:nm});break;}}
+  });
+  return out;
+}
+
+/* Returns the best-matching glossary entries. Longer and multi-word matches win,
+   and a term appearing early in the question gets a boost because that is usually
+   the actual subject ("how many ADLs trigger LTC benefits" is asking about ADLs). */
+function coachGlossHits(qn,max,raw){
+  /* Only treat a short token as a high-signal acronym if the student actually
+     typed it in caps (ADL, MEC, HSA) — otherwise ordinary words like "agent"
+     would outrank the specific concept being asked about. */
+  var acro={};
+  String(raw||'').replace(/\b[A-Z]{2,6}s?\b/g,function(m){
+    var l=m.toLowerCase(); acro[l]=1; if(/s$/.test(l))acro[l.slice(0,-1)]=1; return m;
+  });
+  var all=[];
+  for(var i=0;i<COACH_G.length;i++){
+    var g=COACH_G[i], names=(g[0]+'|'+g[1]).toLowerCase().split('|'), best=null;
+    for(var j=0;j<names.length;j++){
+      var n=names[j].trim(); if(n.length<2)continue;
+      var idx=qn.indexOf(n); if(idx<0)continue;
+      var before=idx===0?' ':qn.charAt(idx-1);
+      var after=(idx+n.length>=qn.length)?' ':qn.charAt(idx+n.length);
+      if(/[a-z0-9]/.test(before)||/[a-z0-9]/.test(after))continue;
+      var sc=n.length+(n.indexOf(' ')>=0?8:0)+Math.max(0,10-(idx/Math.max(1,qn.length))*20);
+      /* a short standalone token (ADL, MEC, HSA, COBRA) is a deliberate, high-signal
+         mention, so it should not lose to a longer phrase that merely appears nearby */
+      if(n.length<=6&&n.indexOf(' ')<0&&acro[n])sc+=14;
+      if(!best||sc>best.s)best={g:g,s:sc,name:n};
+    }
+    if(best)all.push(best);
+  }
+  /* merge scenario-trigger matches, keeping the higher score per term */
+  coachTrigHits(qn).forEach(function(t){
+    for(var i=0;i<all.length;i++){
+      if(all[i].g[0]===t.g[0]){all[i].s=Math.max(all[i].s,t.s);return;}
+    }
+    all.push(t);
+  });
+  all.sort(function(a,b){return b.s-a.s;});
+  var out=[],seen={};
+  for(var k=0;k<all.length&&out.length<(max||2);k++){
+    if(seen[all[k].g[0]])continue;
+    if(k===0||all[k].s>=all[0].s*0.45){seen[all[k].g[0]]=1;out.push(all[k]);}
+  }
+  return out;
+}
+function coachGlossHit(qn){var h=coachGlossHits(qn,1);return h.length?h[0]:null;}
+
+function coachSearch(toks,phrase,limit){
+  if(!COACH_READY)coachBuildIndex();
+  var N=COACH_DOCS.length||1,res=[];
+  COACH_DOCS.forEach(function(d){
+    var s=0,hit=0;
+    toks.forEach(function(t){
+      var df=COACH_DF[t]; if(!df)return;
+      var idf=Math.log(1+N/df), tf=d.tf[t];
+      if(tf){s+=idf*(1+Math.log(tf));hit++;}
+      if(d.head.indexOf(t)>=0)s+=idf*1.4;
+    });
+    if(!hit)return;
+    s*=(0.55+0.45*(hit/Math.max(1,toks.length)));
+    if(phrase&&phrase.length>7&&d.low.indexOf(phrase)>=0)s+=12;
+    res.push({d:d,s:s});
+  });
+  res.sort(function(a,b){return b.s-a.s;});
+  return res.slice(0,limit||6);
+}
+
+function coachAnswerOffline(text){
+  var qn=cNorm(text), toks=cExpand(cTok(text));
+  if(!toks.length)return '<div class="c-none">Ask me about any Life &amp; Health concept — for example <i>"what is a MEC"</i> or <i>"explain the elimination period"</i>.</div>';
+  var gls=coachGlossHits(qn,2,text), gl=gls.length?gls[0]:null, hits=coachSearch(toks,qn,5), html='', used=false;
+  gls.forEach(function(h){
+    html+='<div class="c-def"><div class="c-def-t">'+cEsc(h.g[0])+'</div><div>'+cEsc(h.g[2])+'</div></div>';
+    used=true;
+  });
+  var top=hits[0]?hits[0].s:0;
+  var strong=hits.filter(function(h){return h.s>=top*0.45;}).slice(0,3);
+  if(strong.length&&(!gl||top>6)){
+    html+='<div class="c-src-h">'+(used?'Related practice questions':'Closest material in your question bank')+'</div>';
+    strong.forEach(function(h){
+      var q=h.d.q,o=q.options||{};
+      html+='<div class="c-src"><div class="c-src-top">'+cEsc(q.topic)+'</div>'
+        +'<div class="c-src-q">'+cEsc(q.question)+'</div>'
+        +'<div class="c-src-a"><b>Correct:</b> '+cEsc(o[q.correct]||'')+'</div>'
+        +'<div class="c-src-e">'+cEsc(q.explanation||'')+'</div></div>';
+    });
+    used=true;
+  }
+  if(!used){
+    html='<div class="c-none">I couldn\'t find that in your study material. Try naming the concept directly (like <i>"elimination period"</i>, <i>"MEC"</i>, or <i>"Medigap open enrollment"</i>) — or open <b>&#9881;</b> above and connect Claude for open-ended questions.</div>';
+  }
+  return html;
+}
+
+/* ---------- optional Claude API (user's own key) ---------- */
+function coachGetKey(){try{return localStorage.getItem(COACH_LS_KEY)||'';}catch(e){return '';}}
+function coachGetModel(){try{return localStorage.getItem(COACH_LS_MODEL)||COACH_DEFAULT_MODEL;}catch(e){return COACH_DEFAULT_MODEL;}}
+function coachContextFor(text){
+  var qn=cNorm(text),toks=cExpand(cTok(text)),parts=[];
+  coachGlossHits(qn,2,text).forEach(function(h){parts.push('GLOSSARY — '+h.g[0]+': '+h.g[2]);});
+  coachSearch(toks,qn,5).forEach(function(h){
+    var q=h.d.q,o=q.options||{};
+    parts.push('['+q.topic+']\nQ: '+q.question+'\nCorrect answer: '+(o[q.correct]||'')+'\nExplanation: '+(q.explanation||''));
+  });
+  return parts.join('\n\n---\n\n').slice(0,9000);
+}
+function coachAskAPI(userQ,ctx){
+  var sys='You are an expert tutor helping a student pass the '+COACH_STATE_NAME+' Life & Health insurance producer licensing exam. '
+   +'Use the STUDY MATERIAL below whenever it is relevant - it is the student\'s own question bank and glossary. '
+   +'Answer in a tight, exam-focused way: state the rule, explain why it works that way, and add a short memory hook when it helps. '
+   +'Keep it under about 200 words unless more is clearly needed. Use short paragraphs or bullet lines, no markdown headings. '
+   +'Never invent statute numbers or citations. If a state-law detail is not in the material, say so plainly and tell the student to confirm it with the '+COACH_STATE_NAME+' insurance department.';
+  return fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'content-type':'application/json','x-api-key':coachGetKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:coachGetModel(),max_tokens:800,system:sys,messages:[{role:'user',content:'STUDY MATERIAL:\n'+ctx+'\n\nSTUDENT QUESTION: '+userQ}]})
+  }).then(function(r){
+    if(!r.ok)return r.text().then(function(t){throw new Error('HTTP '+r.status+' '+String(t).slice(0,120));});
+    return r.json();
+  }).then(function(j){
+    var txt=(j.content||[]).filter(function(c){return c.type==='text';}).map(function(c){return c.text;}).join('\n').trim();
+    if(!txt)throw new Error('empty response');
+    return txt;
+  });
+}
+function coachMd(s){
+  var h=cEsc(s);
+  h=h.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/(^|\n)\s*[-*]\s+/g,'$1&bull; ');
+  h=h.replace(/\n{2,}/g,'</p><p>').replace(/\n/g,'<br>');
+  return '<p>'+h+'</p>';
+}
+
+/* ---------- chat state + UI ---------- */
+var coachLog=[];
+function coachLoadLog(){try{var s=localStorage.getItem(COACH_LS_LOG);coachLog=s?(JSON.parse(s)||[]):[];}catch(e){coachLog=[];}}
+function coachSaveLog(){try{coachLog=coachLog.slice(-40);localStorage.setItem(COACH_LS_LOG,JSON.stringify(coachLog));}catch(e){}}
+function coachRender(){
+  var el=document.getElementById('coach-log'); if(!el)return;
+  if(!coachLog.length){
+    el.innerHTML='<div class="c-empty"><b>Ask me anything about the material.</b><br>'
+      +'I answer from your <b id="coach-count">'+(typeof BANK!=='undefined'?BANK.length:0)+'</b> explained questions plus a '+COACH_G.length+'-term glossary — instantly, offline, free. '
+      +'Tap a starter below or type your own.</div>';
+    return;
+  }
+  el.innerHTML=coachLog.map(function(m){
+    if(m.r==='u')return '<div class="c-row c-row-u"><div class="c-bub c-bub-u">'+cEsc(m.t)+'</div></div>';
+    return '<div class="c-row"><div class="c-bub c-bub-a">'+m.t+(m.src?'<div class="c-tag">'+cEsc(m.src)+'</div>':'')+'</div></div>';
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function coachSend(text){
+  text=String(text||'').trim(); if(!text)return;
+  coachLog.push({r:'u',t:text});
+  if(coachGetKey()){
+    coachLog.push({r:'a',t:'<span class="c-think">Thinking&hellip;</span>'});
+    coachRender();
+    var ctx=coachContextFor(text);
+    coachAskAPI(text,ctx).then(function(ans){
+      coachLog[coachLog.length-1]={r:'a',t:coachMd(ans),src:'Claude · grounded in your study material'};
+      coachRender();coachSaveLog();
+    }).catch(function(err){
+      coachLog[coachLog.length-1]={r:'a',t:coachAnswerOffline(text),src:'Offline coach · Claude unavailable ('+String(err&&err.message||err).slice(0,70)+')'};
+      coachRender();coachSaveLog();
+    });
+  }else{
+    coachLog.push({r:'a',t:coachAnswerOffline(text),src:'From your study material'});
+    coachRender();coachSaveLog();
+  }
+}
+var COACH_CHIPS=["What is a MEC?","Elimination period vs probationary period","COBRA vs conversion","Own occupation vs any occupation","Medigap open enrollment rules","Maryland Guaranty Corporation limits","Explain nonforfeiture options","Which 1035 exchanges are allowed?"];
+function coachRenderChips(){
+  var el=document.getElementById('coach-chips'); if(!el)return;
+  el.innerHTML=COACH_CHIPS.map(function(c){return '<button type="button" class="c-chip">'+cEsc(c)+'</button>';}).join('');
+  el.querySelectorAll('.c-chip').forEach(function(b){b.addEventListener('click',function(){coachSend(this.textContent);});});
+}
+function coachSyncSettings(){
+  var k=coachGetKey(), st=document.getElementById('coach-status'), inp=document.getElementById('coach-key');
+  if(st){
+    st.textContent=k?'Claude connected':'Offline mode';
+    st.className='c-status '+(k?'c-on':'c-off');
+  }
+  if(inp&&k)inp.placeholder='Key saved in this browser · sk-ant-…';
+  var m=document.getElementById('coach-model'); if(m)m.value=coachGetModel();
+}
+function coachAddAskButton(exDiv,q){
+  if(!exDiv||exDiv.querySelector('.c-ask'))return;
+  var b=document.createElement('button');
+  b.type='button'; b.className='c-ask'; b.textContent='💬 Ask Coach about this';
+  b.addEventListener('click',function(){
+    switchTab('coach');
+    coachSend('Explain this in more depth: '+q.question);
+  });
+  exDiv.appendChild(b);
+}
+function coachInit(){
+  coachBuildIndex(); coachLoadLog(); coachRender(); coachRenderChips(); coachSyncSettings();
+  var inp=document.getElementById('coach-input'), send=document.getElementById('coach-send');
+  function fire(){ if(!inp)return; var v=inp.value; inp.value=''; inp.style.height='auto'; coachSend(v); }
+  if(send)send.addEventListener('click',fire);
+  if(inp){
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();fire();}});
+    inp.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,110)+'px';});
+  }
+  var gear=document.getElementById('coach-settings-btn');
+  if(gear)gear.addEventListener('click',function(){
+    var s=document.getElementById('coach-settings');
+    if(s){s.style.display=(s.style.display==='none'||!s.style.display)?'block':'none';coachSyncSettings();}
+  });
+  var save=document.getElementById('coach-save-key');
+  if(save)save.addEventListener('click',function(){
+    var v=(document.getElementById('coach-key')||{}).value||'';
+    v=v.trim();
+    try{
+      if(v){localStorage.setItem(COACH_LS_KEY,v);}
+      var m=(document.getElementById('coach-model')||{}).value||COACH_DEFAULT_MODEL;
+      localStorage.setItem(COACH_LS_MODEL,m);
+    }catch(e){}
+    var el=document.getElementById('coach-key'); if(el)el.value='';
+    coachSyncSettings();
+    alert(coachGetKey()?'Claude connected. Your key is stored only in this browser.':'Enter a key to connect Claude.');
+  });
+  var clr=document.getElementById('coach-clear-key');
+  if(clr)clr.addEventListener('click',function(){
+    try{localStorage.removeItem(COACH_LS_KEY);}catch(e){}
+    var el=document.getElementById('coach-key'); if(el){el.value='';el.placeholder='sk-ant-…';}
+    coachSyncSettings(); alert('Key removed from this browser. Back to offline mode.');
+  });
+  var wipe=document.getElementById('coach-clear-chat');
+  if(wipe)wipe.addEventListener('click',function(){
+    coachLog=[]; coachSaveLog(); coachRender();
+  });
+}
+
 boot();
+try{coachInit();}catch(e){console.error("Coach init failed:",e);}
 // Defensive re-bind: if inline onclick was stripped by a sandbox/preview, attach listeners. Skipped when onclick already works.
 (function(){
   function bind(sel,fn){var el=document.querySelector(sel);if(el&&!el.onclick)el.addEventListener('click',fn);}
   bind('#nav-practice',function(){switchTab('practice');});
   bind('#nav-review',function(){switchTab('review');});
   bind('#nav-final',function(){switchTab('final');});
+  bind('#nav-coach',function(){switchTab('coach');});
   bind('#mode-random',function(){setMode('random');});
   bind('#mode-topic',function(){setMode('topic');});
   bind('#mode-weak',function(){setMode('weak');});
