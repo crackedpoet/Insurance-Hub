@@ -114,7 +114,92 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .c-ta{flex:1;padding:11px 13px;border:1.5px solid #ddd;border-radius:11px;font-size:14px;font-family:inherit;resize:none;line-height:1.5;background:#fff;color:#1a1a1a;max-height:110px;overflow-y:auto}
 .c-send{padding:12px 18px;background:#1B6F50;color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;flex-shrink:0}
 .c-ask{margin-top:10px;border:1.5px solid #1B6F50;background:#fff;color:#1B6F50;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+
+/* ================= Theme tokens ================= */
+:root{--c-surface:#fff;--c-border:#e6e9ee;--sc-good:#1B6F50;--sc-warn:#7A4F00;--sc-bad:#A32D2D}
+[data-theme="dark"]{--c-surface:#1b2029;--c-border:#39414f;--sc-good:#4ade80;--sc-warn:#fbbf24;--sc-bad:#f87171;color-scheme:dark}
+.nav-tab{font-size:12px;padding:10px 6px 14px}
+.theme-btn{border:1.5px solid #ddd;background:#fff;border-radius:9px;width:32px;height:32px;font-size:15px;cursor:pointer;line-height:1;padding:0;flex-shrink:0}
+
+/* ================= Floating Coach widget ================= */
+.c-fab{position:fixed;right:16px;bottom:64px;width:56px;height:56px;border-radius:50%;border:none;
+ background:#1B6F50;color:#fff;box-shadow:0 6px 20px rgba(0,0,0,.30);cursor:pointer;z-index:200;
+ display:flex;align-items:center;justify-content:center;transition:transform .18s ease}
+.c-fab:hover{transform:scale(1.06)}
+.c-fab:active{transform:scale(.94)}
+.c-fab-icon{position:absolute;display:flex;align-items:center;justify-content:center;transition:opacity .16s,transform .22s}
+.c-fab-x{opacity:0;transform:rotate(-90deg);font-size:21px;font-weight:700}
+body.coach-open .c-fab-chat{opacity:0;transform:rotate(90deg)}
+body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
+.c-fab-dot{position:absolute;top:3px;right:3px;width:12px;height:12px;border-radius:50%;background:#e8453c;border:2px solid #fff}
+.c-fab-dot[hidden]{display:none}
+.c-backdrop{position:fixed;inset:0;background:rgba(8,10,16,.5);z-index:199;display:none}
+.c-widget{position:fixed;right:16px;bottom:130px;width:390px;max-width:calc(100vw - 32px);
+ height:min(600px,calc(100vh - 190px));background:var(--c-surface);border-radius:16px;
+ box-shadow:0 14px 44px rgba(0,0,0,.30);z-index:201;display:flex;flex-direction:column;overflow:hidden;
+ animation:cpop .18s ease}
+@keyframes cpop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.c-widget[hidden]{display:none}
+.c-wtop{background:#1B6F50;color:#fff;padding:12px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-shrink:0}
+.c-wtitle{font-size:15px;font-weight:700;line-height:1.25;margin-bottom:5px}
+.c-wtop-r{display:flex;gap:6px;flex-shrink:0}
+.c-icon{width:31px;height:31px;border-radius:8px;border:1px solid rgba(255,255,255,.38);background:rgba(255,255,255,.15);
+ color:#fff;font-size:14px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;padding:0;font-family:inherit}
+.c-icon:hover{background:rgba(255,255,255,.28)}
+.c-wbody{flex:1;overflow-y:auto;padding:12px;min-height:0}
+.c-widget .c-log{max-height:none;min-height:0;overflow:visible;margin-bottom:8px}
+.c-widget .c-chips{margin-bottom:0}
+.c-widget .c-inputrow{padding:10px 12px;border-top:1px solid var(--c-border);flex-shrink:0;background:var(--c-surface)}
+.c-widget .c-status{background:rgba(255,255,255,.22);color:#fff}
+.c-widget .c-on{background:rgba(255,255,255,.30);color:#fff}
+@media(max-width:560px){
+  .c-fab{right:12px;bottom:60px;width:52px;height:52px}
+  body.coach-open .c-fab{display:none}
+  .c-widget{right:8px;left:8px;bottom:8px;width:auto;max-width:none;height:min(88vh,calc(100vh - 16px));border-radius:14px}
+  .c-backdrop:not([hidden]){display:block}
+  body.coach-open{overflow:hidden}
+}
+
+/* ================= Dark mode ================= */
+[data-theme="dark"] body{background:#12151c;color:#e6e9ef}
+[data-theme="dark"] .header p{color:#99a2b3}
+[data-theme="dark"] .stat,[data-theme="dark"] .qcard,[data-theme="dark"] .no-q,[data-theme="dark"] .r-stat,
+[data-theme="dark"] .review-card,[data-theme="dark"] .review-empty,[data-theme="dark"] .c-empty,
+[data-theme="dark"] .c-settings,[data-theme="dark"] .c-bub-a{background:#1b2029;color:#e6e9ef}
+[data-theme="dark"] .stat-num,[data-theme="dark"] .qtext,[data-theme="dark"] .review-qtext,
+[data-theme="dark"] .c-src-q,[data-theme="dark"] .c-set-t{color:#e6e9ef}
+[data-theme="dark"] .stat-lbl,[data-theme="dark"] .r-stat-lbl,[data-theme="dark"] .section-label,
+[data-theme="dark"] .qnum,[data-theme="dark"] .set-label,[data-theme="dark"] .review-topic,
+[data-theme="dark"] .topic-group-label,[data-theme="dark"] .ch-badge,[data-theme="dark"] .nav-tab,
+[data-theme="dark"] .c-src-top,[data-theme="dark"] .c-src-h,[data-theme="dark"] .c-tag,
+[data-theme="dark"] .c-set-note{color:#8d97a8}
+[data-theme="dark"] .progress-bar-wrap{background:#2a3140}
+[data-theme="dark"] .bottom-nav{background:#171b23;border-top-color:#2a3140}
+[data-theme="dark"] .mode-btn,[data-theme="dark"] .topic-btn,[data-theme="dark"] .q-count-sel,
+[data-theme="dark"] .review-filter,[data-theme="dark"] .opt,[data-theme="dark"] .c-input,
+[data-theme="dark"] .c-ta,[data-theme="dark"] .c-chip,[data-theme="dark"] .c-btn,
+[data-theme="dark"] .theme-btn,[data-theme="dark"] .export-btn,[data-theme="dark"] .clear-btn,
+[data-theme="dark"] .review-opt,[data-theme="dark"] .c-src{background:#232935;border-color:#39414f;color:#dfe4ec}
+[data-theme="dark"] .mode-btn.active,[data-theme="dark"] .topic-btn.active{background:#1e2b3d;border-color:#1B6F50;color:#9fc4ff}
+[data-theme="dark"] .opt.correct,[data-theme="dark"] .opt.reveal-correct,
+[data-theme="dark"] .review-opt.ro-c{background:#17321a;border-color:#2f7a35;color:#b7edb9}
+[data-theme="dark"] .opt.wrong,[data-theme="dark"] .review-opt.ro-w{background:#3a1a1c;border-color:#8c3a3a;color:#f3b7b7}
+[data-theme="dark"] .explanation,[data-theme="dark"] .c-def{background:#182437;color:#c6dbf7}
+[data-theme="dark"] .review-expl{background:#1f2531;color:#c3cad6}
+[data-theme="dark"] .weak-info{background:#33270f;color:#f0cf94}
+[data-theme="dark"] .weak-tag{background:#5a4413;color:#ffd98a}
+[data-theme="dark"] .export-btn{color:#9fd8bd}
+[data-theme="dark"] .clear-btn{color:#f0a0a0}
+[data-theme="dark"] .c-src-a{color:#a9e5ad}
+[data-theme="dark"] .c-src-e,[data-theme="dark"] .c-set-p,[data-theme="dark"] .c-empty{color:#b3bbc8}
+[data-theme="dark"] .c-none{background:#332b16;color:#f0d79b}
+[data-theme="dark"] .c-off{background:#2a3140;color:#a8b1c0}
+[data-theme="dark"] .c-ask{background:#232935}
+/* Final Exam results are built with inline styles in JS */
+[data-theme="dark"] #final-results div[style*="background:#fff"]{background:#1b2029!important}
+[data-theme="dark"] #final-results div[style*="#f0f0f0"]{border-bottom-color:#2a3140!important}
 </style>
+<script>(function(){try{var t=localStorage.getItem("ihub_theme");if(!t)t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body>
 <div class="wrap">
@@ -123,7 +208,10 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <h1>MD Exam Prep</h1>
       <p>Maryland Life &amp; Health &middot; 27 topics &middot; 296 questions &middot; answers shuffled each attempt</p>
     </div>
-    <div id="boot-status" title="If this stays on 'Loading…' the page didn't finish loading — usually means the file uploaded to GitHub was truncated. Re-upload via drag-and-drop." style="font-size:11px;padding:3px 9px;border-radius:99px;background:#FFE9A8;color:#7A4F00;font-weight:700;white-space:nowrap;flex-shrink:0">Loading&hellip;</div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <button id="theme-btn" type="button" class="theme-btn" title="Switch to dark mode" aria-label="Toggle dark mode">🌙</button>
+  <div id="boot-status" title="If this stays on 'Loading…' the page didn't finish loading — usually means the file uploaded to GitHub was truncated. Re-upload via drag-and-drop." style="font-size:11px;padding:3px 9px;border-radius:99px;background:#FFE9A8;color:#7A4F00;font-weight:700;white-space:nowrap;flex-shrink:0">Loading&hellip;</div>
+    </div>
   </div>
   <div class="stats">
     <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Done</div></div>
@@ -205,14 +293,19 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div id="final-results" style="display:none"></div>
   </div>
 
-  <div id="tab-coach" style="display:none">
-    <div class="c-head">
+  <div id="coach-backdrop" class="c-backdrop" hidden></div>
+  <div id="tab-coach" class="c-widget" hidden role="dialog" aria-label="Study Coach">
+    <div class="c-wtop">
       <div>
-        <div class="section-label" style="margin-bottom:4px">Study Coach</div>
+        <div class="c-wtitle">Study Coach</div>
         <span id="coach-status" class="c-status c-off">Offline mode</span>
       </div>
-      <button id="coach-settings-btn" type="button" class="c-gear" title="Coach settings" aria-label="Coach settings">&#9881;</button>
+      <div class="c-wtop-r">
+        <button id="coach-settings-btn" type="button" class="c-icon" title="Coach settings" aria-label="Coach settings">&#9881;</button>
+        <button id="coach-close" type="button" class="c-icon" title="Close" aria-label="Close coach">&#10005;</button>
+      </div>
     </div>
+    <div class="c-wbody">
     <div id="coach-settings" class="c-settings" style="display:none">
       <div class="c-set-t">Connect Claude &mdash; optional</div>
       <div class="c-set-p">The coach already answers from your question bank and glossary for free, offline, with no setup. Connecting Claude adds conversational answers for anything outside the bank.</div>
@@ -232,6 +325,7 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     </div>
     <div id="coach-log" class="c-log"></div>
     <div id="coach-chips" class="c-chips"></div>
+    </div>
     <div class="c-inputrow">
       <textarea id="coach-input" class="c-ta" rows="1" placeholder="Ask anything&hellip; e.g. What is a MEC?"></textarea>
       <button id="coach-send" type="button" class="c-send">Ask</button>
@@ -251,10 +345,6 @@ body{background:#f2f2f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <button class="nav-tab" id="nav-final" onclick="switchTab('final')">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block;margin:0 auto 2px"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
     Final Exam
-  </button>
-  <button class="nav-tab" id="nav-coach" onclick="switchTab('coach')">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:block;margin:0 auto 2px"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-    Coach
   </button>
 </div>
 
@@ -332,8 +422,6 @@ function switchTab(tab){
   document.getElementById('nav-practice').classList.toggle('active',tab==='practice');
   document.getElementById('nav-review').classList.toggle('active',tab==='review');
   var nf=document.getElementById('nav-final');if(nf)nf.classList.toggle('active',tab==='final');
-  var tc=document.getElementById('tab-coach');if(tc)tc.style.display=tab==='coach'?'block':'none';
-  var nc=document.getElementById('nav-coach');if(nc)nc.classList.toggle('active',tab==='coach');
   if(tab==='review')renderReview();
 }
 
@@ -416,14 +504,14 @@ function submitFinalExam(){
   const passed=pct>=70;
   let html='<div style="background:#fff;border-radius:12px;padding:20px;margin-bottom:14px;text-align:center">'
     +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:8px">Final Exam Result</div>'
-    +'<div style="font-size:42px;font-weight:800;color:'+(passed?'#1B6F50':'#A32D2D')+';margin-bottom:6px">'+pct+'%</div>'
-    +'<div style="font-size:18px;font-weight:600;color:'+(passed?'#1B6F50':'#A32D2D')+'">'+(passed?'✓ PASS (70% to pass)':'Below 70% — keep drilling weak areas')+'</div>'
+    +'<div style="font-size:42px;font-weight:800;color:'+(passed?'var(--sc-good)':'var(--sc-bad)')+';margin-bottom:6px">'+pct+'%</div>'
+    +'<div style="font-size:18px;font-weight:600;color:'+(passed?'var(--sc-good)':'var(--sc-bad)')+'">'+(passed?'✓ PASS (70% to pass)':'Below 70% — keep drilling weak areas')+'</div>'
     +'<div style="font-size:13px;color:#666;margin-top:6px">'+correct+' of '+total+' correct</div></div>'
     +'<div style="background:#fff;border-radius:12px;padding:18px;margin-bottom:14px">'
     +'<div class="section-label" style="margin-bottom:10px">Score by official outline domain</div>';
   Object.keys(domainScore).sort(function(a,b){return a===b?0:(isNaN(a)?1:isNaN(b)?-1:(+a)-(+b));}).forEach(function(k){
     const d=domainScore[k],dp=d.n>0?Math.round(d.c/d.n*100):0;
-    const color=dp>=70?'#1B6F50':dp>=50?'#7A4F00':'#A32D2D';
+    const color=dp>=70?'var(--sc-good)':dp>=50?'var(--sc-warn)':'var(--sc-bad)';
     html+='<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0">'
       +'<span style="font-size:13px">'+fEscape(d.name)+'</span>'
       +'<span style="font-size:13px;font-weight:700;color:'+color+';white-space:nowrap;margin-left:10px">'+d.c+'/'+d.n+' &middot; '+dp+'%</span></div>';
@@ -1050,7 +1138,7 @@ function coachRender(){
     if(m.r==='u')return '<div class="c-row c-row-u"><div class="c-bub c-bub-u">'+cEsc(m.t)+'</div></div>';
     return '<div class="c-row"><div class="c-bub c-bub-a">'+m.t+(m.src?'<div class="c-tag">'+cEsc(m.src)+'</div>':'')+'</div></div>';
   }).join('');
-  el.scrollTop=el.scrollHeight;
+  var sc=document.querySelector('.c-wbody')||el; sc.scrollTop=sc.scrollHeight;
 }
 function coachSend(text){
   text=String(text||'').trim(); if(!text)return;
@@ -1091,13 +1179,60 @@ function coachAddAskButton(exDiv,q){
   var b=document.createElement('button');
   b.type='button'; b.className='c-ask'; b.textContent='💬 Ask Coach about this';
   b.addEventListener('click',function(){
-    switchTab('coach');
+    coachOpen();
     coachSend('Explain this in more depth: '+q.question);
   });
   exDiv.appendChild(b);
 }
+
+/* ---------- theme ---------- */
+function ihubSetTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  try{localStorage.setItem('ihub_theme',t);}catch(e){}
+  var b=document.getElementById('theme-btn');
+  if(b){b.textContent=(t==='dark'?'\u2600\uFE0F':'\uD83C\uDF19');b.title=(t==='dark'?'Switch to light mode':'Switch to dark mode');}
+}
+function ihubInitTheme(){
+  var t=null;try{t=localStorage.getItem('ihub_theme');}catch(e){}
+  if(!t)t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+  ihubSetTheme(t);
+  var b=document.getElementById('theme-btn');
+  if(b)b.addEventListener('click',function(){
+    ihubSetTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+  });
+}
+/* ---------- floating coach widget ---------- */
+function coachOpen(){
+  var w=document.getElementById('tab-coach'),bd=document.getElementById('coach-backdrop');
+  if(!w)return;
+  w.hidden=false; if(bd)bd.hidden=false;
+  document.body.classList.add('coach-open');
+  var dot=document.getElementById('coach-fab-dot'); if(dot)dot.hidden=true;
+  coachRender();
+  setTimeout(function(){
+    var i=document.getElementById('coach-input');
+    if(i&&window.innerWidth>560){try{i.focus();}catch(e){}}
+  },90);
+}
+function coachClose(){
+  var w=document.getElementById('tab-coach'),bd=document.getElementById('coach-backdrop');
+  if(w)w.hidden=true; if(bd)bd.hidden=true;
+  document.body.classList.remove('coach-open');
+}
+function coachToggle(){
+  var w=document.getElementById('tab-coach');
+  if(w&&w.hidden)coachOpen(); else coachClose();
+}
+function coachIsOpen(){var w=document.getElementById('tab-coach');return !!(w&&!w.hidden);}
+
 function coachInit(){
   coachBuildIndex(); coachLoadLog(); coachRender(); coachRenderChips(); coachSyncSettings();
+  function ihubWireFab(){var f=document.getElementById('coach-fab');if(f&&!f.getAttribute('data-wired')){f.setAttribute('data-wired','1');f.addEventListener('click',coachToggle);}}
+  ihubWireFab();
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ihubWireFab);else setTimeout(ihubWireFab,0);
+  var cls=document.getElementById('coach-close'); if(cls)cls.addEventListener('click',coachClose);
+  var bd=document.getElementById('coach-backdrop'); if(bd)bd.addEventListener('click',coachClose);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&coachIsOpen())coachClose();});
   var inp=document.getElementById('coach-input'), send=document.getElementById('coach-send');
   function fire(){ if(!inp)return; var v=inp.value; inp.value=''; inp.style.height='auto'; coachSend(v); }
   if(send)send.addEventListener('click',fire);
@@ -1136,6 +1271,7 @@ function coachInit(){
 }
 
 boot();
+try{ihubInitTheme();}catch(e){console.error("Theme init failed:",e);}
 try{coachInit();}catch(e){console.error("Coach init failed:",e);}
 // Defensive re-bind: if inline onclick was stripped by a sandbox/preview, attach listeners. Skipped when onclick already works.
 (function(){
@@ -1143,7 +1279,6 @@ try{coachInit();}catch(e){console.error("Coach init failed:",e);}
   bind('#nav-practice',function(){switchTab('practice');});
   bind('#nav-review',function(){switchTab('review');});
   bind('#nav-final',function(){switchTab('final');});
-  bind('#nav-coach',function(){switchTab('coach');});
   bind('#mode-random',function(){setMode('random');});
   bind('#mode-topic',function(){setMode('topic');});
   bind('#mode-weak',function(){setMode('weak');});
@@ -1164,5 +1299,10 @@ window.addEventListener('error',function(ev){console.error('Unhandled:',ev.messa
 (function(){var el=document.getElementById('boot-status');if(el){el.textContent='✓ Ready';el.style.background='#D8F0D5';el.style.color='#1B6F50';el.title='Page loaded successfully.';}})();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<button id="coach-fab" type="button" class="c-fab" aria-label="Open Study Coach" title="Ask the Study Coach">
+  <span class="c-fab-icon c-fab-chat"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+  <span class="c-fab-icon c-fab-x">&#10005;</span>
+  <span id="coach-fab-dot" class="c-fab-dot" hidden></span>
+</button>
 </body>
 </html>
