@@ -238,6 +238,32 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
 .srs-empty-i{font-size:30px;line-height:1;margin-bottom:8px}
 .srs-empty-t{font-weight:700;font-size:15px;margin-bottom:6px}
 .srs-empty-p{font-size:13px;color:#8d97a8;line-height:1.6}
+
+/* ---------- Flashcards ---------- */
+.mode-btn.srs{grid-column:auto}            /* was 1/-1 — left gaps in the 2-col grid */
+.mode-btn.cards{display:flex;align-items:center;justify-content:center;gap:8px}
+.fc-prog{font-size:11px;font-weight:700;color:#8d97a8;letter-spacing:.06em;text-transform:uppercase;text-align:center;margin-bottom:10px}
+.fc-card{background:var(--c-surface);border-radius:16px;padding:34px 22px;min-height:210px;display:flex;
+ flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;
+ box-shadow:0 2px 14px rgba(0,0,0,.09);margin-bottom:12px;user-select:none}
+.fc-card:active{transform:scale(.995)}
+.fc-term{font-size:22px;font-weight:700;line-height:1.3}
+.fc-hint{font-size:12px;color:#8d97a8;margin-top:16px;letter-spacing:.03em}
+.fc-def{font-size:14.5px;line-height:1.65;margin-top:16px;padding-top:16px;border-top:1px solid var(--c-border);
+ color:#374151;text-align:left;width:100%}
+[data-theme="dark"] .fc-def{color:#c3cad6}
+.fc-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.fc-btn{padding:14px 12px;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;border:1.5px solid;font-family:inherit}
+.fc-no{background:#fff;border-color:#A32D2D;color:#A32D2D}
+.fc-yes{background:#1B6F50;border-color:#1B6F50;color:#fff}
+[data-theme="dark"] .fc-no{background:#2a1e1e;border-color:#8c3a3a;color:#f0a0a0}
+.fc-done{background:var(--c-surface);border-radius:14px;padding:26px 20px;text-align:center}
+.fc-done-i{font-size:32px;line-height:1;margin-bottom:10px}
+.fc-done-t{font-size:17px;font-weight:700;margin-bottom:8px}
+.fc-done-p{font-size:13.5px;color:#8d97a8;line-height:1.65;margin-bottom:16px}
+.fc-again{padding:12px 20px;background:#2A5FA5;color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.fc-kbd{font-size:11px;color:#8d97a8;text-align:center;margin-top:10px}
+@media(max-width:560px){.fc-kbd{display:none}}
 </style>
 <script>(function(){try{var t=localStorage.getItem("ihub_theme");if(!t)t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
@@ -267,8 +293,9 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
       <button class="mode-btn active" id="mode-random" onclick="setMode('random')">&#127922; Random mix</button>
       <button class="mode-btn" id="mode-topic" onclick="setMode('topic')">&#128218; By chapter</button>
       <button class="mode-btn" id="mode-weak" onclick="setMode('weak')">&#127919; Weak areas</button>
-      <button class="mode-btn srs" id="mode-srs" onclick="setMode('srs')">&#128257; Due for review <span id="srs-count" class="srs-badge" hidden>0</span></button>
       <button class="mode-btn" id="mode-va" onclick="setMode('va')">&#9878;&#65039; VA laws only</button>
+      <button class="mode-btn srs" id="mode-srs" onclick="setMode('srs')">&#128257; Due for review <span id="srs-count" class="srs-badge" hidden>0</span></button>
+      <button class="mode-btn cards" id="mode-cards" onclick="setMode('cards')">&#127183; Flashcards</button>
     </div>
     <div id="topic-section" class="topic-section" style="display:none"></div>
     <div id="weak-info" class="weak-info" style="display:none">
@@ -445,10 +472,10 @@ NEW_BANK.forEach(q=>BANK.push(q));
 (function(){BANK.forEach(q=>{if(q.question==='Medicare Advantage (Part C) plans:'&&q.topic==='Social Security & disability benefits')q.topic='Medicare, Medigap & senior health plans';});let seen=false;for(let i=0;i<BANK.length;i++){if(BANK[i].question==="'Twisting' in insurance is defined as:"){if(seen){BANK.splice(i,1);break;}else seen=true;}}})();
 const OUTLINE_WEIGHTS=[{key:'1',name:'Insurance Regulation',weight:0.10,items:14,topics:['Producer licensing & reporting rules','Unfair trade practices & consumer protection','Replacement regulations & Guaranty Association','Virginia Title 38.2 & required numbers']},{key:'2',name:'General Insurance',weight:0.06,items:8,topics:['Insurance fundamentals, risk & contract law','Legal concepts (subrogation, waiver, estoppel)']},{key:'3',name:'Life Insurance Basics',weight:0.06,items:8,topics:['Uses of life insurance (key person, buy-sell, estate)','Life insurance underwriting & policy issue']},{key:'4',name:'Life Insurance Policies',weight:0.10,items:14,topics:['Types of life insurance policies','Group life insurance']},{key:'5',name:'Life Policy Provisions, Options & Riders',weight:0.11,items:16,topics:['Provisions, riders & nonforfeiture options','Premiums, proceeds & beneficiaries']},{key:'6',name:'Annuities',weight:0.06,items:8,topics:['Annuities']},{key:'7',name:'Federal Tax — Life & Annuities',weight:0.02,items:3,topics:['Federal tax — Life & Annuities']},{key:'8',name:'Qualified Plans',weight:0.02,items:3,topics:['Retirement plans & IRAs','Social Security & disability benefits']},{key:'9',name:'Health Insurance Basics',weight:0.06,items:8,topics:['Health & accident insurance basics','Health insurance underwriting & renewability']},{key:'10',name:'Individual Health Policy Provisions',weight:0.11,items:16,topics:['Health insurance policy provisions']},{key:'11',name:'Disability Income & Related Insurance',weight:0.05,items:7,topics:['Disability income insurance']},{key:'12',name:'Medical Plans',weight:0.06,items:8,topics:['Health plan types (HMO, PPO, EPO, POS, HDHP)','Medical expense & cost-sharing']},{key:'13',name:'Group Health Insurance',weight:0.05,items:7,topics:['Group health insurance']},{key:'14',name:'Dental Insurance',weight:0.01,items:2,topics:['Dental & vision insurance']},{key:'15',name:'Senior Citizens & Special Needs',weight:0.11,items:15,topics:['Medicare, Medigap & senior health plans']},{key:'16',name:'Federal Tax — Health Insurance',weight:0.02,items:3,topics:['Federal tax — Health insurance']},{key:'S',name:'Virginia-Specific Health & Medicare',weight:0,items:0,topics:['Virginia-specific health & Medicare regulations']}];
 
-let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{}};
+let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{},cards:{}};
 
-function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),srs:state.srs||{},seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
-function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.examHistory=Array.isArray(p.examHistory)?p.examHistory:[];state.srs=(p.srs&&typeof p.srs==='object')?p.srs:{};state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
+function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),srs:state.srs||{},cards:state.cards||{},seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
+function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.examHistory=Array.isArray(p.examHistory)?p.examHistory:[];state.srs=(p.srs&&typeof p.srs==='object')?p.srs:{};state.cards=(p.cards&&typeof p.cards==='object')?p.cards:{};state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
 
 const POOLS={},PIDX={},QDB={};
 function initPools(){ALL_TOPICS.forEach(t=>{POOLS[t]=shuffle(BANK.filter(q=>q.topic===t));PIDX[t]=0;});}
@@ -504,6 +531,103 @@ function srsUpdateBadge(){
   var n=0; try{n=srsDueList().length;}catch(e){}
   b.textContent=n; b.hidden=(n===0);
 }
+
+
+/* ================= Flashcards =================
+   Same Leitner schedule as the question SRS, but kept in its own store so
+   term recall never inflates the exam-question retention numbers.        */
+function cardsAll(){ if(!state.cards)state.cards={}; return state.cards; }
+function cardGet(t){ return cardsAll()[t]||null; }
+function cardRecord(t,ok){
+  var m=cardsAll(), r=m[t]||{b:0,seen:0,missed:0,due:0};
+  r.seen=(r.seen||0)+1;
+  if(ok)r.b=Math.min(SRS_MAX,(r.b||0)+1); else {r.b=0;r.missed=(r.missed||0)+1;}
+  r.last=Date.now(); r.due=Date.now()+SRS_DAYS[r.b]*86400000;
+  m[t]=r;
+}
+function cardCounts(){
+  var m=cardsAll(), now=Date.now(), c={total:COACH_G.length,seen:0,mastered:0,learning:0,due:0};
+  COACH_G.forEach(function(g){
+    var r=m[g[0]]; if(!r)return;
+    c.seen++; if(r.b>=4)c.mastered++; else c.learning++;
+    if(r.due<=now)c.due++;
+  });
+  return c;
+}
+/* due terms first (weakest box first), then terms never seen */
+function cardDeck(n){
+  var m=cardsAll(), now=Date.now(), due=[], fresh=[];
+  COACH_G.forEach(function(g){
+    var r=m[g[0]], item={term:g[0],def:g[2]};
+    if(!r)fresh.push(item);
+    else if(r.due<=now){item._b=r.b;item._d=r.due;due.push(item);}
+  });
+  due.sort(function(a,b){ return a._b!==b._b ? a._b-b._b : a._d-b._d; });
+  fresh=shuffle(fresh);
+  return due.concat(fresh).slice(0,n||10);
+}
+var fcDeck=null;
+function fcStart(){
+  var con=document.getElementById('questions-container');
+  var want=parseInt(document.getElementById('q-count').value)||5;
+  var deck=cardDeck(want);
+  if(!deck.length){
+    con.innerHTML='<div class="fc-done"><div class="fc-done-i">&#127881;</div>'
+      +'<div class="fc-done-t">All caught up</div>'
+      +'<div class="fc-done-p">Every term is scheduled further out. Come back tomorrow.</div></div>';
+    window.scrollTo({top:0,behavior:'smooth'}); return;
+  }
+  fcDeck={list:deck,i:0,flipped:false,y:0,n:0};
+  con.innerHTML='<div id="fc-wrap"></div>';
+  fcPaint(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function fcPaint(){
+  var w=document.getElementById('fc-wrap'); if(!w||!fcDeck)return;
+  if(fcDeck.i>=fcDeck.list.length){
+    var tot=fcDeck.y+fcDeck.n;
+    w.innerHTML='<div class="fc-done"><div class="fc-done-i">'+(fcDeck.n===0?'&#127942;':'&#128170;')+'</div>'
+      +'<div class="fc-done-t">You knew '+fcDeck.y+' of '+tot+'</div>'
+      +'<div class="fc-done-p">'+(fcDeck.n>0
+        ? fcDeck.n+' term'+(fcDeck.n===1?'':'s')+' will come back tomorrow. The rest move further out.'
+        : 'Every term moves further out. Nice.')+'</div>'
+      +'<button class="fc-again" id="fc-again" type="button">Another round</button></div>';
+    var ag=document.getElementById('fc-again'); if(ag)ag.addEventListener('click',fcStart);
+    return;
+  }
+  var c=fcDeck.list[fcDeck.i], r=cardGet(c.term);
+  var tag=(r&&r.missed>0)?'<span class="srs-tag">missed '+r.missed+'\u00D7</span>':'';
+  w.innerHTML='<div class="fc-prog">'+(fcDeck.i+1)+' of '+fcDeck.list.length+tag+'</div>'
+    +'<div class="fc-card" id="fc-card"><div class="fc-term">'+cEsc(c.term)+'</div>'
+    +(fcDeck.flipped?'<div class="fc-def">'+cEsc(c.def)+'</div>':'<div class="fc-hint">Tap to reveal</div>')
+    +'</div>'
+    +(fcDeck.flipped?'<div class="fc-actions">'
+      +'<button class="fc-btn fc-no" id="fc-no" type="button">Still learning</button>'
+      +'<button class="fc-btn fc-yes" id="fc-yes" type="button">Got it</button></div>'
+      +'<div class="fc-kbd">1 = still learning &nbsp;&middot;&nbsp; 2 = got it</div>'
+     :'<div class="fc-kbd">Space or click to reveal</div>');
+  document.getElementById('fc-card').addEventListener('click',fcFlip);
+  if(fcDeck.flipped){
+    document.getElementById('fc-yes').addEventListener('click',function(){fcGrade(true);});
+    document.getElementById('fc-no').addEventListener('click',function(){fcGrade(false);});
+  }
+}
+function fcFlip(){ if(fcDeck&&!fcDeck.flipped){fcDeck.flipped=true;fcPaint();} }
+function fcGrade(ok){
+  if(!fcDeck)return;
+  var c=fcDeck.list[fcDeck.i];
+  cardRecord(c.term,ok);
+  if(ok)fcDeck.y++; else fcDeck.n++;
+  fcDeck.i++; fcDeck.flipped=false; save(); fcPaint();
+}
+document.addEventListener('keydown',function(e){
+  if(!fcDeck||state.mode!=='cards')return;
+  var t=(e.target&&e.target.tagName)||'';
+  if(t==='TEXTAREA'||t==='INPUT'||t==='SELECT')return;
+  if(typeof coachIsOpen==='function'&&coachIsOpen())return;
+  if(!fcDeck.flipped&&(e.key===' '||e.key==='Enter')){e.preventDefault();fcFlip();}
+  else if(fcDeck.flipped&&e.key==='1'){e.preventDefault();fcGrade(false);}
+  else if(fcDeck.flipped&&e.key==='2'){e.preventDefault();fcGrade(true);}
+});
 
 function pickFrom(topic){
   if(!POOLS[topic]||!POOLS[topic].length)return null;
@@ -670,6 +794,7 @@ function selTopic(l,b){state.selectedTopic=l;document.querySelectorAll('.topic-b
 function getTopics(){if(state.mode==='topic')return[state.selectedTopic||ALL_TOPICS[0]];if(state.mode==='va')return VA_TOPICS;if(state.mode==='weak'){const w=getWeak();return w.length?w:ALL_TOPICS;}return ALL_TOPICS;}
 
 function generateQuestions(){
+  if(state.mode==='cards'){fcStart();return;}
   if(state.mode==='srs'){
     var due=srsDueList();
     var want=parseInt(document.getElementById('q-count').value)||5;
@@ -816,6 +941,10 @@ function progReportText(){
     L.push('  Mastered: '+_sc.mastered+'   Learning: '+_sc.learning+'   Struggling: '+_sc.struggling);
     L.push('  Questions tracked: '+_sc.tracked+'   Due for review now: '+_sc.due);
   }}catch(e){}
+  try{var _cc=cardCounts();if(_cc.seen){
+    L.push('');L.push('FLASHCARDS  ('+_cc.total+' key terms)');
+    L.push('  Mastered: '+_cc.mastered+'   Learning: '+_cc.learning+'   Untouched: '+(_cc.total-_cc.seen));
+  }}catch(e){}
   var eh=(state.examHistory||[]).slice().reverse();
   L.push('');
   L.push('TIMED MOCK EXAMS  (70% to pass)');
@@ -869,6 +998,15 @@ function progRender(){
      +'<div class="prog-kpi"><div class="prog-kpi-n prog-warn">'+sc.learning+'</div><div class="prog-kpi-l">Learning</div></div>'
      +'<div class="prog-kpi"><div class="prog-kpi-n prog-bad">'+sc.struggling+'</div><div class="prog-kpi-l">Struggling</div></div>'
      +'<div class="prog-kpi"><div class="prog-kpi-n">'+sc.due+'</div><div class="prog-kpi-l">Due now</div></div>'
+     +'</div>';
+  }}catch(e){}
+  try{var cc=cardCounts();if(cc.seen){
+    h+='<div class="prog-sec">Flashcards &middot; key terms</div>'
+     +'<div class="prog-kpis">'
+     +'<div class="prog-kpi"><div class="prog-kpi-n prog-good">'+cc.mastered+'</div><div class="prog-kpi-l">Mastered</div></div>'
+     +'<div class="prog-kpi"><div class="prog-kpi-n prog-warn">'+cc.learning+'</div><div class="prog-kpi-l">Learning</div></div>'
+     +'<div class="prog-kpi"><div class="prog-kpi-n">'+(cc.total-cc.seen)+'</div><div class="prog-kpi-l">Untouched</div></div>'
+     +'<div class="prog-kpi"><div class="prog-kpi-n">'+cc.due+'</div><div class="prog-kpi-l">Due now</div></div>'
      +'</div>';
   }}catch(e){}
   h+='<div class="prog-sec">Timed mock exams &middot; 70% to pass</div>';
@@ -942,7 +1080,7 @@ function renderReview(){
   if(!items.length){con.innerHTML='<div class="review-empty">No answered questions yet.<br>Complete practice questions to build your review list.</div>';return;}
   con.innerHTML=items.map(r=>`<div class="review-card ${r.isCorrect?'rc-c':'rc-w'}"><div class="review-topic">${r.topic} &middot; ${r.isCorrect?'&#10003; Correct':'&#10007; Incorrect'}</div><div class="review-qtext">${r.question}</div><div class="review-opts">${['A','B','C','D'].map(l=>`<div class="review-opt ${l===r.correct?'ro-c':(l===r.userAnswer&&!r.isCorrect?'ro-w':'')}"><span style="font-weight:700;min-width:16px;flex-shrink:0">${l}</span><span>${(r.options||{})[l]||''}</span></div>`).join('')}</div><div class="review-expl"><strong>Explanation:</strong> ${r.explanation}</div></div>`).join('');
 }
-function clearAll(){if(!confirm('Clear all progress and review history? This cannot be undone.'))return;state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{}};initPools();save();updateStats();document.getElementById('questions-container').innerHTML='';renderReview();}
+function clearAll(){if(!confirm('Clear all progress and review history? This cannot be undone.'))return;state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{},cards:{}};initPools();save();updateStats();document.getElementById('questions-container').innerHTML='';renderReview();}
 
 function exportPDF(){
   const tf=document.getElementById('rev-topic').value,rf=document.getElementById('rev-result').value;
@@ -989,7 +1127,7 @@ function exportPDF(){
   doc.save('VA_Exam_Prep_Review.pdf');
 }
 
-function boot(){try{initPools();load();buildTopics();updateStats();setMode('random');}catch(e){console.error('Bootstrap error:',e);try{localStorage.removeItem(SK);}catch(_){}initPools();state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{}};buildTopics();updateStats();setMode('random');}}
+function boot(){try{initPools();load();buildTopics();updateStats();setMode('random');}catch(e){console.error('Bootstrap error:',e);try{localStorage.removeItem(SK);}catch(_){}initPools();state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{},cards:{}};buildTopics();updateStats();setMode('random');}}
 
 /* ===== Study Coach (offline retrieval + optional Claude) ===== */
 /* Study Coach glossary: [term, "alias|alias", definition] */
@@ -1568,6 +1706,7 @@ try{coachInit();}catch(e){console.error("Coach init failed:",e);}
   bind('#mode-topic',function(){setMode('topic');});
   bind('#mode-weak',function(){setMode('weak');});
   bind('#mode-srs',function(){setMode('srs');});
+  bind('#mode-cards',function(){setMode('cards');});
   bind('#mode-va',function(){setMode('va');});
   // Final Exam wiring
   var f75=document.getElementById('final-75'),f150=document.getElementById('final-150');
