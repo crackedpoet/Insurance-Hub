@@ -224,6 +224,20 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
 [data-theme="dark"] .prog-btn{background:#232935;border-color:#39414f;color:#dfe4ec}
 [data-theme="dark"] .prog-btn-p{background:#1B6F50;border-color:#1B6F50;color:#fff}
 .prog-note{font-size:11px;color:#8d97a8;margin-top:9px;line-height:1.55}
+
+/* ---------- Spaced repetition ---------- */
+.mode-btn.srs{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px}
+.srs-badge{display:inline-block;min-width:20px;padding:1px 7px;border-radius:99px;background:#c0392b;color:#fff;
+ font-size:11px;font-weight:700;line-height:1.6}
+.srs-badge[hidden]{display:none}
+.mode-btn.srs.active .srs-badge{background:#fff;color:#c0392b}
+.srs-tag{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+ padding:1px 7px;border-radius:99px;background:rgba(192,57,43,.14);color:#c0392b;margin-left:7px;vertical-align:middle}
+[data-theme="dark"] .srs-tag{background:rgba(240,160,160,.16);color:#f0a0a0}
+.srs-empty{background:var(--c-surface);border-radius:12px;padding:20px;text-align:center;margin-bottom:12px}
+.srs-empty-i{font-size:30px;line-height:1;margin-bottom:8px}
+.srs-empty-t{font-weight:700;font-size:15px;margin-bottom:6px}
+.srs-empty-p{font-size:13px;color:#8d97a8;line-height:1.6}
 </style>
 <script>(function(){try{var t=localStorage.getItem("ihub_theme");if(!t)t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
@@ -253,6 +267,7 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
       <button class="mode-btn active" id="mode-random" onclick="setMode('random')">&#127922; Random mix</button>
       <button class="mode-btn" id="mode-topic" onclick="setMode('topic')">&#128218; By chapter</button>
       <button class="mode-btn" id="mode-weak" onclick="setMode('weak')">&#127919; Weak areas</button>
+      <button class="mode-btn srs" id="mode-srs" onclick="setMode('srs')">&#128257; Due for review <span id="srs-count" class="srs-badge" hidden>0</span></button>
       <button class="mode-btn" id="mode-md" onclick="setMode('md')">&#9878;&#65039; MD laws only</button>
     </div>
     <div id="topic-section" class="topic-section" style="display:none"></div>
@@ -429,10 +444,10 @@ const NEW_BANK=[{"topic":"Federal tax — Life & Annuities","question":"A life i
 NEW_BANK.forEach(q=>BANK.push(q));
 const OUTLINE_WEIGHTS=[{key:'1',name:'Insurance Regulation (incl. MD state law)',weight:0.30,items:39,topics:['Producer licensing & reporting rules','Unfair trade practices & consumer protection','Replacement regulations & Guaranty Association','Maryland Insurance Article & required numbers','Maryland-specific health & Medicare regulations']},{key:'2',name:'General Insurance',weight:0.05,items:7,topics:['Insurance fundamentals, risk & contract law','Legal concepts (subrogation, waiver, estoppel)']},{key:'3',name:'Life Insurance Basics',weight:0.09,items:12,topics:['Uses of life insurance (key person, buy-sell, estate)','Life insurance underwriting & policy issue']},{key:'4',name:'Life Insurance Policies',weight:0.05,items:7,topics:['Types of life insurance policies','Group life insurance']},{key:'5',name:'Life Policy Provisions, Options & Riders',weight:0.08,items:10,topics:['Provisions, riders & nonforfeiture options','Premiums, proceeds & beneficiaries']},{key:'6',name:'Annuities',weight:0.05,items:6,topics:['Annuities']},{key:'7',name:'Federal Tax — Life & Annuities',weight:0.04,items:5,topics:['Federal tax — Life & Annuities']},{key:'8',name:'Qualified Plans',weight:0.02,items:2,topics:['Retirement plans & IRAs','Social Security & disability benefits']},{key:'9',name:'Health Insurance Basics',weight:0.07,items:9,topics:['Health & accident insurance basics','Health insurance underwriting & renewability']},{key:'10',name:'Individual Health Policy Provisions',weight:0.02,items:3,topics:['Health insurance policy provisions']},{key:'11',name:'Disability Income & Related Insurance',weight:0.05,items:6,topics:['Disability income insurance']},{key:'12',name:'Medical Plans',weight:0.08,items:10,topics:['Health plan types (HMO, PPO, EPO, POS, HDHP)','Medical expense & cost-sharing']},{key:'13',name:'Group Health Insurance',weight:0.02,items:3,topics:['Group health insurance']},{key:'14',name:'Dental Insurance',weight:0.01,items:1,topics:['Dental & vision insurance']},{key:'15',name:'Senior Citizens & Special Needs',weight:0.05,items:7,topics:['Medicare, Medigap & senior health plans']},{key:'16',name:'Federal Tax — Health Insurance',weight:0.02,items:3,topics:['Federal tax — Health insurance']}];
 
-let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[]};
+let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{}};
 
-function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
-function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.examHistory=Array.isArray(p.examHistory)?p.examHistory:[];state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
+function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),srs:state.srs||{},seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
+function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.examHistory=Array.isArray(p.examHistory)?p.examHistory:[];state.srs=(p.srs&&typeof p.srs==='object')?p.srs:{};state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
 
 const POOLS={},PIDX={},QDB={};
 function initPools(){ALL_TOPICS.forEach(t=>{POOLS[t]=shuffle(BANK.filter(q=>q.topic===t));PIDX[t]=0;});}
@@ -443,6 +458,52 @@ function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.fl
 function isPositional(q){var opts=[q.options.A,q.options.B,q.options.C,q.options.D].map(function(x){return x||'';});for(var i=0;i<4;i++){var o=opts[i],lo=o.toLowerCase();if(/(all|none|both) of (the )?(above|following|these)/.test(lo))return true;if(o.length<=22&&/\b[A-D]\s*(and|or|&)\s*[A-D]\b/.test(o))return true;if(o.length<=22&&/\bboth\s+[A-D]\b/i.test(o))return true;if(/\bI{1,3}\s+(and|,)\s+I{1,3}\b/.test(o))return true;}return false;}
 function displayOrder(q){var ents=[['A',q.options.A],['B',q.options.B],['C',q.options.C],['D',q.options.D]];return isPositional(q)?ents:shuffle(ents);}
 function qid(q){return q.question.substring(0,48);}
+
+/* ================= Spaced repetition (Leitner) =================
+   Box 0..5. Wrong answer sends a question back to box 0 so it returns
+   next session; each correct answer promotes it one box and pushes the
+   next sighting further out. Box 5 = mastered.                        */
+var SRS_DAYS=[0,1,3,7,14,30];
+var SRS_MAX=5;
+function srsAll(){ if(!state.srs)state.srs={}; return state.srs; }
+function srsGet(q){ return srsAll()[qid(q)]||null; }
+function srsRecord(q,ok){
+  var m=srsAll(), id=qid(q), r=m[id];
+  if(!r)r={b:0,seen:0,missed:0,due:0};
+  r.seen=(r.seen||0)+1;
+  if(ok){ r.b=Math.min(SRS_MAX,(r.b||0)+1); }
+  else  { r.b=0; r.missed=(r.missed||0)+1; }
+  r.last=Date.now();
+  r.due=Date.now()+SRS_DAYS[r.b]*86400000;
+  m[id]=r;
+}
+function srsDueList(){
+  var now=Date.now(), m=srsAll(), out=[];
+  BANK.forEach(function(q){
+    var r=m[qid(q)];
+    if(r && r.due<=now) out.push({q:q,r:r});
+  });
+  out.sort(function(a,b){
+    if(a.r.b!==b.r.b) return a.r.b-b.r.b;        // weakest box first
+    return (a.r.due||0)-(b.r.due||0);            // then most overdue
+  });
+  return out;
+}
+function srsCounts(){
+  var m=srsAll(), now=Date.now(), c={tracked:0,mastered:0,learning:0,struggling:0,due:0};
+  Object.keys(m).forEach(function(k){
+    var r=m[k]; c.tracked++;
+    if(r.b>=4)c.mastered++; else if(r.b>=1)c.learning++; else c.struggling++;
+    if(r.due<=now)c.due++;
+  });
+  return c;
+}
+function srsUpdateBadge(){
+  var b=document.getElementById('srs-count'); if(!b)return;
+  var n=0; try{n=srsDueList().length;}catch(e){}
+  b.textContent=n; b.hidden=(n===0);
+}
+
 function pickFrom(topic){
   if(!POOLS[topic]||!POOLS[topic].length)return null;
   if(!state.seenIds[topic])state.seenIds[topic]=new Set();
@@ -530,7 +591,7 @@ function submitFinalExam(){
   if(finalState.timerId){clearInterval(finalState.timerId);finalState.timerId=null;}
   const domainScore={};let total=0,correct=0;
   finalState.questions.forEach(function(q,i){
-    const picked=finalState.answers[i],isC=picked===q.correct;
+    const picked=finalState.answers[i],isC=picked===q.correct;try{if(picked)srsRecord(q,isC);}catch(e){}
     total++;if(isC)correct++;
     const dk=q._dk||'?';
     if(!domainScore[dk])domainScore[dk]={n:0,c:0,name:q._dn||'Mixed'};
@@ -592,6 +653,7 @@ function submitFinalExam(){
 // ===============================================
 
 function updateStats(){
+  try{srsUpdateBadge();}catch(e){}
   document.getElementById('stat-total').textContent=state.total;
   document.getElementById('stat-correct').textContent=state.correct;
   document.getElementById('stat-pct').textContent=state.total>0?Math.round(state.correct/state.total*100)+'%':'—';
@@ -607,6 +669,16 @@ function selTopic(l,b){state.selectedTopic=l;document.querySelectorAll('.topic-b
 function getTopics(){if(state.mode==='topic')return[state.selectedTopic||ALL_TOPICS[0]];if(state.mode==='md')return MD_TOPICS;if(state.mode==='weak'){const w=getWeak();return w.length?w:ALL_TOPICS;}return ALL_TOPICS;}
 
 function generateQuestions(){
+  if(state.mode==='srs'){
+    var due=srsDueList();
+    var want=parseInt(document.getElementById('q-count').value)||5;
+    var con=document.getElementById('questions-container');
+    if(!due.length){
+      con.insertAdjacentHTML('afterbegin','<div class="srs-empty"><div class="srs-empty-i">&#127881;</div><div class="srs-empty-t">Nothing due right now</div><div class="srs-empty-p">Everything you have missed is scheduled further out. Use <b>Random mix</b> to cover new material, and check back tomorrow.</div></div>');
+      window.scrollTo({top:0,behavior:'smooth'});return;
+    }
+    renderQs(due.slice(0,want).map(function(d){return d.q;}),'Due for review');save();return;
+  }
   const pool=getTopics(),count=parseInt(document.getElementById('q-count').value)||5,qs=[];
   for(let i=0;i<count;i++){const t=pool[Math.floor(Math.random()*pool.length)];const q=pickFrom(t);if(q)qs.push(q);}
   if(!qs.length){document.getElementById('questions-container').insertAdjacentHTML('afterbegin','<div class="no-q">No questions available.</div>');return;}
@@ -626,6 +698,7 @@ function renderQs(qs,label){
     var qnum=document.createElement('div');
     qnum.className='qnum';
     qnum.textContent='Q'+(state.total+i+1)+' · '+q.topic;
+    try{var _r=srsGet(q);if(_r&&_r.missed>0){var _t=document.createElement('span');_t.className='srs-tag';_t.textContent='missed '+_r.missed+'\u00D7';qnum.appendChild(_t);}}catch(e){}
     card.appendChild(qnum);
     var qtext=document.createElement('div');
     qtext.className='qtext';
@@ -675,7 +748,7 @@ function renderQs(qs,label){
 }
 function ans(btn,chosen,correct,k){const q=QDB[k];if(!q)return;
   const opts=document.getElementById('o-'+k);if(!opts||opts.dataset.done)return;opts.dataset.done='1';
-  const ok=chosen===correct;state.total++;if(ok){state.correct++;state.streak++;}else{state.streak=0;}
+  const ok=chosen===correct;try{srsRecord(q,ok);}catch(e){}state.total++;if(ok){state.correct++;state.streak++;}else{state.streak=0;}
   if(!state.topicScores[q.topic])state.topicScores[q.topic]={total:0,correct:0};
   state.topicScores[q.topic].total++;if(ok)state.topicScores[q.topic].correct++;
   state.reviewHistory.push({id:Date.now()+Math.random(),topic:q.topic,question:q.question,options:q.options,correct:q.correct,explanation:q.explanation,userAnswer:chosen,isCorrect:ok,ts:Date.now()});
@@ -737,6 +810,11 @@ function progReportText(){
   L.push('  Answered in last 7 days: '+progSince(7));
   L.push('  Days studied: '+progDaysStudied());
   L.push('  Last studied: '+progAgo(progLastStudied()));
+  try{var _sc=srsCounts();if(_sc.tracked){
+    L.push('');L.push('RETENTION  (spaced repetition)');
+    L.push('  Mastered: '+_sc.mastered+'   Learning: '+_sc.learning+'   Struggling: '+_sc.struggling);
+    L.push('  Questions tracked: '+_sc.tracked+'   Due for review now: '+_sc.due);
+  }}catch(e){}
   var eh=(state.examHistory||[]).slice().reverse();
   L.push('');
   L.push('TIMED MOCK EXAMS  (70% to pass)');
@@ -783,6 +861,15 @@ function progRender(){
     +'<div class="prog-kpi"><div class="prog-kpi-n">'+progDaysStudied()+'</div><div class="prog-kpi-l">Days</div></div>'
     +'<div class="prog-kpi"><div class="prog-kpi-n">'+progSince(7)+'</div><div class="prog-kpi-l">This week</div></div>'
     +'</div>';
+  try{var sc=srsCounts();if(sc.tracked){
+    h+='<div class="prog-sec">Retention &middot; spaced repetition</div>'
+     +'<div class="prog-kpis">'
+     +'<div class="prog-kpi"><div class="prog-kpi-n prog-good">'+sc.mastered+'</div><div class="prog-kpi-l">Mastered</div></div>'
+     +'<div class="prog-kpi"><div class="prog-kpi-n prog-warn">'+sc.learning+'</div><div class="prog-kpi-l">Learning</div></div>'
+     +'<div class="prog-kpi"><div class="prog-kpi-n prog-bad">'+sc.struggling+'</div><div class="prog-kpi-l">Struggling</div></div>'
+     +'<div class="prog-kpi"><div class="prog-kpi-n">'+sc.due+'</div><div class="prog-kpi-l">Due now</div></div>'
+     +'</div>';
+  }}catch(e){}
   h+='<div class="prog-sec">Timed mock exams &middot; 70% to pass</div>';
   if(!eh.length){
     h+='<div class="prog-none">No timed exam taken yet. Go to <b>Final Exam</b> and run one &mdash; it is the single best readiness check.</div>';
@@ -854,7 +941,7 @@ function renderReview(){
   if(!items.length){con.innerHTML='<div class="review-empty">No answered questions yet.<br>Complete practice questions to build your review list.</div>';return;}
   con.innerHTML=items.map(r=>`<div class="review-card ${r.isCorrect?'rc-c':'rc-w'}"><div class="review-topic">${r.topic} &middot; ${r.isCorrect?'&#10003; Correct':'&#10007; Incorrect'}</div><div class="review-qtext">${r.question}</div><div class="review-opts">${['A','B','C','D'].map(l=>`<div class="review-opt ${l===r.correct?'ro-c':(l===r.userAnswer&&!r.isCorrect?'ro-w':'')}"><span style="font-weight:700;min-width:16px;flex-shrink:0">${l}</span><span>${(r.options||{})[l]||''}</span></div>`).join('')}</div><div class="review-expl"><strong>Explanation:</strong> ${r.explanation}</div></div>`).join('');
 }
-function clearAll(){if(!confirm('Clear all progress and review history? This cannot be undone.'))return;state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[]};initPools();save();updateStats();document.getElementById('questions-container').innerHTML='';renderReview();}
+function clearAll(){if(!confirm('Clear all progress and review history? This cannot be undone.'))return;state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{}};initPools();save();updateStats();document.getElementById('questions-container').innerHTML='';renderReview();}
 
 function exportPDF(){
   const tf=document.getElementById('rev-topic').value,rf=document.getElementById('rev-result').value;
@@ -901,7 +988,7 @@ function exportPDF(){
   doc.save('MD_Exam_Prep_Review.pdf');
 }
 
-function boot(){try{initPools();load();buildTopics();updateStats();setMode('random');}catch(e){console.error('Bootstrap error:',e);try{localStorage.removeItem(SK);}catch(_){}initPools();state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[]};buildTopics();updateStats();setMode('random');}}
+function boot(){try{initPools();load();buildTopics();updateStats();setMode('random');}catch(e){console.error('Bootstrap error:',e);try{localStorage.removeItem(SK);}catch(_){}initPools();state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{}};buildTopics();updateStats();setMode('random');}}
 
 /* ===== Study Coach (offline retrieval + optional Claude) ===== */
 /* Study Coach glossary: [term, "alias|alias", definition] */
@@ -1479,6 +1566,7 @@ try{coachInit();}catch(e){console.error("Coach init failed:",e);}
   bind('#mode-random',function(){setMode('random');});
   bind('#mode-topic',function(){setMode('topic');});
   bind('#mode-weak',function(){setMode('weak');});
+  bind('#mode-srs',function(){setMode('srs');});
   bind('#mode-md',function(){setMode('md');});
   // Final Exam wiring
   var f75=document.getElementById('final-75'),f150=document.getElementById('final-150');
