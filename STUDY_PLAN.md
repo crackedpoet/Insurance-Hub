@@ -27,6 +27,8 @@ Open the app. **Practice** tab. Do these in order:
 
 **3. Ask about anything unclear.** Tap the **chat bubble** (bottom-right) and keep asking until it makes sense. Do not move on from a term you can't explain out loud.
 
+**Dead time? Run flashcards.** The **🃏 Flashcards** mode drills the 155 key terms — term on the front, definition on the back, you grade yourself. It uses the same schedule, so terms you miss come back. This is the one to do standing in line or waiting on an appointment. It builds the vocabulary that makes the scenario questions readable.
+
 Twice a week, also switch to **By chapter** and run your *worst* domain from the last report.
 
 Twenty focused minutes beats two distracted hours. If you only have ten, do the review queue and stop.
