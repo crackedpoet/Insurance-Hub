@@ -198,6 +198,32 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
 /* Final Exam results are built with inline styles in JS */
 [data-theme="dark"] #final-results div[style*="background:#fff"]{background:#1b2029!important}
 [data-theme="dark"] #final-results div[style*="#f0f0f0"]{border-bottom-color:#2a3140!important}
+
+/* ---------- Progress report ---------- */
+.prog-card{background:var(--c-surface);border-radius:12px;padding:16px;margin-bottom:14px}
+.prog-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
+.prog-title{font-size:15px;font-weight:700}
+.prog-sub{font-size:11.5px;color:#8d97a8;margin-bottom:12px;line-height:1.5}
+.prog-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.prog-kpi{background:rgba(127,138,153,.10);border-radius:9px;padding:9px 6px;text-align:center}
+.prog-kpi-n{font-size:17px;font-weight:700;line-height:1.1}
+.prog-kpi-l{font-size:9.5px;color:#8d97a8;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
+.prog-sec{font-size:10px;font-weight:700;color:#8d97a8;text-transform:uppercase;letter-spacing:.07em;margin:14px 0 7px}
+.prog-row{display:flex;align-items:center;gap:9px;padding:6px 0}
+.prog-bar{flex:1;height:7px;border-radius:99px;background:rgba(127,138,153,.22);overflow:hidden}
+.prog-fill{height:100%;border-radius:99px}
+.prog-nm{font-size:12.5px;flex:1;min-width:0}
+.prog-pc{font-size:12px;font-weight:700;white-space:nowrap;min-width:62px;text-align:right}
+.prog-good{color:var(--sc-good)}.prog-warn{color:var(--sc-warn)}.prog-bad{color:var(--sc-bad)}
+.prog-none{font-size:12.5px;color:#8d97a8;line-height:1.6}
+.prog-exam{display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0;border-bottom:1px solid rgba(127,138,153,.18)}
+.prog-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.prog-btn{flex:1;min-width:130px;padding:11px 12px;border:1.5px solid #ddd;background:#fff;border-radius:10px;
+ font-size:13px;font-weight:600;cursor:pointer;color:#444;font-family:inherit}
+.prog-btn-p{background:#2A5FA5;border-color:#2A5FA5;color:#fff}
+[data-theme="dark"] .prog-btn{background:#232935;border-color:#39414f;color:#dfe4ec}
+[data-theme="dark"] .prog-btn-p{background:#2A5FA5;border-color:#2A5FA5;color:#fff}
+.prog-note{font-size:11px;color:#8d97a8;margin-top:9px;line-height:1.55}
 </style>
 <script>(function(){try{var t=localStorage.getItem("ihub_theme");if(!t)t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
@@ -246,6 +272,16 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
   </div>
 
   <div id="tab-review" style="display:none">
+    <div id="progress-card" class="prog-card">
+      <div class="prog-head"><div class="prog-title">Progress report</div></div>
+      <div class="prog-sub">Your study record. Tap <b>Copy report</b> and send it to your team lead so they know where to help.</div>
+      <div id="prog-body"></div>
+      <div class="prog-actions">
+        <button id="prog-copy" type="button" class="prog-btn prog-btn-p">&#128203; Copy report</button>
+        <button id="prog-share" type="button" class="prog-btn">&#128228; Share</button>
+      </div>
+      <div class="prog-note">Everything here is stored only on this device. Nothing is sent anywhere unless you copy or share it yourself.</div>
+    </div>
     <div class="review-stats-bar">
       <div class="r-stat"><div class="r-stat-num" id="rev-total">0</div><div class="r-stat-lbl">Answered</div></div>
       <div class="r-stat"><div class="r-stat-num" id="rev-correct">0</div><div class="r-stat-lbl">Correct</div></div>
@@ -394,10 +430,10 @@ NEW_BANK.forEach(q=>BANK.push(q));
 (function(){BANK.forEach(q=>{if(q.question==='Medicare Advantage (Part C) plans:'&&q.topic==='Social Security & disability benefits')q.topic='Medicare, Medigap & senior health plans';});let seen=false;for(let i=0;i<BANK.length;i++){if(BANK[i].question==="'Twisting' in insurance is defined as:"){if(seen){BANK.splice(i,1);break;}else seen=true;}}})();
 const OUTLINE_WEIGHTS=[{key:'1',name:'Insurance Regulation',weight:0.10,items:14,topics:['Producer licensing & reporting rules','Unfair trade practices & consumer protection','Replacement regulations & Guaranty Association','Virginia Title 38.2 & required numbers']},{key:'2',name:'General Insurance',weight:0.06,items:8,topics:['Insurance fundamentals, risk & contract law','Legal concepts (subrogation, waiver, estoppel)']},{key:'3',name:'Life Insurance Basics',weight:0.06,items:8,topics:['Uses of life insurance (key person, buy-sell, estate)','Life insurance underwriting & policy issue']},{key:'4',name:'Life Insurance Policies',weight:0.10,items:14,topics:['Types of life insurance policies','Group life insurance']},{key:'5',name:'Life Policy Provisions, Options & Riders',weight:0.11,items:16,topics:['Provisions, riders & nonforfeiture options','Premiums, proceeds & beneficiaries']},{key:'6',name:'Annuities',weight:0.06,items:8,topics:['Annuities']},{key:'7',name:'Federal Tax — Life & Annuities',weight:0.02,items:3,topics:['Federal tax — Life & Annuities']},{key:'8',name:'Qualified Plans',weight:0.02,items:3,topics:['Retirement plans & IRAs','Social Security & disability benefits']},{key:'9',name:'Health Insurance Basics',weight:0.06,items:8,topics:['Health & accident insurance basics','Health insurance underwriting & renewability']},{key:'10',name:'Individual Health Policy Provisions',weight:0.11,items:16,topics:['Health insurance policy provisions']},{key:'11',name:'Disability Income & Related Insurance',weight:0.05,items:7,topics:['Disability income insurance']},{key:'12',name:'Medical Plans',weight:0.06,items:8,topics:['Health plan types (HMO, PPO, EPO, POS, HDHP)','Medical expense & cost-sharing']},{key:'13',name:'Group Health Insurance',weight:0.05,items:7,topics:['Group health insurance']},{key:'14',name:'Dental Insurance',weight:0.01,items:2,topics:['Dental & vision insurance']},{key:'15',name:'Senior Citizens & Special Needs',weight:0.11,items:15,topics:['Medicare, Medigap & senior health plans']},{key:'16',name:'Federal Tax — Health Insurance',weight:0.02,items:3,topics:['Federal tax — Health insurance']},{key:'S',name:'Virginia-Specific Health & Medicare',weight:0,items:0,topics:['Virginia-specific health & Medicare regulations']}];
 
-let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{}};
+let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[]};
 
-function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
-function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
+function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
+function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.examHistory=Array.isArray(p.examHistory)?p.examHistory:[];state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
 
 const POOLS={},PIDX={},QDB={};
 function initPools(){ALL_TOPICS.forEach(t=>{POOLS[t]=shuffle(BANK.filter(q=>q.topic===t));PIDX[t]=0;});}
@@ -503,6 +539,7 @@ function submitFinalExam(){
   });
   const pct=total>0?Math.round(correct/total*100):0;
   const passed=pct>=70;
+  try{if(!state.examHistory)state.examHistory=[];state.examHistory.push({ts:Date.now(),pct:pct,correct:correct,total:total});state.examHistory=state.examHistory.slice(-20);save();}catch(e){}
   let html='<div style="background:#fff;border-radius:12px;padding:20px;margin-bottom:14px;text-align:center">'
     +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:8px">Final Exam Result</div>'
     +'<div style="font-size:42px;font-weight:800;color:'+(passed?'var(--sc-good)':'var(--sc-bad)')+';margin-bottom:6px">'+pct+'%</div>'
@@ -649,7 +686,165 @@ function ans(btn,chosen,correct,k){const q=QDB[k];if(!q)return;
 }
 
 function buildRevFilters(){const sel=document.getElementById('rev-topic'),cur=sel.value;sel.innerHTML='<option value="">All topics</option>';[...new Set(state.reviewHistory.map(r=>r.topic))].forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;if(t===cur)o.selected=true;sel.appendChild(o);});}
+
+/* ================= Progress report ================= */
+function progPct(c,t){return t>0?Math.round(c/t*100):null;}
+function progDomains(){
+  var out=[];
+  if(typeof OUTLINE_WEIGHTS==='undefined')return out;
+  OUTLINE_WEIGHTS.forEach(function(d){
+    var t=0,c=0;
+    d.topics.forEach(function(tp){var s=state.topicScores[tp];if(s){t+=s.total;c+=s.correct;}});
+    out.push({name:d.name,total:t,correct:c,pct:progPct(c,t)});
+  });
+  return out;
+}
+function progDaysStudied(){
+  var days={};
+  (state.reviewHistory||[]).forEach(function(r){
+    if(!r.ts)return; var d=new Date(r.ts);
+    days[d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()]=1;
+  });
+  return Object.keys(days).length;
+}
+function progLastStudied(){
+  var last=0;(state.reviewHistory||[]).forEach(function(r){if(r.ts&&r.ts>last)last=r.ts;});
+  return last||null;
+}
+function progSince(days){
+  var cut=Date.now()-days*86400000,n=0;
+  (state.reviewHistory||[]).forEach(function(r){if(r.ts&&r.ts>=cut)n++;});
+  return n;
+}
+function progAgo(ts){
+  if(!ts)return 'never';
+  var d=Math.floor((Date.now()-ts)/86400000);
+  if(d<=0)return 'today'; if(d===1)return 'yesterday'; return d+' days ago';
+}
+function progCls(p){return p===null?'':(p>=70?'prog-good':p>=50?'prog-warn':'prog-bad');}
+function progColor(p){return p>=70?'var(--sc-good)':p>=50?'var(--sc-warn)':'var(--sc-bad)';}
+
+function progReportText(){
+  var who=(COACH_STATE==='VA')?'Virginia Life & Health (VA Exam Prep)':'Maryland Life & Health (MD Exam Prep)';
+  var acc=progPct(state.correct,state.total);
+  var L=[];
+  L.push('EXAM PREP - PROGRESS REPORT');
+  L.push(who);
+  L.push('Generated '+new Date().toLocaleDateString());
+  L.push('');
+  L.push('OVERALL');
+  L.push('  Questions answered: '+state.total);
+  L.push('  Accuracy: '+(acc===null?'--':acc+'%'));
+  L.push('  Answered in last 7 days: '+progSince(7));
+  L.push('  Days studied: '+progDaysStudied());
+  L.push('  Last studied: '+progAgo(progLastStudied()));
+  var eh=(state.examHistory||[]).slice().reverse();
+  L.push('');
+  L.push('TIMED MOCK EXAMS  (70% to pass)');
+  if(!eh.length){L.push('  None taken yet');}
+  else{
+    var passed=eh.filter(function(e){return e.pct>=70;}).length;
+    eh.slice(0,5).forEach(function(e){
+      L.push('  '+new Date(e.ts).toLocaleDateString()+' - '+e.pct+'%  ('+e.correct+'/'+e.total+')  '+(e.pct>=70?'PASS':'below 70%'));
+    });
+    L.push('  Passed '+passed+' of '+eh.length+' attempts');
+  }
+  var ds=progDomains(), practiced=ds.filter(function(d){return d.total>0;});
+  practiced.sort(function(a,b){return a.pct-b.pct;});
+  L.push('');
+  L.push('BY OFFICIAL EXAM DOMAIN');
+  if(!practiced.length){L.push('  Nothing practiced yet');}
+  practiced.slice().reverse().forEach(function(d){
+    var mark=d.pct>=70?'[OK]':d.pct>=50?'[!!]':'[XX]';
+    L.push('  '+mark+' '+String(d.pct+'%').padStart(4)+'  '+d.name+'  ('+d.correct+'/'+d.total+')');
+  });
+  var weak=practiced.filter(function(d){return d.pct<70;}).slice(0,3);
+  if(weak.length){
+    L.push('');
+    L.push('FOCUS NEXT');
+    weak.forEach(function(d,i){L.push('  '+(i+1)+'. '+d.name+' - '+d.pct+'%');});
+  }
+  var untouched=ds.filter(function(d){return d.total===0;}).map(function(d){return d.name;});
+  if(untouched.length){
+    L.push('');
+    L.push('NOT PRACTICED YET');
+    untouched.forEach(function(n){L.push('  - '+n);});
+  }
+  return L.join('\n');
+}
+
+function progRender(){
+  var el=document.getElementById('prog-body'); if(!el)return;
+  var acc=progPct(state.correct,state.total);
+  var eh=(state.examHistory||[]).slice().reverse();
+  var h='';
+  h+='<div class="prog-kpis">'
+    +'<div class="prog-kpi"><div class="prog-kpi-n">'+state.total+'</div><div class="prog-kpi-l">Answered</div></div>'
+    +'<div class="prog-kpi"><div class="prog-kpi-n '+progCls(acc)+'">'+(acc===null?'--':acc+'%')+'</div><div class="prog-kpi-l">Accuracy</div></div>'
+    +'<div class="prog-kpi"><div class="prog-kpi-n">'+progDaysStudied()+'</div><div class="prog-kpi-l">Days</div></div>'
+    +'<div class="prog-kpi"><div class="prog-kpi-n">'+progSince(7)+'</div><div class="prog-kpi-l">This week</div></div>'
+    +'</div>';
+  h+='<div class="prog-sec">Timed mock exams &middot; 70% to pass</div>';
+  if(!eh.length){
+    h+='<div class="prog-none">No timed exam taken yet. Go to <b>Final Exam</b> and run one &mdash; it is the single best readiness check.</div>';
+  }else{
+    eh.slice(0,5).forEach(function(e){
+      h+='<div class="prog-exam"><span>'+new Date(e.ts).toLocaleDateString()+'</span>'
+       +'<span class="'+progCls(e.pct)+'" style="font-weight:700">'+e.pct+'% &middot; '+e.correct+'/'+e.total+'</span></div>';
+    });
+  }
+  var ds=progDomains(), practiced=ds.filter(function(d){return d.total>0;});
+  practiced.sort(function(a,b){return b.pct-a.pct;});
+  h+='<div class="prog-sec">By official exam domain</div>';
+  if(!practiced.length){
+    h+='<div class="prog-none">Answer some practice questions and your strongest and weakest domains will show up here.</div>';
+  }else{
+    practiced.forEach(function(d){
+      h+='<div class="prog-row"><span class="prog-nm">'+cEsc(d.name)+'</span>'
+       +'<span class="prog-bar"><span class="prog-fill" style="width:'+d.pct+'%;background:'+progColor(d.pct)+'"></span></span>'
+       +'<span class="prog-pc '+progCls(d.pct)+'">'+d.pct+'% &middot; '+d.total+'</span></div>';
+    });
+    var weak=practiced.slice(-3).reverse().filter(function(d){return d.pct<70;});
+    if(weak.length){
+      h+='<div class="prog-sec">Focus next</div>';
+      weak.forEach(function(d,i){
+        h+='<div class="prog-row"><span class="prog-nm">'+(i+1)+'. '+cEsc(d.name)+'</span>'
+         +'<span class="prog-pc '+progCls(d.pct)+'">'+d.pct+'%</span></div>';
+      });
+    }
+  }
+  var untouched=ds.filter(function(d){return d.total===0;});
+  if(untouched.length){
+    h+='<div class="prog-sec">Not practiced yet</div><div class="prog-none">'
+      +untouched.map(function(d){return cEsc(d.name);}).join(' &middot; ')+'</div>';
+  }
+  el.innerHTML=h;
+}
+
+function progCopy(){
+  var txt=progReportText();
+  function done(){var b=document.getElementById('prog-copy');if(!b)return;
+    var o=b.innerHTML;b.innerHTML='\u2705 Copied';setTimeout(function(){b.innerHTML=o;},1800);}
+  function fallback(){
+    try{
+      var ta=document.createElement('textarea');ta.value=txt;
+      ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);
+      ta.select();document.execCommand('copy');document.body.removeChild(ta);done();
+    }catch(e){alert(txt);}
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done,fallback);
+  }else fallback();
+}
+function progShare(){
+  var txt=progReportText();
+  if(navigator.share){
+    navigator.share({title:'Exam prep progress',text:txt}).catch(function(){});
+  }else progCopy();
+}
+
 function renderReview(){
+  try{progRender();}catch(e){console.error("progRender",e);}
   buildRevFilters();
   const tf=document.getElementById('rev-topic').value,rf=document.getElementById('rev-result').value;
   let items=[...state.reviewHistory].reverse();
@@ -658,9 +853,9 @@ function renderReview(){
   document.getElementById('rev-total').textContent=n;document.getElementById('rev-correct').textContent=nc;document.getElementById('rev-pct').textContent=n>0?Math.round(nc/n*100)+'%':'—';
   const con=document.getElementById('review-container');
   if(!items.length){con.innerHTML='<div class="review-empty">No answered questions yet.<br>Complete practice questions to build your review list.</div>';return;}
-  con.innerHTML=items.map(r=>`<div class="review-card ${r.isCorrect?'rc-c':'rc-w'}"><div class="review-topic">${r.topic} &middot; ${r.isCorrect?'&#10003; Correct':'&#10007; Incorrect'}</div><div class="review-qtext">${r.question}</div><div class="review-opts">${['A','B','C','D'].map(l=>`<div class="review-opt ${l===r.correct?'ro-c':(l===r.userAnswer&&!r.isCorrect?'ro-w':'')}"><span style="font-weight:700;min-width:16px;flex-shrink:0">${l}</span><span>${r.options[l]}</span></div>`).join('')}</div><div class="review-expl"><strong>Explanation:</strong> ${r.explanation}</div></div>`).join('');
+  con.innerHTML=items.map(r=>`<div class="review-card ${r.isCorrect?'rc-c':'rc-w'}"><div class="review-topic">${r.topic} &middot; ${r.isCorrect?'&#10003; Correct':'&#10007; Incorrect'}</div><div class="review-qtext">${r.question}</div><div class="review-opts">${['A','B','C','D'].map(l=>`<div class="review-opt ${l===r.correct?'ro-c':(l===r.userAnswer&&!r.isCorrect?'ro-w':'')}"><span style="font-weight:700;min-width:16px;flex-shrink:0">${l}</span><span>${(r.options||{})[l]||''}</span></div>`).join('')}</div><div class="review-expl"><strong>Explanation:</strong> ${r.explanation}</div></div>`).join('');
 }
-function clearAll(){if(!confirm('Clear all progress and review history? This cannot be undone.'))return;state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{}};initPools();save();updateStats();document.getElementById('questions-container').innerHTML='';renderReview();}
+function clearAll(){if(!confirm('Clear all progress and review history? This cannot be undone.'))return;state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[]};initPools();save();updateStats();document.getElementById('questions-container').innerHTML='';renderReview();}
 
 function exportPDF(){
   const tf=document.getElementById('rev-topic').value,rf=document.getElementById('rev-result').value;
@@ -707,7 +902,7 @@ function exportPDF(){
   doc.save('VA_Exam_Prep_Review.pdf');
 }
 
-function boot(){try{initPools();load();buildTopics();updateStats();setMode('random');}catch(e){console.error('Bootstrap error:',e);try{localStorage.removeItem(SK);}catch(_){}initPools();state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{}};buildTopics();updateStats();setMode('random');}}
+function boot(){try{initPools();load();buildTopics();updateStats();setMode('random');}catch(e){console.error('Bootstrap error:',e);try{localStorage.removeItem(SK);}catch(_){}initPools();state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[]};buildTopics();updateStats();setMode('random');}}
 
 /* ===== Study Coach (offline retrieval + optional Claude) ===== */
 /* Study Coach glossary: [term, "alias|alias", definition] */
@@ -1265,6 +1460,8 @@ function coachInit(){
     var el=document.getElementById('coach-key'); if(el){el.value='';el.placeholder='sk-ant-…';}
     coachSyncSettings(); alert('Key removed from this browser. Back to offline mode.');
   });
+  var pc=document.getElementById('prog-copy'); if(pc)pc.addEventListener('click',progCopy);
+  var ps=document.getElementById('prog-share'); if(ps)ps.addEventListener('click',progShare);
   var wipe=document.getElementById('coach-clear-chat');
   if(wipe)wipe.addEventListener('click',function(){
     coachLog=[]; coachSaveLog(); coachRender();
