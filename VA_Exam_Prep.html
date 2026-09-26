@@ -264,6 +264,37 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
 .fc-again{padding:12px 20px;background:#2A5FA5;color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
 .fc-kbd{font-size:11px;color:#8d97a8;text-align:center;margin-top:10px}
 @media(max-width:560px){.fc-kbd{display:none}}
+
+/* ---------- Auto-send progress ---------- */
+.sync-box{margin-top:14px;padding:12px 13px;border-radius:10px;background:rgba(127,138,153,.10)}
+.sync-row{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+.sync-t{font-size:13px;font-weight:700}
+.sync-s{font-size:11.5px;color:#8d97a8;line-height:1.55;margin-top:5px}
+.sync-ok{color:var(--sc-good)}.sync-err{color:var(--sc-bad)}
+.sync-name{flex:1;min-width:150px;padding:9px 11px;border:1.5px solid #ddd;border-radius:9px;font-size:13.5px;font-family:inherit;background:#fff;color:inherit}
+[data-theme="dark"] .sync-name{background:#232935;border-color:#39414f}
+.sync-btn{padding:9px 14px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;border:1.5px solid #2A5FA5;background:#2A5FA5;color:#fff}
+.sync-btn.ghost{background:transparent;color:#2A5FA5}
+[data-theme="dark"] .sync-btn.ghost{color:#dfe4ec;border-color:#39414f}
+
+/* ---------- Exam plan + readiness ---------- */
+.plan{border-radius:11px;padding:13px 14px;margin-bottom:12px;background:rgba(127,138,153,.10)}
+.plan-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.plan-l{font-size:10px;font-weight:700;color:#8d97a8;text-transform:uppercase;letter-spacing:.07em}
+.plan-date{padding:7px 9px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit;background:#fff;color:inherit}
+[data-theme="dark"] .plan-date{background:#232935;border-color:#39414f;color-scheme:dark}
+.plan-big{font-size:26px;font-weight:800;line-height:1.1;margin-top:8px}
+.plan-s{font-size:12.5px;line-height:1.6;margin-top:4px}
+.plan-m{font-size:11.5px;color:#8d97a8;line-height:1.55;margin-top:6px}
+.rd-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rd-band{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+.rd-ok{background:rgba(27,111,80,.14);color:var(--sc-good)}
+.rd-mid{background:rgba(196,132,29,.16);color:var(--sc-warn)}
+.rd-low{background:rgba(163,45,45,.13);color:var(--sc-bad)}
+.rd-bar{height:8px;border-radius:99px;background:rgba(127,138,153,.22);margin-top:9px;position:relative;overflow:visible}
+.rd-fill{height:100%;border-radius:99px}
+.rd-pass{position:absolute;left:70%;top:-3px;width:2px;height:14px;background:#8d97a8}
+.rd-parts{font-size:11.5px;color:#8d97a8;line-height:1.7;margin-top:8px}
 </style>
 <script>(function(){try{var t=localStorage.getItem("ihub_theme");if(!t)t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
@@ -322,7 +353,8 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
         <button id="prog-copy" type="button" class="prog-btn prog-btn-p">&#128203; Copy report</button>
         <button id="prog-share" type="button" class="prog-btn">&#128228; Share</button>
       </div>
-      <div class="prog-note">Everything here is stored only on this device. Nothing is sent anywhere unless you copy or share it yourself.</div>
+      <div class="prog-note">Your study data is stored on this device. Nothing is sent anywhere unless you copy or share it, or turn on auto-send below.</div>
+      <div id="sync-box" class="sync-box"></div>
     </div>
     <div class="review-stats-bar">
       <div class="r-stat"><div class="r-stat-num" id="rev-total">0</div><div class="r-stat-lbl">Answered</div></div>
@@ -474,7 +506,7 @@ const OUTLINE_WEIGHTS=[{key:'1',name:'Insurance Regulation',weight:0.10,items:14
 
 let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{},cards:{}};
 
-function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),srs:state.srs||{},cards:state.cards||{},seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
+function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),srs:state.srs||{},cards:state.cards||{},seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}try{syncMaybe();}catch(e){}}
 function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.examHistory=Array.isArray(p.examHistory)?p.examHistory:[];state.srs=(p.srs&&typeof p.srs==='object')?p.srs:{};state.cards=(p.cards&&typeof p.cards==='object')?p.cards:{};state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
 
 const POOLS={},PIDX={},QDB={};
@@ -922,6 +954,189 @@ function progAgo(ts){
 function progCls(p){return p===null?'':(p>=70?'prog-good':p>=50?'prog-warn':'prog-bad');}
 function progColor(p){return p>=70?'var(--sc-good)':p>=50?'var(--sc-warn)':'var(--sc-bad)';}
 
+
+/* ================= Auto-send progress (opt-in) =================
+   Sends a small snapshot to the team lead's Google Sheet. Off until the
+   student turns it on and types their name. Fire-and-forget; the app
+   never waits on it and works fully offline without it.               */
+var IHUB_SYNC_URL='https://script.google.com/macros/s/AKfycbwda1rK5LLe7j1KgqQwa-SV5tbMJ5KsE0GsJT-6CDkb-JlKxOzEp0qu_kMDqbG7Y-ii/exec';
+var SYNC_GAP=5*60000;
+/* key is computed lazily: COACH_STATE is assigned later in the file than this block */
+function syncKey(){return 'ihub_sync_'+COACH_STATE;}
+function syncCfg(){try{return JSON.parse(localStorage.getItem(syncKey())||'{}')||{};}catch(e){return {};}}
+function syncPut(c){try{localStorage.setItem(syncKey(),JSON.stringify(c));}catch(e){}}
+function syncPayload(c){
+  var acc=progPct(state.correct,state.total), sc={}, cc={}, eh=state.examHistory||[];
+  try{sc=srsCounts();}catch(e){}
+  try{cc=cardCounts();}catch(e){}
+  var ds=progDomains().filter(function(d){return d.total>0;}).sort(function(a,b){return a.pct-b.pct;});
+  var best=null; eh.forEach(function(x){if(best===null||x.pct>best)best=x.pct;});
+  return {name:c.name,state:COACH_STATE,sentAt:Date.now(),
+    summary:{answered:state.total,accuracy:acc,answered7d:progSince(7),daysStudied:progDaysStudied(),
+      lastStudied:progLastStudied(),mastered:sc.mastered||0,learning:sc.learning||0,struggling:sc.struggling||0,
+      due:sc.due||0,mocks:eh.length,lastMock:eh.length?eh[eh.length-1].pct:null,bestMock:best,
+      weakest:ds.length?ds[0].name+' ('+ds[0].pct+'%)':'',cardsMastered:cc.mastered||0,
+      examDate:planGet().date||'',daysLeft:planDaysLeft(),readiness:(readiness()||{}).score,perDay:(planPace()||{}).perDay,coach:!!coachGetKey()},
+    report:progReportText()};
+}
+function syncSend(force){
+  var c=syncCfg();
+  if(!c.on||!c.name||!IHUB_SYNC_URL)return;
+  var now=Date.now();
+  if(!force&&(c.sentTotal===state.total&&c.sentExams===(state.examHistory||[]).length))return;
+  if(!force&&c.tried&&now-c.tried<SYNC_GAP)return;
+  var body; try{body=JSON.stringify(syncPayload(c));}catch(e){return;}
+  var total=state.total, exams=(state.examHistory||[]).length;
+  c.tried=now; syncPut(c);
+  fetch(IHUB_SYNC_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body})
+    .then(function(r){return r.json();})
+    .then(function(j){var d=syncCfg(); if(j&&j.ok){d.ok=Date.now();d.err='';d.sentTotal=total;d.sentExams=exams;}else{d.err=(j&&j.error)||'rejected';} syncPut(d); syncPaint();})
+    .catch(function(){var d=syncCfg(); d.err='offline'; syncPut(d); syncPaint();});
+}
+function syncBeacon(){
+  var c=syncCfg();
+  if(!c.on||!c.name||!IHUB_SYNC_URL||!navigator.sendBeacon)return;
+  if(c.sentTotal===state.total&&c.sentExams===(state.examHistory||[]).length)return;
+  try{
+    if(navigator.sendBeacon(IHUB_SYNC_URL,new Blob([JSON.stringify(syncPayload(c))],{type:'text/plain;charset=utf-8'}))){
+      c.sentTotal=state.total; c.sentExams=(state.examHistory||[]).length; c.ok=Date.now(); c.err=''; syncPut(c);
+    }
+  }catch(e){}
+}
+function syncMaybe(){ setTimeout(function(){syncSend(false);},0); }
+document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden')syncBeacon(); });
+window.addEventListener('pagehide',syncBeacon);
+function syncPaint(){
+  var el=document.getElementById('sync-box'); if(!el)return;
+  var c=syncCfg();
+  if(!c.on){
+    el.innerHTML='<div class="sync-t">Auto-send to your team lead</div>'
+      +'<div class="sync-s">Turn this on and your progress is sent to your team lead automatically, so you never have to remember to text it. Only the numbers in this report are sent. No answers, no personal info beyond the name you type.</div>'
+      +'<div class="sync-row" style="margin-top:9px"><input id="sync-name" class="sync-name" type="text" maxlength="60" placeholder="Your first name" value="'+cEsc(c.name||'')+'">'
+      +'<button id="sync-on" class="sync-btn" type="button">Turn on</button></div>';
+    document.getElementById('sync-on').addEventListener('click',function(){
+      var n=(document.getElementById('sync-name').value||'').trim();
+      if(!n){document.getElementById('sync-name').focus();return;}
+      var d=syncCfg(); d.on=true; d.name=n; d.tried=0; syncPut(d); syncSend(true); syncPaint();
+    });
+    return;
+  }
+  var st=c.err?'<span class="sync-err">Not sent yet ('+cEsc(c.err)+'). It will retry next time you study.</span>'
+    :c.ok?'<span class="sync-ok">Last sent '+progAgo(c.ok)+'.</span>':'Sending...';
+  el.innerHTML='<div class="sync-row"><div class="sync-t">Auto-send is on for '+cEsc(c.name)+'</div>'
+    +'<div style="display:flex;gap:6px"><button id="sync-now" class="sync-btn" type="button">Send now</button>'
+    +'<button id="sync-off" class="sync-btn ghost" type="button">Turn off</button></div></div>'
+    +'<div class="sync-s">'+st+' Your progress goes to your team lead after each study session.</div>';
+  document.getElementById('sync-now').addEventListener('click',function(){var d=syncCfg();d.err='';syncPut(d);syncSend(true);syncPaint();});
+  document.getElementById('sync-off').addEventListener('click',function(){var d=syncCfg();d.on=false;syncPut(d);syncPaint();});
+}
+
+
+/* ================= Exam plan + readiness =================
+   Exam date is per device and per state, like everything else.
+   Readiness is an ESTIMATE of an exam-day score, deliberately
+   conservative: untouched domains count as guessing (25%),
+   thin domains are pulled toward 25%, and it is discounted until
+   answers have survived a 2-week gap (Mastered).                   */
+var PASS_PCT=70, GUESS=0.25, SHRINK_N=6;
+function planKey(){return 'ihub_plan_'+COACH_STATE;}
+function planGet(){try{return JSON.parse(localStorage.getItem(planKey())||'{}')||{};}catch(e){return {};}}
+function planSetDate(v){var p=planGet();p.date=v||'';try{localStorage.setItem(planKey(),JSON.stringify(p));}catch(e){}}
+function planDaysLeft(){
+  var p=planGet(); if(!p.date||!/^\d{4}-\d{2}-\d{2}$/.test(p.date))return null;
+  var a=p.date.split('-'), ex=new Date(+a[0],+a[1]-1,+a[2]), t=new Date(); t.setHours(0,0,0,0);
+  return Math.round((ex-t)/86400000);
+}
+function planCoverage(){
+  var seen=0; try{seen=srsCounts().tracked;}catch(e){}
+  var s2=0; Object.keys(state.seenIds||{}).forEach(function(k){var v=state.seenIds[k];s2+=v?(v.size!=null?v.size:v.length||0):0;});
+  seen=Math.min(BANK.length,Math.max(seen,s2));
+  return {seen:seen,total:BANK.length,left:BANK.length-seen};
+}
+function planPace(){
+  var dl=planDaysLeft(); if(dl===null||dl<1)return null;
+  var cv=planCoverage(), due=0; try{due=srsCounts().due;}catch(e){}
+  /* finish every question at least once with 2 days spare for mocks and review,
+     and never less than 15 a day so the review queue keeps moving */
+  var days=Math.max(1,dl-2), per=Math.max(15,Math.ceil(cv.left/days));
+  var recent=progSince(7)/7;
+  return {daysLeft:dl,perDay:per,recent:Math.round(recent),onTrack:recent>=per*0.9,left:cv.left,due:due};
+}
+function readiness(){
+  if(state.total<20||typeof OUTLINE_WEIGHTS==='undefined')return null;
+  var pred=0,wsum=0;
+  OUTLINE_WEIGHTS.forEach(function(d){
+    var t=0,c=0; d.topics.forEach(function(tp){var s=state.topicScores[tp];if(s){t+=s.total;c+=s.correct;}});
+    pred+=d.weight*((c+SHRINK_N*GUESS)/(t+SHRINK_N)); wsum+=d.weight;
+  });
+  pred=wsum?pred/wsum*100:0;
+  var sc={tracked:0,mastered:0}; try{sc=srsCounts();}catch(e){}
+  var ms=sc.tracked?sc.mastered/sc.tracked:0;
+  var retain=0.85+0.15*Math.min(1,ms/0.5);          /* full credit once half of tracked items are Mastered */
+  var practice=pred*retain;
+  var eh=(state.examHistory||[]).slice(-3), mock=null;
+  if(eh.length){mock=eh.reduce(function(a,e){return a+e.pct;},0)/eh.length;}
+  var score=mock===null?practice:0.6*mock+0.4*practice;
+  return {score:Math.round(score),practice:Math.round(practice),mock:mock===null?null:Math.round(mock),
+    mocks:eh.length,masteredShare:Math.round(ms*100),hasMock:mock!==null};
+}
+function rdBand(s){return s>=75?['Ready','rd-ok']:s>=PASS_PCT-5?['Borderline','rd-mid']:['Not yet','rd-low'];}
+function planHtml(){
+  var p=planGet(), pc=planPace(), dl=planDaysLeft(), r=readiness(), h='';
+  var today=new Date(); today.setHours(0,0,0,0);
+  var min=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  h+='<div class="plan"><div class="plan-top"><div class="plan-l">Exam date</div>'
+    +'<input id="plan-date" class="plan-date" type="date" min="'+min+'" value="'+cEsc(p.date||'')+'"></div>';
+  if(dl===null){
+    h+='<div class="plan-m">Set your test date to get a daily target and a countdown.</div>';
+  }else if(dl<0){
+    h+='<div class="plan-s">That date has passed. Set your new test date.</div>';
+  }else if(dl===0){
+    h+='<div class="plan-big">Today</div><div class="plan-s">Skip new material. Light review of your Due list, then rest.</div>';
+  }else{
+    h+='<div class="plan-big">'+dl+' day'+(dl===1?'':'s')+' left</div>';
+    if(pc){
+      h+='<div class="plan-s">Target: <b>'+pc.perDay+' questions a day</b>'
+        +(pc.left>0?' ('+pc.left+' you have not seen yet)':' (you have seen every question, keep clearing Due for review)')+'.</div>'
+        +'<div class="plan-s '+(pc.onTrack?'prog-good':'prog-warn')+'">'
+        +(pc.onTrack?'On track. ':'Behind pace. ')+'Last 7 days you averaged '+pc.recent+' a day.</div>';
+      if(dl<=14&&!(state.examHistory||[]).length)h+='<div class="plan-s prog-bad">Take a timed mock exam this week.</div>';
+    }
+  }
+  h+='</div>';
+  h+='<div class="plan"><div class="plan-l">Readiness estimate</div>';
+  if(!r){
+    h+='<div class="plan-m">Answer at least 20 questions to get an estimate.</div>';
+  }else{
+    var b=rdBand(r.score), col=r.score>=75?'var(--sc-good)':r.score>=PASS_PCT-5?'var(--sc-warn)':'var(--sc-bad)';
+    h+='<div class="rd-row"><div class="plan-big">'+r.score+'%</div><span class="rd-band '+b[1]+'">'+b[0]+'</span></div>'
+      +'<div class="rd-bar"><div class="rd-fill" style="width:'+Math.min(100,r.score)+'%;background:'+col+'"></div><div class="rd-pass" title="70% to pass"></div></div>'
+      +'<div class="rd-parts">'
+      +(r.hasMock?'Timed mocks (last '+r.mocks+'): '+r.mock+'%<br>':'<b>No timed mock yet.</b> Take one for a much better estimate.<br>')
+      +'Practice, weighted like the real exam: '+r.practice+'%<br>'
+      +'Mastered (still right after 2 weeks): '+r.masteredShare+'% of questions you have seen'
+      +'</div><div class="plan-m">An estimate, not a guarantee. Aim for 75% or better before test day.</div>';
+  }
+  h+='</div>';
+  return h;
+}
+function planText(L){
+  var p=planGet(), dl=planDaysLeft(), pc=planPace(), r=readiness();
+  L.push('');L.push('EXAM PLAN');
+  if(dl===null)L.push('  Exam date: not set');
+  else{
+    L.push('  Exam date: '+p.date+'  ('+(dl<0?'passed':dl+' days left')+')');
+    if(pc)L.push('  Target: '+pc.perDay+'/day   Last 7 days: '+pc.recent+'/day   '+(pc.onTrack?'ON TRACK':'BEHIND'));
+  }
+  if(r){
+    L.push('  Readiness estimate: '+r.score+'%  ('+rdBand(r.score)[0]+')');
+    L.push('    mocks '+(r.hasMock?r.mock+'%':'none')+' / practice '+r.practice+'% / mastered '+r.masteredShare+'%');
+  }
+}
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.id==='plan-date'){planSetDate(e.target.value);try{progRender();}catch(x){}try{var c=syncCfg();c.tried=0;syncPut(c);syncSend(true);}catch(x){}}
+});
+
 function progReportText(){
   var who=(COACH_STATE==='VA')?'Virginia Life & Health (VA Exam Prep)':'Maryland Life & Health (MD Exam Prep)';
   var acc=progPct(state.correct,state.total);
@@ -936,6 +1151,7 @@ function progReportText(){
   L.push('  Answered in last 7 days: '+progSince(7));
   L.push('  Days studied: '+progDaysStudied());
   L.push('  Last studied: '+progAgo(progLastStudied()));
+  try{planText(L);}catch(e){}
   try{var _sc=srsCounts();if(_sc.tracked){
     L.push('');L.push('RETENTION  (spaced repetition)');
     L.push('  Mastered: '+_sc.mastered+'   Learning: '+_sc.learning+'   Struggling: '+_sc.struggling);
@@ -981,10 +1197,12 @@ function progReportText(){
 }
 
 function progRender(){
+  try{syncPaint();}catch(e){}
   var el=document.getElementById('prog-body'); if(!el)return;
   var acc=progPct(state.correct,state.total);
   var eh=(state.examHistory||[]).slice().reverse();
   var h='';
+  try{h+=planHtml();}catch(e){}
   h+='<div class="prog-kpis">'
     +'<div class="prog-kpi"><div class="prog-kpi-n">'+state.total+'</div><div class="prog-kpi-l">Answered</div></div>'
     +'<div class="prog-kpi"><div class="prog-kpi-n '+progCls(acc)+'">'+(acc===null?'--':acc+'%')+'</div><div class="prog-kpi-l">Accuracy</div></div>'
