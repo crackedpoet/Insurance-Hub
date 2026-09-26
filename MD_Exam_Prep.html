@@ -295,6 +295,22 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
 .rd-fill{height:100%;border-radius:99px}
 .rd-pass{position:absolute;left:70%;top:-3px;width:2px;height:14px;background:#8d97a8}
 .rd-parts{font-size:11.5px;color:#8d97a8;line-height:1.7;margin-top:8px}
+
+/* ---------- Today's session ---------- */
+.today{background:var(--c-surface);border-radius:14px;padding:15px 16px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.07);border:1.5px solid #1B6F50}
+.today-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.today-t{font-size:16px;font-weight:800}
+.today-x{font-size:12px;color:#8d97a8;display:flex;align-items:center;gap:6px}
+.today-sel{padding:6px 8px;border:1.5px solid #ddd;border-radius:8px;font-size:12.5px;font-family:inherit;background:#fff;color:inherit}
+[data-theme="dark"] .today-sel{background:#232935;border-color:#39414f}
+.today-p{font-size:13.5px;line-height:1.6;margin:9px 0 12px}
+.today-go{width:100%;padding:13px;border:none;border-radius:11px;background:#1B6F50;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+.today-go.ghost{background:transparent;color:#1B6F50;border:1.5px solid #1B6F50;margin-top:8px}
+[data-theme="dark"] .today-go.ghost{color:#dfe4ec;border-color:#39414f}
+.today-done{font-size:13.5px;font-weight:700;color:var(--sc-good);margin:9px 0 10px}
+.today-mock{font-size:12.5px;line-height:1.55;background:rgba(163,45,45,.10);color:var(--sc-bad);border-radius:8px;padding:8px 10px;margin:0 0 10px}
+.today-wk{font-size:11.5px;color:#8d97a8;margin-top:9px;text-align:center}
+.topic-btn.trk-hide{display:none}
 </style>
 <script>(function(){try{var t=localStorage.getItem("ihub_theme");if(!t)t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
@@ -319,6 +335,7 @@ body.coach-open .c-fab-x{opacity:1;transform:rotate(0)}
   <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
 
   <div id="tab-practice">
+    <div id="today-card" class="today"></div>
     <div class="section-label">Mode</div>
     <div class="mode-row">
       <button class="mode-btn active" id="mode-random" onclick="setMode('random')">&#127922; Random mix</button>
@@ -505,7 +522,7 @@ const OUTLINE_WEIGHTS=[{key:'1',name:'Insurance Regulation (incl. MD state law)'
 
 let state={mode:'random',selectedTopic:null,total:0,correct:0,streak:0,topicScores:{},reviewHistory:[],seenIds:{},examHistory:[],srs:{},cards:{}};
 
-function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),srs:state.srs||{},cards:state.cards||{},seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}try{syncMaybe();}catch(e){}}
+function save(){try{const d={total:state.total,correct:state.correct,streak:state.streak,topicScores:state.topicScores,reviewHistory:state.reviewHistory.slice(-500),examHistory:(state.examHistory||[]).slice(-20),srs:state.srs||{},cards:state.cards||{},seenIds:{}};ALL_TOPICS.forEach(t=>{if(state.seenIds[t])d.seenIds[t]=[...state.seenIds[t]];});localStorage.setItem(SK,JSON.stringify(d));}catch(e){}try{todayCheck();}catch(e){}try{syncMaybe();}catch(e){}}
 function load(){try{const s=localStorage.getItem(SK);if(!s)return;const p=JSON.parse(s);state.total=p.total||0;state.correct=p.correct||0;state.streak=p.streak||0;state.topicScores=p.topicScores||{};state.reviewHistory=Array.isArray(p.reviewHistory)?p.reviewHistory:[];state.examHistory=Array.isArray(p.examHistory)?p.examHistory:[];state.srs=(p.srs&&typeof p.srs==='object')?p.srs:{};state.cards=(p.cards&&typeof p.cards==='object')?p.cards:{};state.seenIds={};if(p.seenIds)Object.keys(p.seenIds).forEach(t=>{state.seenIds[t]=new Set(p.seenIds[t]);});}catch(e){}}
 
 const POOLS={},PIDX={},QDB={};
@@ -693,7 +710,8 @@ function pickFinalExamQuestions(length){
   return shuffle(picks).slice(0,length);
 }
 function startFinalExam(length){
-  finalState.length=length;finalState.duration=length===75?75:150;finalState.questions=pickFinalExamQuestions(length);
+  length=trackExamLen(length);
+  finalState.length=length;finalState.duration=length===75?75:150;finalState.questions=pickFinalExamQuestions(length);try{var _td=trackExamDur(length);if(_td)finalState.duration=_td;}catch(e){}
   finalState.answers={};finalState.startTime=Date.now();finalState.submitted=false;
   document.getElementById('final-setup').style.display='none';
   document.getElementById('final-results').style.display='none';
@@ -818,11 +836,11 @@ function updateStats(){
   const weak=getWeak(),el=document.getElementById('weak-tags');if(el)el.innerHTML=weak.length?weak.map(t=>`<span class="weak-tag">${t}</span>`).join(''):'<em>No weak spots yet!</em>';
   const badge=document.getElementById('rev-badge');if(badge){const n=state.reviewHistory.length;badge.style.display=n>0?'inline':'none';badge.textContent=n>99?'99+':n;}
 }
-function getWeak(){return ALL_TOPICS.filter(t=>{const s=state.topicScores[t];return s&&s.total>=2&&s.correct/s.total<0.7;});}
+function getWeak(){return trackTopics().filter(t=>{const s=state.topicScores[t];return s&&s.total>=2&&s.correct/s.total<0.7;});}
 function setMode(m){state.mode=m;document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));document.getElementById('mode-'+m).classList.add('active');document.getElementById('topic-section').style.display=m==='topic'?'block':'none';document.getElementById('weak-info').style.display=m==='weak'?'block':'none';updateStats();}
 function buildTopics(){document.getElementById('topic-section').innerHTML='<div class="section-label" style="margin-bottom:10px">Select a chapter</div>'+TOPIC_GROUPS.map(g=>`<div class="topic-group"><div class="topic-group-label">${g.group}</div><div class="topic-grid">${g.topics.map(t=>`<button class="topic-btn${state.selectedTopic===t.label?' active':''}" data-label="${t.label.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" onclick="selTopic(this.dataset.label,this)"><span class="ch-badge">${t.ch}</span>${t.label}</button>`).join('')}</div></div>`).join('');}
 function selTopic(l,b){state.selectedTopic=l;document.querySelectorAll('.topic-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}
-function getTopics(){if(state.mode==='topic')return[state.selectedTopic||ALL_TOPICS[0]];if(state.mode==='md')return MD_TOPICS;if(state.mode==='weak'){const w=getWeak();return w.length?w:ALL_TOPICS;}return ALL_TOPICS;}
+function getTopics(){if(state.mode==='topic')return[state.selectedTopic||trackTopics()[0]];if(state.mode==='md')return MD_TOPICS.filter(inTrack).length?MD_TOPICS.filter(inTrack):MD_TOPICS;if(state.mode==='weak'){const w=getWeak();return w.length?w:trackTopics();}return trackTopics();}
 
 function generateQuestions(){
   if(state.mode==='cards'){fcStart();return;}
@@ -975,7 +993,7 @@ function syncPayload(c){
       lastStudied:progLastStudied(),mastered:sc.mastered||0,learning:sc.learning||0,struggling:sc.struggling||0,
       due:sc.due||0,mocks:eh.length,lastMock:eh.length?eh[eh.length-1].pct:null,bestMock:best,
       weakest:ds.length?ds[0].name+' ('+ds[0].pct+'%)':'',cardsMastered:cc.mastered||0,
-      examDate:planGet().date||'',daysLeft:planDaysLeft(),readiness:(readiness()||{}).score,perDay:(planPace()||{}).perDay,coach:!!coachGetKey()},
+      examDate:planGet().date||'',daysLeft:planDaysLeft(),readiness:(readiness()||{}).score,perDay:(planPace()||{}).perDay,coach:!!coachGetKey(),track:trackLabel(),sessions7d:todaySessions7()},
     report:progReportText()};
 }
 function syncSend(force){
@@ -1084,7 +1102,7 @@ function planHtml(){
   var p=planGet(), pc=planPace(), dl=planDaysLeft(), r=readiness(), h='';
   var today=new Date(); today.setHours(0,0,0,0);
   var min=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
-  h+='<div class="plan"><div class="plan-top"><div class="plan-l">Exam date</div>'
+  h+='<div class="plan"><div class="plan-m" style="margin:0 0 8px">Studying for: <b>'+cEsc(trackLabel())+'</b></div><div class="plan-top"><div class="plan-l">Exam date</div>'
     +'<input id="plan-date" class="plan-date" type="date" min="'+min+'" value="'+cEsc(p.date||'')+'"></div>';
   if(dl===null){
     h+='<div class="plan-m">Set your test date to get a daily target and a countdown.</div>';
@@ -1121,7 +1139,7 @@ function planHtml(){
 }
 function planText(L){
   var p=planGet(), dl=planDaysLeft(), pc=planPace(), r=readiness();
-  L.push('');L.push('EXAM PLAN');
+  L.push('');L.push('EXAM PLAN');L.push('  Exam: '+trackLabel());L.push('  Today sessions finished: '+todaySessions7()+' of the last 7 days');
   if(dl===null)L.push('  Exam date: not set');
   else{
     L.push('  Exam date: '+p.date+'  ('+(dl<0?'passed':dl+' days left')+')');
@@ -1135,6 +1153,146 @@ function planText(L){
 document.addEventListener('change',function(e){
   if(e.target&&e.target.id==='plan-date'){planSetDate(e.target.value);try{progRender();}catch(x){}try{var c=syncCfg();c.tried=0;syncPut(c);syncSend(true);}catch(x){}}
 });
+
+
+/* ================= Exam type + Today's session ================= */
+var TRACK_DEFS={"MD":{"health":{"label":"Health only","source":"Prometric MD Series 20-24 Accident and Health or Sickness Producer outline, 9/21/2021: 80 scored items, 105 min, 70% to pass","items":80,"minutes":105,"domains":[{"key":"1","name":"Insurance Regulation (incl. MD state law)","weight":0.3,"items":24,"topics":["Producer licensing & reporting rules","Unfair trade practices & consumer protection","Maryland Insurance Article & required numbers","Maryland-specific health & Medicare regulations"]},{"key":"2","name":"General Insurance","weight":0.0875,"items":7,"topics":["Insurance fundamentals, risk & contract law","Legal concepts (subrogation, waiver, estoppel)"]},{"key":"3","name":"Health Insurance Basics","weight":0.1125,"items":9,"topics":["Health & accident insurance basics","Health insurance underwriting & renewability"]},{"key":"4","name":"Individual Health Policy Provisions","weight":0.075,"items":6,"topics":["Health insurance policy provisions"]},{"key":"5","name":"Disability Income & Related Insurance","weight":0.0875,"items":7,"topics":["Disability income insurance"]},{"key":"6","name":"Medical Plans","weight":0.1375,"items":11,"topics":["Health plan types (HMO, PPO, EPO, POS, HDHP)","Medical expense & cost-sharing"]},{"key":"7","name":"Group Health Insurance","weight":0.05,"items":4,"topics":["Group health insurance"]},{"key":"8","name":"Dental Insurance","weight":0.0125,"items":1,"topics":["Dental & vision insurance"]},{"key":"9","name":"Senior Citizens & Special Needs","weight":0.0875,"items":7,"topics":["Medicare, Medigap & senior health plans"]},{"key":"10","name":"Federal Tax — Health Insurance","weight":0.05,"items":4,"topics":["Federal tax — Health insurance"]}]},"life":{"label":"Life only","source":"Prometric MD Series 20-27 Life Producer outline, 9/21/2021: 80 scored items, 105 min, 70% to pass","items":80,"minutes":105,"domains":[{"key":"1","name":"Insurance Regulation (incl. MD state law)","weight":0.3,"items":24,"topics":["Producer licensing & reporting rules","Unfair trade practices & consumer protection","Replacement regulations & Guaranty Association","Maryland Insurance Article & required numbers"]},{"key":"2","name":"General Insurance","weight":0.1,"items":8,"topics":["Insurance fundamentals, risk & contract law","Legal concepts (subrogation, waiver, estoppel)"]},{"key":"3","name":"Life Insurance Basics","weight":0.175,"items":14,"topics":["Uses of life insurance (key person, buy-sell, estate)","Life insurance underwriting & policy issue"]},{"key":"4","name":"Life Insurance Policies","weight":0.1,"items":8,"topics":["Types of life insurance policies","Group life insurance"]},{"key":"5","name":"Life Policy Provisions, Options & Riders","weight":0.1375,"items":11,"topics":["Provisions, riders & nonforfeiture options","Premiums, proceeds & beneficiaries"]},{"key":"6","name":"Annuities","weight":0.0875,"items":7,"topics":["Annuities"]},{"key":"7","name":"Federal Tax — Life & Annuities","weight":0.075,"items":6,"topics":["Federal tax — Life & Annuities"]},{"key":"8","name":"Qualified Plans","weight":0.025,"items":2,"topics":["Retirement plans & IRAs","Social Security & disability benefits"]}]}}};
+var TRACK_LH={label:'Life & Health'};
+var OUTLINE_ORIG=OUTLINE_WEIGHTS.slice();
+function trackKey(){return 'ihub_track_'+COACH_STATE;}
+function trackId(){var d=TRACK_DEFS[COACH_STATE]||{};var t='lh';try{t=localStorage.getItem(trackKey())||'lh';}catch(e){} return (t!=='lh'&&d[t])?t:'lh';}
+function trackDef(){var t=trackId();return t==='lh'?TRACK_LH:TRACK_DEFS[COACH_STATE][t];}
+function trackLabel(){return trackDef().label;}
+function trackApply(){
+  var d=trackDef(), src=d.domains||OUTLINE_ORIG;
+  OUTLINE_WEIGHTS.length=0; src.forEach(function(x){OUTLINE_WEIGHTS.push(x);});
+  try{trackHideTopics();}catch(e){}
+}
+var _trkSet=null;
+function trackTopicSet(){
+  if(trackId()==='lh')return null;
+  var s={}; OUTLINE_WEIGHTS.forEach(function(d){d.topics.forEach(function(t){s[t]=1;});}); return s;
+}
+function inTrack(topic){var s=trackTopicSet();return !s||!!s[topic];}
+function trackTopics(){var s=trackTopicSet();return s?ALL_TOPICS.filter(function(t){return s[t];}):ALL_TOPICS;}
+function trackHideTopics(){
+  document.querySelectorAll('.topic-btn').forEach(function(b){b.classList.toggle('trk-hide',!inTrack(b.dataset.label));});
+}
+/* keep every existing mode inside the chosen exam */
+var _buildTopics=buildTopics; buildTopics=function(){_buildTopics.apply(this,arguments);trackHideTopics();};
+var _srsDueList=srsDueList; srsDueList=function(){return _srsDueList().filter(function(d){return inTrack(d.q.topic);});};
+planCoverage=function(){
+  var m={}; try{m=srsAll();}catch(e){}
+  var tot=0,seen=0; BANK.forEach(function(q){if(!inTrack(q.topic))return;tot++;if(m[qid(q)])seen++;});
+  return {seen:seen,total:tot,left:tot-seen};
+};
+function trackExamLen(len){var d=trackDef();return (d.items&&len!==75)?d.items:len;}
+function trackExamDur(len){var d=trackDef();if(!d.minutes)return null;return len===75?Math.round(d.minutes*75/d.items):d.minutes;}
+function trackFinalLabels(){
+  var b=document.getElementById('final-150'), d=trackDef(); if(!b)return;
+  if(!b.dataset.orig)b.dataset.orig=b.innerHTML;
+  b.innerHTML=d.items?'Real exam ('+d.items+' q &middot; '+d.minutes+' min)':b.dataset.orig;
+}
+
+/* ---- Today's session ---- */
+function todayStr(){var t=new Date();return t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();}
+function todayKey(){return 'ihub_today_'+COACH_STATE;}
+function todayGet(){try{return JSON.parse(localStorage.getItem(todayKey())||'{}')||{};}catch(e){return {};}}
+function todayPut(o){try{localStorage.setItem(todayKey(),JSON.stringify(o));}catch(e){}}
+function todaySessions7(){
+  /* distinct calendar days, so a second round on the same day never counts twice */
+  var o=todayGet(), cut=Date.now()-7*86400000, seen={};
+  (o.days||[]).forEach(function(ts){if(ts>=cut){var d=new Date(ts);seen[d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()]=1;}});
+  return Object.keys(seen).length;
+}
+function todaySize(){var p=null;try{p=planPace();}catch(e){} var n=p?p.perDay:20; return Math.max(10,Math.min(40,n));}
+function todayRank(){
+  return OUTLINE_WEIGHTS.map(function(d){
+    var t=0,c=0; d.topics.forEach(function(tp){var s=state.topicScores[tp];if(s){t+=s.total;c+=s.correct;}});
+    var acc=(c+SHRINK_N*GUESS)/(t+SHRINK_N);
+    var avail=BANK.filter(function(q){return d.topics.indexOf(q.topic)>=0;}).length;
+    return {d:d,lost:d.weight*(1-acc),pct:t?Math.round(c/t*100):null,avail:avail};
+  }).filter(function(r){return r.avail>0;}).sort(function(a,b){return b.lost-a.lost;});
+}
+function todayPlan(){
+  var n=todaySize(), due=srsDueList(), nDue=Math.min(due.length,Math.ceil(n*0.6));
+  var rank=todayRank(), rest=n-nDue, alloc=[], left=rest;
+  for(var i=0;i<rank.length&&left>0;i++){
+    var k=Math.min(left,i===0?Math.ceil(rest*0.6):left,rank[i].avail);
+    if(k>0){alloc.push({r:rank[i],k:k});left-=k;}
+  }
+  return {n:n,due:due.slice(0,nDue),alloc:alloc};
+}
+function todayMockDue(){
+  var dl=null;try{dl=planDaysLeft();}catch(e){}
+  if(dl===null||dl<0||dl>14)return false;
+  var last=0;(state.examHistory||[]).forEach(function(e){if(e.ts>last)last=e.ts;});
+  return Date.now()-last>7*86400000;
+}
+function todayStart(){
+  var p=todayPlan(), qs=[], used={};
+  p.due.forEach(function(d){var id=qid(d.q);if(!used[id]){used[id]=1;qs.push(d.q);}});
+  p.alloc.forEach(function(a){
+    var tries=0, got=0;
+    while(got<a.k&&tries<a.k*6){tries++;
+      var tp=a.r.d.topics[Math.floor(Math.random()*a.r.d.topics.length)], q=pickFrom(tp);
+      if(!q)continue; var id=qid(q); if(used[id])continue; used[id]=1; qs.push(q); got++;
+    }
+  });
+  if(!qs.length)return;
+  var o=todayGet(); o.date=todayStr(); o.start=state.total; o.n=qs.length; o.done=false; todayPut(o);
+  document.getElementById('questions-container').innerHTML='';
+  renderQs(qs,"Today's session");
+  save(); todayPaint();
+}
+function todayCheck(){
+  var o=todayGet(); if(o.date!==todayStr()||o.done||!o.n)return;
+  if(state.total-o.start<o.n){setTimeout(todayPaint,0);return;}   /* live "N of M" while in progress */
+  {
+    o.done=true; o.days=(o.days||[]).filter(function(ts){return ts>Date.now()-30*86400000;}); o.days.push(Date.now());
+    todayPut(o); setTimeout(todayPaint,0);
+    try{var c=syncCfg();c.tried=0;syncPut(c);}catch(e){}
+  }
+}
+function todayPaint(){
+  var el=document.getElementById('today-card'); if(!el)return;
+  var defs=TRACK_DEFS[COACH_STATE], t=trackId(), o=todayGet(), isToday=o.date===todayStr();
+  var sel='';
+  if(defs){
+    sel='<label class="today-x">Exam <select id="trk-sel" class="today-sel"><option value="lh"'+(t==='lh'?' selected':'')+'>Life &amp; Health</option>';
+    Object.keys(defs).forEach(function(k){sel+='<option value="'+k+'"'+(t===k?' selected':'')+'>'+cEsc(defs[k].label)+'</option>';});
+    sel+='</select></label>';
+  }
+  var h='<div class="today-top"><div class="today-t">Today&#39;s session</div>'+sel+'</div>';
+  if(todayMockDue())h+='<div class="today-mock"><b>Take a timed mock exam today.</b> Your exam is close and you have not taken one this week. It is the best readiness check there is.</div>';
+  if(isToday&&o.done){
+    h+='<div class="today-done">&#10003; Done for today ('+o.n+' questions). Nice work.</div>'
+      +'<button id="today-go" class="today-go ghost" type="button">Do another round</button>';
+  }else if(isToday&&o.n){
+    var did=Math.max(0,state.total-o.start);
+    h+='<div class="today-p">In progress: <b>'+Math.min(did,o.n)+' of '+o.n+'</b> answered. Scroll down to keep going.</div>'
+      +'<button id="today-go" class="today-go ghost" type="button">Start a fresh set</button>';
+  }else{
+    var p=todayPlan(), parts=[];
+    if(p.due.length)parts.push('<b>'+p.due.length+'</b> due for review');
+    p.alloc.forEach(function(a,i){parts.push('<b>'+a.k+'</b> from '+cEsc(a.r.d.name)+(i===0?' ('+(a.r.pct===null?'not started yet':'your biggest gap')+', '+Math.round(a.r.d.weight*100)+'% of the exam)':''));});
+    var tot=p.due.length+p.alloc.reduce(function(s,a){return s+a.k;},0);
+    h+='<div class="today-p">'+tot+' questions: '+parts.join(' + ')+'.</div>'
+      +'<button id="today-go" class="today-go" type="button">&#9654; Start today&#39;s session</button>';
+  }
+  h+='<div class="today-wk">Finished '+todaySessions7()+' of the last 7 days</div>';
+  el.innerHTML=h;
+  document.getElementById('today-go').addEventListener('click',todayStart);
+  var s=document.getElementById('trk-sel');
+  if(s)s.addEventListener('change',function(){
+    try{localStorage.setItem(trackKey(),s.value);}catch(e){}
+    trackApply(); trackFinalLabels(); todayPaint(); try{progRender();}catch(e){} try{srsUpdateBadge();}catch(e){}
+    try{var c=syncCfg();c.tried=0;syncPut(c);syncSend(true);}catch(e){}
+  });
+}
+trackApply();
+document.addEventListener('DOMContentLoaded',function(){try{trackApply();trackFinalLabels();todayPaint();srsUpdateBadge();}catch(e){}});
+if(document.readyState!=='loading')setTimeout(function(){try{trackApply();trackFinalLabels();todayPaint();}catch(e){}},0);
 
 function progReportText(){
   var who=(COACH_STATE==='VA')?'Virginia Life & Health (VA Exam Prep)':'Maryland Life & Health (MD Exam Prep)';
